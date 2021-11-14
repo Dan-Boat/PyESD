@@ -1,0 +1,2 @@
+# PyESD
+Python Package for Empirical Statistical Downscaling. This repository contains all scripts of the pyESD package which is under development. The purpose of the package is to downscale climate variables like precipitation and temperature from large-scale reanalysis datasets (eg. ERA5) to point scale. The package adopts many Machine Learning and Al algorithms to establish the statistical transfer functions. )
