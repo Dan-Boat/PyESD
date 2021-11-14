@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Nov 12 14:02:28 2021
+
+@author: dboateng
+This routine contians all the utility classes and functions required for ESD functions 
+"""
+
+import xarray as xr
+import pandas as pd 
+import numpy as np 
+import matplotlib.pyplot as plt
+
+
+
+class Dataset():
+    def __init__(self, name, variables):
+        self.name = name 
+        self.variables = variables 
+        self.data = {}
+        
+    def get(self, varname):
+        try:
+            return self.data[varname]
+        
+        except KeyError:
+            
+            self.data[varname] = xr.open_dataarray(self.variables[varname])
+            
+            return self.data[varname]
+        
+    
+# function to estimate distance 
+def haversine(lon1, lat1, lon2, lat2):
+# convert decimal degrees to radians 
+    lon1 = np.deg2rad(lon1)
+    lon2 = np.deg2rad(lon2)
+    lat1 = np.deg2rad(lat1)
+    lat2 = np.deg2rad(lat2)
+    
+    # haversine formula 
+    dlon = lon2 - lon1 
+    dlat = lat2 - lat1 
+    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
+    c = 2 * np.arcsin(np.sqrt(a)) 
+    r = 6371
+    return c * r    #km     
+        
+
+def extract_indices_around(dataset, lat, lon, radius):
+    close_grids = lambda lat_, lon_: haversine(lat, lon, lat_, lon_) <= radius
+    
+    
+    if hasattr(dataset, "longitude"):
+        LON, LAT = np.meshgrid(dataset.longitude, dataset)
+    else:
+        LON, LAT = np.meshgrid(dataset.lon, dataset.lat)
+        
+    grids_index = np.where(close_grids(LAT, LON))
+    
+    return grids_index
