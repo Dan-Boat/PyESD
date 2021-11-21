@@ -20,15 +20,40 @@ class Dataset():
         self.variables = variables 
         self.data = {}
         
-    def get(self, varname):
+    def get(self, varname, domain="Europe"):
         try:
-            return self.data[varname]
+            data=self.data[varname]
         
         except KeyError:
             
             self.data[varname] = xr.open_dataarray(self.variables[varname])
             
-            return self.data[varname]
+            data = self.data[varname]
+            
+        if domain == "Europe":
+            
+            minlat, maxlat, minlon, maxlon = 35, 60, -10, 30
+            
+            if hasattr(data, "longitude"):
+                data = data.assign_coords({"longitude": (((data.longitude + 180) % 360) - 180)})
+                data = data.where((data.latitude >= minlat) & (data.latitude <= maxlat), drop=True)
+                data = data.where((data.longitude >= minlon) & (data.longitude <= maxlon), drop=True)
+            else:
+                data = data.assign_coords({"lon": (((data.lon + 180) % 360) - 180)})
+                data = data.where((data.lat >= minlat) & (data.lat <= maxlat), drop=True)
+                data = data.where((data.lon >= minlon) & (data.lon <= maxlon), drop=True)
+            
+            if hasattr(data, "level"):
+                data = data.squeeze(dim="level")
+            return data
+        
+        if hasattr(data, "level"):
+            data = data.squeeze(dim="level")
+        else:
+            return data
+    
+            
+           
         
     
 # function to estimate distance 
@@ -53,7 +78,7 @@ def extract_indices_around(dataset, lat, lon, radius):
     
     
     if hasattr(dataset, "longitude"):
-        LON, LAT = np.meshgrid(dataset.longitude, dataset)
+        LON, LAT = np.meshgrid(dataset.longitude, dataset.latitude)
     else:
         LON, LAT = np.meshgrid(dataset.lon, dataset.lat)
         
