@@ -99,7 +99,7 @@ class Predictor(ABC):
             
             if dataset.name not in self.params:
                 self.params[dataset.name] = {}
-                data = self._generate(daterange, dataset, fit, patterns_from, params_from)
+            data = self._generate(daterange, dataset, fit, patterns_from, params_from)
                 
             if data_key in self.data:
                 self.data[data_key] = self.data[data_key].combine_first(data)
