@@ -17,6 +17,7 @@ sys.path.append("/home/dboateng/Python_scripts/ESD_Package")
 from Package.ESD_utils import Dataset
 from Package.WeatherstationPreprocessing import read_weatherstationnames, read_station_csv
 from Package.standardizer import MonthlyStandardizer
+from Package.feature_selection import RecursiveFeatureElimination
 
 
 
@@ -86,56 +87,67 @@ X_test = so._get_predictor_data(variable, full_test, ERA5Data, fit=True,)
 y_train = so.get_var(variable, full_train, anomalies=True)
 y_test = so.get_var(variable, full_test, anomalies=True)
 
-# checking with univariate
-selector = SelectKBest(mutual_info_regression, k=10).fit(X_train, y_train)
-X_features = X_train.columns[selector.get_support(indices=True)]
-print(X_features)
-scores = selector.scores_
-X_indices = np.arange(X_train.shape[-1])
-plt.bar(X_train.columns, scores, width=0.3, label="Univariate score ($-Log (p_{value})$)")
 
-#estimator = Lasso()
-estimator = SVR(kernel="linear")
-rfecv = RFECV(estimator= estimator, step=1, cv=5, scoring="r2")
-rfecv = rfecv.fit(X_train, y_train)
-print("Optimal number of features:", rfecv.n_features_)
-print("Best predictors:", X_train.columns[rfecv.support_])
-
-# visualise the learning curve 
-
-plt.figure(2)
-plt.xlabel("Number of feature selected")
-plt.ylabel("CV r2 of selected features")
-plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
-#plt.show()
+# trying feature class
+rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
+rcf.fit(X_train, y_train)
+print(rcf.cv_test_score())
+X_train_new = rcf.transform(X_train)
 
 
-# using frature importance
-rf = RandomForestRegressor()
-rf = rf.fit(X_train, y_train)
-importances = rf.feature_importances_
-std = np.std([tree.feature_importances_ for tree in rf.estimators_], axis=0)
-indices = np.argsort(importances)[::-1]
-
-# feature ranking 
-for f in range(X_train.shape[1]):
-    print("%d. feature %d (%f)" % (f +1, indices[f], importances[indices[f]]))
 
 
-# visualize
-plt.figure(3, figsize=(14, 13))
-plt.title("Feature importances")
-plt.bar(range(X_train.shape[1]), importances[indices], color="g", yerr=std[indices], align="center")
-plt.xticks(range(X_train.shape[1]), X_train.columns[indices], rotation=90)
-plt.xlim([-1, X_train.shape[1]])
-#plt.show()
 
-# perfumation importance
-result = permutation_importance(rf, X_test, y_test, n_repeats=10, random_state=42,
-                                n_jobs=2)
-sorted_idx = result.importances_mean.argsort()
-fig, ax = plt.subplots()
-ax.boxplot(result.importances[sorted_idx].T, vert=False, labels=X_test.columns[sorted_idx])
-ax.set_title("Permutation Importances (On test data)")
-fig.tight_layout()
+# # checking with univariate
+# selector = SelectKBest(mutual_info_regression, k=10).fit(X_train, y_train)
+# X_features = X_train.columns[selector.get_support(indices=True)]
+# print(X_features)
+# scores = selector.scores_
+# X_indices = np.arange(X_train.shape[-1])
+# plt.bar(X_train.columns, scores, width=0.3, label="Univariate score ($-Log (p_{value})$)")
+
+# #estimator = Lasso()
+# estimator = SVR(kernel="linear")
+# rfecv = RFECV(estimator= estimator, step=1, cv=5, scoring="r2")
+# rfecv = rfecv.fit(X_train, y_train)
+# print("Optimal number of features:", rfecv.n_features_)
+# print("Best predictors:", X_train.columns[rfecv.support_])
+
+# # visualise the learning curve 
+
+# plt.figure(2)
+# plt.xlabel("Number of feature selected")
+# plt.ylabel("CV r2 of selected features")
+# plt.plot(range(1, len(rfecv.grid_scores_) + 1), rfecv.grid_scores_)
+# #plt.show()
+
+
+# # using frature importance
+# rf = RandomForestRegressor()
+# rf = rf.fit(X_train, y_train)
+# importances = rf.feature_importances_
+# std = np.std([tree.feature_importances_ for tree in rf.estimators_], axis=0)
+# indices = np.argsort(importances)[::-1]
+
+# # feature ranking 
+# for f in range(X_train.shape[1]):
+#     print("%d. feature %d (%f)" % (f +1, indices[f], importances[indices[f]]))
+
+
+# # visualize
+# plt.figure(3, figsize=(14, 13))
+# plt.title("Feature importances")
+# plt.bar(range(X_train.shape[1]), importances[indices], color="g", yerr=std[indices], align="center")
+# plt.xticks(range(X_train.shape[1]), X_train.columns[indices], rotation=90)
+# plt.xlim([-1, X_train.shape[1]])
+# #plt.show()
+
+# # perfumation importance
+# result = permutation_importance(rf, X_test, y_test, n_repeats=10, random_state=42,
+#                                 n_jobs=2)
+# sorted_idx = result.importances_mean.argsort()
+# fig, ax = plt.subplots()
+# ax.boxplot(result.importances[sorted_idx].T, vert=False, labels=X_test.columns[sorted_idx])
+# ax.set_title("Permutation Importances (On test data)")
+# fig.tight_layout()
 plt.show()
