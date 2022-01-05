@@ -10,7 +10,7 @@ Created on Mon Jan  3 17:18:14 2022
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.feature_selection import SelectKBest, chi2, RFECV, f_classif, r_regression, mutual_info_regression, SelectFromModel, SequentialFeatureSelector
+from sklearn.feature_selection import RFECV, SelectFromModel, SequentialFeatureSelector
 from sklearn.linear_model import Lasso, LassoCV, Ridge, BayesianRidge, ARDRegression
 from sklearn.inspection import permutation_importance
 from sklearn.ensemble import RandomForestRegressor
@@ -30,19 +30,21 @@ class RecursiveFeatureElimination():
         self.min_features = 5
         self.scoring = "r2"
         
-        
-    def fit(self, X, Y):
         if self.regressor_name == "ARDRegression":
             self.estimator = ARDRegression()
         elif self.regressor_name == "BayesianRidge":
             self.estimator = BayesianRidge()
         elif self.regressor_name == "lasso":
             self.estimator = Lasso()
+        elif self.regressor_name == "lassocv":
+            self.estimator = LassoCV()
         elif self.regressor_name == "Ridge":
             self.estimator = Ridge()
         else:
             raise ValueError("Check the regressor if implemented")
         
+        
+    def fit(self, X, Y):
         
         self.regressor = RFECV(estimator=self.estimator, scoring=self.scoring, cv=self.cv, n_jobs= self.n_jobs,
                       min_features_to_select=self.min_features).fit(X, Y)
@@ -67,7 +69,106 @@ class RecursiveFeatureElimination():
         
 
 class TreeBasedSelection():
-    pass
+    def __init__(self, regressor_name,):
+        self.regressor_name = regressor_name
+        self.n_jobs = -1
+        self.bootstrap = True
+        self.criterion = "squared_error"
+        self.scoring = "r2"
+        
+        if self.regressor_name == "RandomForest":
+            self.estimator = RandomForestRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap)
+        elif self.regressor_name == "ExtraTree":
+            self.estimator = ExtraTreesRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap)
+        else:
+            raise ValueError("Tree regressor estimator is not defined properly")
+            
+        
+    def fit(self, X, Y):
+        
+        self.regressor = SelectFromModel(estimator=self.estimator, prefit=False).fit(X,Y)
+        
+    def transform(self, X):
+        X_new = self.regressor.transform(X)
+        return X_new
+    
+    def feature_importance(self, X,Y, plot=False):
+        self.estimator.fit(X,Y)
+        importance = self.estimator.feature_importances_
+        feature_names = X.columns
+        forest_importances = pd.Series(importance, index=feature_names)
+        
+        if plot == True:
+            std = np.std([tree.feature_importances_ for tree in self.estimator.estimators_], axis=0)
+            fig,ax = plt.subplots()
+            forest_importances.plot.bar(yerr=std, ax=ax)
+            ax.set_title("Feature importances using tree regressor")
+            fig.tight_layout()
+            plt.show()
+            
+        return forest_importances
+    
+    def permutation_importance_(self, X,Y, plot=False):
+        self.estimator.fit(X,Y)
+        importance = permutation_importance(estimator=self.estimator, X=X, y=Y, scoring=self.scoring,
+                                            n_repeats=10, n_jobs=self.n_jobs)
+        sorted_idx = importance.importance_mean.argsort()
+        if plot == True:
+            fig,ax = plt.subplots()
+            ax.boxplot(importance.importances[sorted_idx].T, vert=False, labels=X.columns[sorted_idx])
+            ax.set_title("Permutation Importances (On test data)")
+            fig.tight_layout()
+            plt.show()
+            
+        return sorted_idx
+            
+           
+    
+    def score(self,X,Y):
+        score = self.regressor.score(X,Y)
+        return score
+    
+    def print_selected_features(self, X):
+        select_names = X.columns[self.regressor.get_support(indices=True)]
+        num_features = len(select_names)
+        print("{0} : optimal number of predictors and selected variables are {1}".format(num_features, select_names))
+        
+        
 
 class SequentialFeatureSelection():
-    pass
+    def __init__(self, regressor_name, n_features, direction):
+        self.regressor_name = regressor_name
+        self.n_features =n_features
+        self.scoring = "r2"
+        self.direction = direction
+        
+        if self.regressor_name == "ARDRegression":
+            self.estimator = ARDRegression()
+        elif self.regressor_name == "BayesianRidge":
+            self.estimator = BayesianRidge()
+        elif self.regressor_name == "lasso":
+            self.estimator = Lasso()
+        elif self.regressor_name == "lassocv":
+            self.estimator = LassoCV()
+        elif self.regressor_name == "Ridge":
+            self.estimator = Ridge()
+        else:
+            raise ValueError("Check the regressor if implemented")
+            
+    def fit(self, X,Y):
+        self.regressor = SequentialFeatureSelector(estimator=self.estimator, n_features_to_select=self.n_features, scoring=self.scoring,
+                                                   direction=self.direction).fit(X,Y)
+        
+    def score(self,X,Y):
+        score = self.regressor.score(X,Y)
+        return score
+    
+    def transform(self, X):
+        X_new = self.regressor.transform(X)
+        return X_new  
+    
+    def print_selected_features(self, X):
+        select_names = X.columns[self.regressor.get_support(indices=True)]
+        num_features = len(select_names)
+        print("{0} : optimal number of predictors and selected variables are {1}".format(num_features, select_names))
+    

@@ -17,7 +17,7 @@ sys.path.append("/home/dboateng/Python_scripts/ESD_Package")
 from Package.ESD_utils import Dataset
 from Package.WeatherstationPreprocessing import read_weatherstationnames, read_station_csv
 from Package.standardizer import MonthlyStandardizer
-from Package.feature_selection import RecursiveFeatureElimination
+from Package.feature_selection import RecursiveFeatureElimination, TreeBasedSelection
 
 
 
@@ -89,11 +89,15 @@ y_test = so.get_var(variable, full_test, anomalies=True)
 
 
 # trying feature class
-rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
-rcf.fit(X_train, y_train)
-print(rcf.cv_test_score())
-X_train_new = rcf.transform(X_train)
+# rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
+# rcf.fit(X_train, y_train)
+# print(rcf.cv_test_score())
+# X_train_new = rcf.transform(X_train)
 
+tree = TreeBasedSelection(regressor_name="RandomForest")
+tree.feature_importance(X_train,y_train, plot=True)
+tree.fit(X_train, y_train)
+X_train_new = tree.transform(X_train)
 
 
 
