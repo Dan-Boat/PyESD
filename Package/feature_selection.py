@@ -44,10 +44,10 @@ class RecursiveFeatureElimination():
             raise ValueError("Check the regressor if implemented")
         
         
-    def fit(self, X, Y):
+    def fit(self, X, y):
         
         self.regressor = RFECV(estimator=self.estimator, scoring=self.scoring, cv=self.cv, n_jobs= self.n_jobs,
-                      min_features_to_select=self.min_features).fit(X, Y)
+                      min_features_to_select=self.min_features).fit(X, y)
         
     
     def print_selected_features(self, X):
@@ -63,8 +63,8 @@ class RecursiveFeatureElimination():
         cv_score = self.regressor.cv_results_["mean_test_score"].mean()
         return cv_score
     
-    def score(self,X,Y):
-        score = self.regressor.score(X,Y)
+    def score(self,X,y):
+        score = self.regressor.score(X,y)
         return score
         
 
@@ -84,16 +84,16 @@ class TreeBasedSelection():
             raise ValueError("Tree regressor estimator is not defined properly")
             
         
-    def fit(self, X, Y):
+    def fit(self, X, y):
         
-        self.regressor = SelectFromModel(estimator=self.estimator, prefit=False).fit(X,Y)
+        self.regressor = SelectFromModel(estimator=self.estimator, prefit=False).fit(X,y)
         
     def transform(self, X):
         X_new = self.regressor.transform(X)
         return X_new
     
-    def feature_importance(self, X,Y, plot=False):
-        self.estimator.fit(X,Y)
+    def feature_importance(self, X,y, plot=False):
+        self.estimator.fit(X,y)
         importance = self.estimator.feature_importances_
         feature_names = X.columns
         forest_importances = pd.Series(importance, index=feature_names)
@@ -108,9 +108,9 @@ class TreeBasedSelection():
             
         return forest_importances
     
-    def permutation_importance_(self, X,Y, plot=False):
-        self.estimator.fit(X,Y)
-        importance = permutation_importance(estimator=self.estimator, X=X, y=Y, scoring=self.scoring,
+    def permutation_importance_(self, X,y, plot=False):
+        self.estimator.fit(X,y)
+        importance = permutation_importance(estimator=self.estimator, X=X, y=y, scoring=self.scoring,
                                             n_repeats=10, n_jobs=self.n_jobs)
         sorted_idx = importance.importance_mean.argsort()
         if plot == True:
@@ -124,8 +124,8 @@ class TreeBasedSelection():
             
            
     
-    def score(self,X,Y):
-        score = self.regressor.score(X,Y)
+    def score(self,X,y):
+        score = self.regressor.score(X,y)
         return score
     
     def print_selected_features(self, X):
@@ -155,12 +155,12 @@ class SequentialFeatureSelection():
         else:
             raise ValueError("Check the regressor if implemented")
             
-    def fit(self, X,Y):
+    def fit(self, X,y):
         self.regressor = SequentialFeatureSelector(estimator=self.estimator, n_features_to_select=self.n_features, scoring=self.scoring,
-                                                   direction=self.direction).fit(X,Y)
+                                                   direction=self.direction).fit(X,y)
         
-    def score(self,X,Y):
-        score = self.regressor.score(X,Y)
+    def score(self,X,y):
+        score = self.regressor.score(X,y)
         return score
     
     def transform(self, X):
