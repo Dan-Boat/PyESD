@@ -20,9 +20,10 @@ from sklearn.linear_model import GammaRegressor, PoissonRegressor
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
+from sklearn.model_selection import cross_val_score, cross_validate, cross_val_predict
 
 #from local
-from .splitter import Splitter, MonthlyBooststrapper
+from .splitter import MonthlyBooststrapper
 
 
 class MetaAttributes():
@@ -51,9 +52,9 @@ class MetaAttributes():
 
 class HyperparameterOptimize(MetaAttributes):
     
-    def __init__(self, method, para_grid, regressor, scoring=None, cv=None):
+    def __init__(self, method, param_grid, regressor, scoring=None, cv=None):
         self.method = method
-        self.para_grid = para_grid
+        self.param_grid = param_grid
         self.scoring = scoring
         self.cv = cv
         self.regressor = regressor
@@ -83,6 +84,11 @@ class Regressors(MetaAttributes):
     def __init__(self, method, cv=None):
         self.method = method
         self.cv = cv
+        if self.cv == None:
+            
+            print(".....Using monthly bootstrapper as default splitter....")
+            cv = MonthlyBooststrapper(n_splits=500, block_size=12)
+            
         self.selection = "random"
         
         
@@ -93,7 +99,7 @@ class Regressors(MetaAttributes):
             self.estimator = LassoCV(cv=self.cv, selection=self.selection)
             
         elif self.method == "LassoLarsCV":
-            self.estimator = LassoLarsCV(cv=self.cv)
+            self.estimator = LassoLarsCV(cv=self.cv, normalize=False)
         
         #Bayesian regression algorithms 
         elif self.method == "ARD": # Automatic Relevance Determination regression 
@@ -111,16 +117,16 @@ class Regressors(MetaAttributes):
         # Neural Networks models (Perceptron) 
         elif self.method == "MLPRegressor":
              regressor= MLPRegressor(random_state=42, max_iter=1000, early_stopping=False)
-             para_grid = {"hidden_layer_sizes": [1,100,200,300], "alpha": [0.0001, 0.5, 1, 1.5, 2,5, 10],
+             param_grid = {"hidden_layer_sizes": [1,100,200,300], "alpha": [0.0001, 0.5, 1, 1.5, 2,5, 10],
                               "learning_rate": ["constant", "adaptive"], "solver": ["adam", "sgd"]}
-             self.estimator = HyperparameterOptimize(method="GridSearchCV", para_grid= para_grid, regressor=regressor)
+             self.estimator = HyperparameterOptimize(method="GridSearchCV", param_grid= param_grid, regressor=regressor)
              
         #Support Vector Machines
         elif self.method == "SVR":
             regressor = SVR()
-            para_grid = {"svr__C":[0.1, 1, 10], "svr__gamma":["auto", 1, 0.1, 0.01, 0.001, 0.0001, 0.2, 0.5, 0.9, 10], 
+            param_grid = {"svr__C":[0.1, 1, 10], "svr__gamma":["auto", 1, 0.1, 0.01, 0.001, 0.0001, 0.2, 0.5, 0.9, 10], 
                          "svr__kernel":["rbf", "poly"]}
-            self.estimator = HyperparameterOptimize(method="RandomizedSearchCV", para_grid= para_grid, regressor=regressor)
+            self.estimator = HyperparameterOptimize(method="RandomizedSearchCV", param_grid= param_grid, regressor=regressor)
         
         # Ensemble tree based algorithms    
         elif self.method == "RandomForest":
@@ -134,7 +140,7 @@ class Regressors(MetaAttributes):
     
     def fit(self, X,y):
         return self.estimator.fit(X,y)
-        pass
+
     
     def predict(self, X):
         yhat = self.estimator.predict(X)
@@ -142,3 +148,15 @@ class Regressors(MetaAttributes):
     
     def score(self, X,y):
         return self.estimator.score(X,y)
+    
+    def cross_val_score(self, X, y):
+        return cross_val_score(self.estimator, X, y, cv=self.cv)
+    
+    def cross_validate(self, X, y):
+        return cross_validate(self.estimator, X, y, scoring=["r2", "neg_root_mean_squared_error"],
+                                n_jobs=2, verbose=0, cv=self.cv)
+    
+    
+    def cross_val_predict(self, X, y):
+        return cross_val_predict(self.estimator, X, y, n_jobs=2, verbose=0)
+        

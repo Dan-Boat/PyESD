@@ -122,11 +122,6 @@ class TreeBasedSelection():
             
         return sorted_idx
             
-           
-    
-    def score(self,X,y):
-        score = self.regressor.score(X,y)
-        return score
     
     def print_selected_features(self, X):
         select_names = X.columns[self.regressor.get_support(indices=True)]

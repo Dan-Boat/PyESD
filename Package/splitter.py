@@ -11,6 +11,7 @@ from sklearn.model_selection import KFold, LeaveOneOut, LeaveOneGroupOut, Repeat
 import numpy as np 
 
 class Splitter():
+    # try more on how to use the customized splitter with the model fitting 
     def __init__(self, method, shuffle=False, n_splits=5):
         self.method = method
         self.shuffle = shuffle
@@ -36,7 +37,7 @@ class Splitter():
         return self.method.get_n_splits(X, y, groups)
     
     def split(self, X, y=None, groups=None):
-        return self.method.split(X, y, groups)
+        return self.method.split(X, y,)
     
 class MonthlyBooststrapper():
     def __init__(self, n_splits=500, test_size=0.1, block_size=12):

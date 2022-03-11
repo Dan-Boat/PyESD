@@ -19,9 +19,8 @@ Note: This routine is specifically designed for data downloded from DWD (otherwi
 import os 
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from pathlib import Path as p
-import xarray as xr
+
 
 #local packages
 try:
