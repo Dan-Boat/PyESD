@@ -17,6 +17,7 @@ from sklearn.linear_model import LassoCV, LassoLarsCV
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from sklearn.linear_model import ARDRegression, BayesianRidge
 from sklearn.linear_model import GammaRegressor, PoissonRegressor
+from sklearn.linear_model import SGDRegressor, RidgeCV
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
@@ -52,7 +53,7 @@ class MetaAttributes():
 
 class HyperparameterOptimize(MetaAttributes):
     
-    def __init__(self, method, param_grid, regressor, scoring=None, cv=None):
+    def __init__(self, method, param_grid, regressor, scoring="r2", cv=10):
         self.method = method
         self.param_grid = param_grid
         self.scoring = scoring
@@ -60,24 +61,43 @@ class HyperparameterOptimize(MetaAttributes):
         self.regressor = regressor
         
         if self.method == "GridSearchCV":
-            self.estimator = GridSearchCV(estimator= self.regressor, param_grid=self.param_grid,
+            self.hyper = GridSearchCV(estimator= self.regressor, param_grid=self.param_grid,
                                           scoring=self.scoring, cv=self.cv)
             
         elif self.method == "RandomizedSearchCV":
-            self.estimator = RandomizedSearchCV(estimator= self.regressor, param_grid=self.param_grid,
+            self.hyper = RandomizedSearchCV(estimator= self.regressor, param_distributions=self.param_grid,
                                           scoring=self.scoring, cv=self.cv)
     def fit(self, X, y):
-        self.estimator.fit(X,y)
+        self.hyper = self.hyper.fit(X,y)
+        self.estimator = self.hyper.best_estimator_
+        return self.estimator
         
     def score(self, X,y):
-        score = self.estimator.score(X,y)
+        score = self.hyper.score(X,y)
         return score
     
     def transform(self, X):
-        return self.estimator.transform(X)
+        return self.hyper.transform(X)
     
     def predict_log_proba(self, X):
-        return self.estimator.predict_log_proba(X)
+        return self.hyper.predict_log_proba(X)
+    
+    def best_estimator(self):
+        return self.hyper.best_estimator_
+    
+    def cross_val_score(self, X, y):
+        return cross_val_score(self.hyper, X, y, cv=self.cv)
+    
+    def cross_validate(self, X, y):
+        return cross_validate(self.hyper, X, y, scoring=["r2", "neg_root_mean_squared_error"],
+                                n_jobs=2, verbose=0, cv=self.cv)
+    
+    
+    def cross_val_predict(self, X, y):
+        return cross_val_predict(self.estimator, X, y, n_jobs=2, verbose=0)
+    
+    
+    
 
 class Regressors(MetaAttributes):
     
@@ -116,17 +136,18 @@ class Regressors(MetaAttributes):
             
         # Neural Networks models (Perceptron) 
         elif self.method == "MLPRegressor":
-             regressor= MLPRegressor(random_state=42, max_iter=1000, early_stopping=False)
-             param_grid = {"hidden_layer_sizes": [1,100,200,300], "alpha": [0.0001, 0.5, 1, 1.5, 2,5, 10],
-                              "learning_rate": ["constant", "adaptive"], "solver": ["adam", "sgd"]}
-             self.estimator = HyperparameterOptimize(method="GridSearchCV", param_grid= param_grid, regressor=regressor)
+             regressor= MLPRegressor(random_state=42, max_iter=1000, early_stopping=True, batch_size=50,
+                                     n_iter_no_change=20)
+             param_grid = {"hidden_layer_sizes": [200,300], "alpha": [0.0001, 1.5, 2,5, 10],
+                              "learning_rate": ["adaptive"], "solver": ["adam"]}
+             self.hyper = HyperparameterOptimize(method="GridSearchCV", param_grid= param_grid, regressor=regressor)
              
         #Support Vector Machines
         elif self.method == "SVR":
             regressor = SVR()
-            param_grid = {"svr__C":[0.1, 1, 10], "svr__gamma":["auto", 1, 0.1, 0.01, 0.001, 0.0001, 0.2, 0.5, 0.9, 10], 
-                         "svr__kernel":["rbf", "poly"]}
-            self.estimator = HyperparameterOptimize(method="RandomizedSearchCV", param_grid= param_grid, regressor=regressor)
+            param_grid = {"C":[0.1, 1, 10], "gamma":["auto", 1, 0.1, 0.01, 0.0001, 0.2, 0.5, 10], 
+                         "kernel":["rbf", "poly", "linear"]}
+            self.hyper = HyperparameterOptimize(method="RandomizedSearchCV", param_grid= param_grid, regressor=regressor)
         
         # Ensemble tree based algorithms    
         elif self.method == "RandomForest":
@@ -134,12 +155,21 @@ class Regressors(MetaAttributes):
             
         elif self.method == "ExtraTree":
             self.estimator = ExtraTreesRegressor(n_estimators=100, random_state=42)
-            
-            
-        return self.estimator
+        
+        elif self.method == "SGDRegressor":
+            self.estimator = SGDRegressor(loss = "squared_error", max_iter=2000, early_stopping=True, 
+                                          random_state=42, validation_fraction=0.1, learning_rate="invscaling",
+                                          )
+        elif self.method == "RidgeCV":
+            self.estimator = RidgeCV(cv=self.cv, scoring="r2", alphas=[1e-3, 1e-2, 1e-1, 1, 10])
     
     def fit(self, X,y):
-        return self.estimator.fit(X,y)
+        if self.method == "MLPRegressor" or self.method=="SVR":
+            self.estimator = self.hyper.fit(X,y)
+            return self.estimator
+        else:
+            self.estimator = self.estimator.fit(X,y)
+            return self.estimator
 
     
     def predict(self, X):
@@ -155,7 +185,6 @@ class Regressors(MetaAttributes):
     def cross_validate(self, X, y):
         return cross_validate(self.estimator, X, y, scoring=["r2", "neg_root_mean_squared_error"],
                                 n_jobs=2, verbose=0, cv=self.cv)
-    
     
     def cross_val_predict(self, X, y):
         return cross_val_predict(self.estimator, X, y, n_jobs=2, verbose=0)
