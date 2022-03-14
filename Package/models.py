@@ -10,6 +10,7 @@ Created on Thu Jan 25 16:00:11 2022
 # imporitng modules 
 import numpy as np 
 import pandas as pd 
+import sys
 
 
 #from sklearn
@@ -20,11 +21,16 @@ from sklearn.linear_model import GammaRegressor, PoissonRegressor
 from sklearn.linear_model import SGDRegressor, RidgeCV
 from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
-from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor
+from sklearn.ensemble import RandomForestRegressor, ExtraTreesRegressor, BaggingRegressor, AdaBoostRegressor
+from sklearn.ensemble import HistGradientBoostingRegressor, GradientBoostingRegressor
 from sklearn.model_selection import cross_val_score, cross_validate, cross_val_predict
 
+from xgboost import XGBRegressor
+
 #from local
-from .splitter import MonthlyBooststrapper
+sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
+
+from Package.splitter import MonthlyBooststrapper
 
 
 class MetaAttributes():
@@ -120,6 +126,10 @@ class Regressors(MetaAttributes):
             
         elif self.method == "LassoLarsCV":
             self.estimator = LassoLarsCV(cv=self.cv, normalize=False)
+            
+        elif self.method == "RidgeCV":
+            self.estimator = RidgeCV(cv=self.cv, scoring="r2", alphas=[1e-3, 1e-2, 1e-1, 1, 10])
+            
         
         #Bayesian regression algorithms 
         elif self.method == "ARD": # Automatic Relevance Determination regression 
@@ -142,7 +152,7 @@ class Regressors(MetaAttributes):
                               "learning_rate": ["adaptive"], "solver": ["adam"]}
              self.hyper = HyperparameterOptimize(method="GridSearchCV", param_grid= param_grid, regressor=regressor)
              
-        #Support Vector Machines
+        #Support Vector Machines (it very expensive to do hyperparamiter search)
         elif self.method == "SVR":
             regressor = SVR()
             param_grid = {"C":[0.1, 1, 10], "gamma":["auto", 1, 0.1, 0.01, 0.0001, 0.2, 0.5, 10], 
@@ -151,17 +161,35 @@ class Regressors(MetaAttributes):
         
         # Ensemble tree based algorithms    
         elif self.method == "RandomForest":
-            self.estimator = RandomForestRegressor(n_estimators=100, random_state=42)
+            self.estimator = RandomForestRegressor(n_estimators=100, random_state=42, n_jobs=-1)
             
         elif self.method == "ExtraTree":
-            self.estimator = ExtraTreesRegressor(n_estimators=100, random_state=42)
+            self.estimator = ExtraTreesRegressor(n_estimators=100, random_state=42, n_jobs=-1)
+            
+        elif self.method == "Bagging":
+            self.estimator = BaggingRegressor(n_estimators=100, random_state=42, n_jobs=-1)
         
+        elif self.method == "AdaBoost":
+            self.estimator = AdaBoostRegressor(n_estimators=100, loss= "linear", random_state=42)
+            
+        elif self.method == "HistGradientBoost":
+            self.estimator = HistGradientBoostingRegressor(loss="squared_error", max_iter=200, validation_fraction=0.1,
+                                                           random_state=42)
+            
+        elif self.method == "GradientBoost":
+            self.estimator = GradientBoostingRegressor(loss="squared_error", n_estimators=200, validation_fraction=0.1,
+                                                           random_state=42, criterion="friedman_mse")
+            
+        elif self.method == "XGBoost":
+            self.estimator = XGBRegressor(n_estimators=100, n_jobs=-1, random_state=42)
+            
+        
+        # gradient descent regression 
         elif self.method == "SGDRegressor":
             self.estimator = SGDRegressor(loss = "squared_error", max_iter=2000, early_stopping=True, 
                                           random_state=42, validation_fraction=0.1, learning_rate="invscaling",
-                                          )
-        elif self.method == "RidgeCV":
-            self.estimator = RidgeCV(cv=self.cv, scoring="r2", alphas=[1e-3, 1e-2, 1e-1, 1, 10])
+                                         )
+        
     
     def fit(self, X,y):
         if self.method == "MLPRegressor" or self.method=="SVR":

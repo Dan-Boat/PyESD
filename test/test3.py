@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 11 12:41:13 2022
+Created on Mon Mar 14 11:53:35 2022
 
 @author: dboateng
 """
+
 import sys
 import os 
 import pandas as pd
@@ -14,6 +15,7 @@ sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
 from Package.feature_selection import RecursiveFeatureElimination, TreeBasedSelection
 from Package.models import Regressors
+from Package.ensemble_models import EnsembleRegressor
 
 
 data_path = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/data/"
@@ -38,42 +40,57 @@ print(selector.cv_test_score())
 train_X_new = selector.transform(df_X_train)
 test_X_new = selector.transform(df_X_test)
 
-from test_utils import plot_regression_results, plot_style
-    
-# using the individual regressors
 models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost", 
           "RandomForest", "SGDRegressor", "ExtraTree", "Bagging", 
           "LassoCV", "MLPRegressor", "RidgeCV", "XGBoost"]
 
-plot_style()
-fig, axes = plt.subplots(3, 4, sharey=True, sharex = True, figsize=(23, 18))
-axs = np.ravel(axes)
+estimators = []
 
 for i in range(len(models)):
-    import time 
-    start_time = time.time()
     
     regressor = Regressors(method= models[i], cv=10)
     regressor.set_model()
-    regressor.fit(train_X_new, train_y)
+    if models[i] == "MLPRegressor":
+        regressor.fit(train_X_new, train_y)
+    estimators.append((models[i], regressor.estimator))
+
+methods = ["Voting", "Stacking"] 
+
+from test_utils import plot_regression_results, plot_style
+import time
+
+fig, axes = plt.subplots(1,2, sharey=True, sharex=True, figsize=(18, 12))
+
+for i in range(len(methods)) :
     
-    score = regressor.cross_validate(train_X_new, train_y)
+    ensemble = EnsembleRegressor(estimators=estimators, cv=10, method=methods[i])
+    
+    start_time = time.time()
+    
+    ensemble.fit(train_X_new, train_y)
+    
+    score = ensemble.cross_validate(train_X_new, train_y)
     
     elapsed_time = time.time() - start_time
     
-    y_pred = regressor.cross_val_predict(train_X_new, train_y)
+    y_pred = ensemble.cross_val_predict(train_X_new, train_y)
     
+    
+    
+    axs = np.ravel(axes)
+    
+    plot_style()
     plot_regression_results(ax=axs[i], y_true=train_y, y_pred=y_pred, 
-                            title= models[i], 
-                            scores = (r"$R^2={:.2f} \pm {:.2f}$" + "\n" + r"$RMSE={:.2f} \pm {:.2f}$").format(
-            np.mean(score["test_r2"]),
-            np.std(score["test_r2"]),
-            -np.mean(score["test_neg_root_mean_squared_error"]),
-            np.std(score["test_neg_root_mean_squared_error"]),),
-                            elapsed_time=elapsed_time, )
-plt.suptitle("Base models performance")
+                                title= methods[i], 
+                                scores = (r"$R^2={:.2f} \pm {:.2f}$" + "\n" + r"$RMSE={:.2f} \pm {:.2f}$").format(
+                np.mean(score["test_r2"]),
+                np.std(score["test_r2"]),
+                -np.mean(score["test_neg_root_mean_squared_error"]),
+                np.std(score["test_neg_root_mean_squared_error"]),),
+                                elapsed_time=elapsed_time, )
+plt.suptitle("Ensemble methods performance")
 plt.tight_layout()
 plt.subplots_adjust(top=0.9)
-plt.savefig("models.svg", format= "svg", bbox_inches="tight", dpi=600)
+plt.savefig("ensemble_models.svg", format= "svg", bbox_inches="tight", dpi=600)
 plt.show()
 
