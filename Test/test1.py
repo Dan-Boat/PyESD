@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 Created on Sun Nov 21 02:11:09 2021
 
@@ -12,7 +10,7 @@ import socket
 import pandas as pd
 import numpy as np
 
-sys.path.append("/home/dboateng/Python_scripts/ESD_Package")
+sys.path.append("C:\\Users\dboateng\Desktop\Python_scripts\ESD_Package")
 
 from Package.ESD_utils import Dataset
 from Package.WeatherstationPreprocessing import read_weatherstationnames, read_station_csv
@@ -23,8 +21,8 @@ from Package.feature_selection import RecursiveFeatureElimination, TreeBasedSele
 
 radius = 200 #km
 
-era5_datadir = "/home/dboateng/Datasets/ERA5/monthly_1950_2021"
-station_datadir = "/home/dboateng/Datasets/Station/Rhine/cdc_download_2021-10-02_11-16_Rhine/processed"
+era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021"
+station_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Rhine/cdc_download_2021-10-02_11-16_Rhine/processed"
 predictordir    = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius/1000)))
 cachedir        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache'))
 
@@ -57,7 +55,7 @@ ERA5Data = Dataset('ERA5', {
 namedict = read_weatherstationnames(station_datadir)
 stationnames = list(namedict.values())
 
-predictors = ["t2m", "tp","msl", "v10", "u10",'z500', 'z850', 'q850',"q500", "t850","t500", "r850", "r500",
+predictors = ["t2m", "tp","msl", "v10", "u10","z500", "z850", "q850","q500", "t850","t500", "r850", "r500",
               "vo850", "vo500", "pv850", "pv500", "u850", "u500", "v850", "v500", "d2m"]
 
 full = pd.date_range(start="1958-01-01", end="2019-12-31", freq="MS")
@@ -80,17 +78,24 @@ X_test = so._get_predictor_data(variable, full_test, ERA5Data, fit=True,)
 y_train = so.get_var(variable, full_train, anomalies=True)
 y_test = so.get_var(variable, full_test, anomalies=True)
 
+# saving data for sample scripts
+X_train.to_csv("predictors_train_1958-2000.csv")
+y_train.to_csv("precipitation_1958-2000.csv")
+X_test.to_csv("predictors_test_2000-2019.csv")
+y_test.to_csv("precipitation_2000-2019.csv")
+
 
 # trying feature class
+
 # rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
 # rcf.fit(X_train, y_train)
 # print(rcf.cv_test_score())
 # X_train_new = rcf.transform(X_train)
 
-tree = TreeBasedSelection(regressor_name="RandomForest")
-tree.feature_importance(X_train,y_train, plot=True)
-tree.fit(X_train, y_train)
-X_train_new = tree.transform(X_train)
+# tree = TreeBasedSelection(regressor_name="RandomForest")
+# tree.feature_importance(X_train,y_train, plot=True)
+# tree.fit(X_train, y_train)
+# X_train_new = tree.transform(X_train)
 
 
 
