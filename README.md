@@ -4,5 +4,5 @@ package is to downscale climate variables like precipitation and temperature fro
 many Machine Learning and Al algorithms to establish the statistical transfer functions). 
 Kindly note that this repo is still underdevelopmemt
 
-# Display of how 8 base or level 0 models perform on precipitation (anonalies) downscaling from large-scale to a point scale using ERA5 datasets
+# Display of how 8 base or level 0 models perform on precipitation (anomalies) downscaling from large-scale to a point scale using ERA5 datasets
 ![alt text](https://github.com/Dan-Boat/PyESD/blob/main/img/models.svg?raw=True)
