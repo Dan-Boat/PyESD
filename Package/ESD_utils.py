@@ -20,7 +20,7 @@ class Dataset():
         self.variables = variables 
         self.data = {}
         
-    def get(self, varname, domain="Europe"):
+    def get(self, varname, domain="NH"):
         try:
             data=self.data[varname]
         
@@ -30,9 +30,9 @@ class Dataset():
             
             data = self.data[varname]
             
-        if domain == "Europe":
+        if domain == "NH":
             
-            minlat, maxlat, minlon, maxlon = 35, 60, -10, 30
+            minlat, maxlat, minlon, maxlon = 10, 90, -90, 90
             
             if hasattr(data, "longitude"):
                 data = data.assign_coords({"longitude": (((data.longitude + 180) % 360) - 180)})
@@ -97,7 +97,11 @@ def map_to_xarray(X, datarray):
         if k != "time":
             coords[k] = datarray.coords.get(k)
             keys.append(k)
-            
+    
+    if "expver" in keys:
+        keys.remove("expver")
+        
+        
     if len(coords[keys[0]]) == np.shape(X)[0]:
         new = xr.DataArray(X, dims=keys, coords=coords)
     else:

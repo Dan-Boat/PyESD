@@ -60,10 +60,10 @@ stationnames = list(namedict.values())
 # predictors = ["t2m", "tp","msl", "v10", "u10",'z500', 'z850', 'q850',"q500", "t850","t500", "r850", "r500",
 #               "vo850", "vo500", "pv850", "pv500", "u850", "u500", "v850", "v500", "d2m", "NAO"]
 
-predictors = ["NAO"]
+predictors = ["NAO", "EA", "SCAN", "EA_WR", "tp"]
 
-full = pd.date_range(start="1958-01-01", end="2019-12-31", freq="MS")
-full_train = pd.date_range(start="1958-01-01", end="2000-12-31", freq="MS")
+full = pd.date_range(start="1959-01-01", end="2019-12-31", freq="MS")
+full_train = pd.date_range(start="1959-01-01", end="2000-12-31", freq="MS")
 full_test = pd.date_range(start="2001-01-01", end="2019-12-31", freq="MS")
 
 variable = "Precipitation"
@@ -84,9 +84,9 @@ y_test = so.get_var(variable, full_test, anomalies=True)
 
 
 # trying feature class
-# rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
-# rcf.fit(X_train, y_train)
-# print(rcf.cv_test_score())
+rcf = RecursiveFeatureElimination(regressor_name="BayesianRidge")
+rcf.fit(X_train, y_train)
+print(rcf.cv_test_score())
 # X_train_new = rcf.transform(X_train)
 
 tree = TreeBasedSelection(regressor_name="RandomForest")

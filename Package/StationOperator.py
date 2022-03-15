@@ -14,7 +14,7 @@ try:
     from .Predictor_Generator import *
     from .standardizer import MonthlyStandardizer
     from .predictand import PredictandTimeseries
-    from .teleconnections import NAO
+    from .teleconnections import NAO, SCAN, EA, EA_WR
 except:
     from Predictor_Generator import *
     from standardizer import MonthlyStandardizer
@@ -45,6 +45,14 @@ class StationOperator():
         for name in predictors:
             if name == "NAO":
                 predictor_list.append(NAO(cachedir=cachedir))
+            elif name == "EA":
+                predictor_list.append(EA(cachedir=cachedir))
+            
+            elif name == "SCAN":
+                predictor_list.append(SCAN(cachedir=cachedir))
+            
+            elif name == "EA_WR":
+                predictor_list.append(EA_WR(cachedir=cachedir))
             else:
                 
                 predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
