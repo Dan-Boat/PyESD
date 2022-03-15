@@ -113,7 +113,7 @@ class Regressors(MetaAttributes):
         if self.cv == None:
             
             print(".....Using monthly bootstrapper as default splitter....")
-            cv = MonthlyBooststrapper(n_splits=500, block_size=12)
+            self.cv = MonthlyBooststrapper(n_splits=500, block_size=12)
             
         self.selection = "random"
         
