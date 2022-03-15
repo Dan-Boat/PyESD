@@ -14,10 +14,12 @@ try:
     from .Predictor_Generator import *
     from .standardizer import MonthlyStandardizer
     from .predictand import PredictandTimeseries
+    from .teleconnections import NAO
 except:
     from Predictor_Generator import *
     from standardizer import MonthlyStandardizer
     from predictand import PredictandTimeseries
+    from teleconnections import NAO
     
     
 class StationOperator():
@@ -41,10 +43,14 @@ class StationOperator():
         predictor_list = []
         
         for name in predictors:
-            
-            predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
-                                                  standardizer_constructor=lambda:
-                                                      MonthlyStandardizer(detrending=detrending, scale=scaling)))
+            if name == "NAO":
+                predictor_list.append(NAO(cachedir=cachedir))
+            else:
+                
+                predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
+                                                      standardizer_constructor=lambda:
+                                                          MonthlyStandardizer(detrending=detrending, scale=scaling)))
+        
         self.variables[variable].set_predictors(predictor_list)
         
     def set_transform(self, variable, transform):

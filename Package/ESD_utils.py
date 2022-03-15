@@ -85,3 +85,27 @@ def extract_indices_around(dataset, lat, lon, radius):
     grids_index = np.where(close_grids(LAT, LON))
     
     return grids_index
+
+
+def map_to_xarray(X, datarray):
+    
+    coords = {}
+    keys = []
+    
+    for k in datarray.coords.keys():
+        
+        if k != "time":
+            coords[k] = datarray.coords.get(k)
+            keys.append(k)
+            
+    if len(coords[keys[0]]) == np.shape(X)[0]:
+        new = xr.DataArray(X, dims=keys, coords=coords)
+    else:
+        new = xr.DataArray(X, dims=keys[::-1], coords=coords)
+        
+    return new 
+            
+    
+    
+    
+    
