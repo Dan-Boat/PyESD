@@ -11,7 +11,7 @@ import matplotlib as mpl
 def plot_style():
     plt.style.use("bmh")
     plt.rcParams['text.latex.preamble'] = [r"\usepackage{lmodern}"]
-    mpl.rc('text', usetex=True)
+    mpl.rc('text', usetex=False)
     mpl.rc('font', size=18, family='serif')
     mpl.rc('xtick', labelsize=22)
     mpl.rc('ytick', labelsize=22)
