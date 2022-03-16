@@ -14,12 +14,12 @@ try:
     from .Predictor_Generator import *
     from .standardizer import MonthlyStandardizer
     from .predictand import PredictandTimeseries
-    from .teleconnections import NAO, SCAN, EA, EA_WR
+    from .teleconnections import NAO, SCAN, EA, EAWR
 except:
     from Predictor_Generator import *
     from standardizer import MonthlyStandardizer
     from predictand import PredictandTimeseries
-    from teleconnections import NAO
+    from teleconnections import NAO, SCAN, EA, EAWR
     
     
 class StationOperator():
@@ -51,8 +51,8 @@ class StationOperator():
             elif name == "SCAN":
                 predictor_list.append(SCAN(cachedir=cachedir))
             
-            elif name == "EA_WR":
-                predictor_list.append(EA_WR(cachedir=cachedir))
+            elif name == "EAWR":
+                predictor_list.append(EAWR(cachedir=cachedir))
             else:
                 
                 predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
@@ -67,11 +67,30 @@ class StationOperator():
     def set_standardizer(self, variable, standardizer):
         self.variables[variable].set_standardizer(standardizer)
         
-    def set_model(self, variable, model):
-        self.variables[variable].set_model(model)
+    def set_model(self, variable, method):
+        self.variables[variable].set_model(method)
     
     def _get_predictor_data(self,variable, datarange, dataset, fit, **predictor_kwargs):
         return self.variables[variable]._get_predictor_data(datarange, dataset, fit, **predictor_kwargs)
+    
+    def fit(self, variable, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs):
+        
+        return self.variables[variable].fit(datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+                selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs)
+    
+    
+    def predict(self, variables, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
+        
+        return self.variables[variable].predict(datarange, predictor_dataset, anomalies=False, **predictor_kwargs)
+    
+    
+    def cross_validate_and_predict(self, variables, datarange, predictor_dataset, **predictor_kwargs):
+        
+        return self.variables[variables].cross_validate_and_predict(datarange, predictor_dataset, **predictor_kwargs)
+    
+    
+    
     
     
     def save(self, directory=None, fname=None):

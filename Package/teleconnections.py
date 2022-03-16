@@ -21,8 +21,12 @@ from cartopy.util import add_cyclic_point
 #from local
 sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.Predictor_Base import Predictor
-from Package.ESD_utils import map_to_xarray
+try:
+    from .Predictor_Base import Predictor
+    from .ESD_utils import map_to_xarray
+except:
+    from Predictor_Base import Predictor
+    from ESD_utils import map_to_xarray
 
 
 def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True, 
@@ -262,7 +266,7 @@ class SCAN(Predictor):
     def plot_cov_matrix(ax=None):
         pass
 
-class EA_WR(Predictor):
+class EAWR(Predictor):
     def __init__(self, **kwargs):
         super().__init__(name="EAWR", longname= "East Atlantic_West Russian Oscilation", **kwargs)
     def _generate(self, datarange, dataset, fit, patterns_from, params_from):

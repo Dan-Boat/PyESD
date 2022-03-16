@@ -10,24 +10,37 @@ import sys
 from sklearn.ensemble import StackingRegressor, VotingRegressor
 from sklearn.model_selection import cross_val_score, cross_validate, cross_val_predict
 
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
-from Package.models import Regressors
+try:
+    from models import Regressors
+except:
+    from .models import Regressors
+    
 
 class EnsembleRegressor():
     
-    def __init__(self, estimators, final_estimator=None, cv=10, n_jobs=-1, passthrough=False, method="Stacking"):
+    def __init__(self, estimators, final_estimator_name=None, cv=10, n_jobs=-1, passthrough=False, method="Stacking",
+                 ):
         self.estimators = estimators 
-        self.final_estimator = final_estimator 
+        self.final_estimator_name = final_estimator_name 
         self.cv = cv
         self.n_jobs = n_jobs
         self.passthrough = passthrough
         self.method = method
         
-        if self.final_estimator == None:
+        if self.final_estimator_name == None:
             regressor = Regressors(method="RandomForest", cv=10)
             regressor.set_model()
             print("....using random forest as final estimator......")
-            self.final_estimator = regressor.estimator 
+            self.final_estimator = regressor.estimator
+        else:
+            
+            regressor = Regressors(method=final_estimator_name, cv=10)
+            regressor.set_model()
+            print("-------using " + final_estimator_name + " as final estimator ......")
+            self.final_estimator = regressor.estimator
+            
+            
+            
         if self.method == "Stacking":   
             self.ensemble = StackingRegressor(estimators=self.estimators, final_estimator=self.final_estimator, cv=self.cv, 
                                              passthrough=self.passthrough, n_jobs=self.n_jobs)

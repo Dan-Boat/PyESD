@@ -27,10 +27,12 @@ from sklearn.model_selection import cross_val_score, cross_validate, cross_val_p
 
 from xgboost import XGBRegressor
 
-#from local
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.splitter import MonthlyBooststrapper
+try:
+    from .splitter import MonthlyBooststrapper
+    
+except:
+    from splitter import MonthlyBooststrapper
 
 
 class MetaAttributes():

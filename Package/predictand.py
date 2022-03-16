@@ -5,23 +5,33 @@ Created on Sun Nov 21 00:55:22 2021
 
 @author: dboateng
 """
-
+import sys
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from copy import copy
 from collections import OrderedDict
 
+
 try:
-    from .standardizer import MonthlyStandardizer, NoStandardizer
-except:
     from standardizer import MonthlyStandardizer, NoStandardizer
     from feature_selection import RecursiveFeatureElimination, TreeBasedSelection, SequentialFeatureSelection
+    from models import Regressors
+    from ensemble_models import EnsembleRegressor
+    
+except:
+    from .standardizer import MonthlyStandardizer, NoStandardizer
+    from .feature_selection import RecursiveFeatureElimination, TreeBasedSelection, SequentialFeatureSelection
+    from .models import Regressors
+    from .ensemble_models import EnsembleRegressor
+    
+    
+    
     
     
 class PredictandTimeseries():
     
-    def __init__(self, data, transform=None, standardizer=None, model=None):
+    def __init__(self, data, transform=None, standardizer=None):
         
         self.data = data
         self.transform = None
@@ -30,8 +40,7 @@ class PredictandTimeseries():
         if transform is not None:
             self.set_transform(transform)
         self.set_standardizer(standardizer)
-        if model is not None:
-            self.set_model(model)
+
             
     def get(self, daterange=None, anomalies=False):
         if anomalies:
@@ -65,8 +74,27 @@ class PredictandTimeseries():
         else:
             self.data_st = self.standardizer.fit_transform(self.data)
             
-    def set_model(self, model):
-        pass
+    def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None):
+        
+        self.cv = cv
+        
+        if ensemble_learning == True:
+            if method not in ["stacking", "voting"]:
+                raise ValueError("ensemble method used either stacking or voting")
+                
+            
+            if estimators is None:
+                raise ValueError("...estimators list must be provided for ensemble models")
+                
+            else:
+                self.estimators = estimators
+            
+            self.model = EnsembleRegressor(estimators=self.estimators, cv=self.cv, method=method, 
+                                           final_estimator_name=final_estimator_name)
+        else:
+            
+            self.model = Regressors(method=method, cv=self.cv)
+            
     
     def set_predictors(self, predictors):
         self.predictors = OrderedDict()
@@ -153,7 +181,7 @@ class PredictandTimeseries():
         return yhat
     
     
-    def cross_validate(self, datarange, predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, datarange, predictor_dataset, **predictor_kwargs):
         
         X = self._get_predictor_data(datarange, predictor_dataset, **predictor_kwargs)
         
@@ -162,6 +190,27 @@ class PredictandTimeseries():
         X = X.loc[~np.nan(y)]
         
         y = y.dropna()
+        
+        if hasattr(self, "selector"):
+            X_selected = self.selector.transform(X)
+            
+            val_score = self.model.cross_validate(X_selected, y)
+            fit_score = self.model.score(X_selected, y)
+            y_pred = self.model.cross_val_predict(X_selected, y)
+        else:
+            fit_score = self.model.score(X, y)
+            val_score = self.model.cross_validate(X, y)
+            y_pred = self.model.cross_val_predict(X, y)
+            
+        scores = {"test_r2": np.mean(val_score["test_r2"]),
+                  "test_r2_std": np.std(val_score["test_r2"]),
+                  "train_r2": fit_score,
+                  "test_rmse": np.mean(val_score["test_neg_root_mean_squared_error"]),
+                  "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]), 
+                  }
+        return scores, y_pred
+            
+            
         
         
         
