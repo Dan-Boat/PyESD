@@ -66,7 +66,9 @@ class DeepLearningRegressor():
         return self.estimator.fit(X,y)
     
     def predict(self, X):
-        pass
+        yhat = self.estimator.predict(X)
+        return yhat
+
     
     
         

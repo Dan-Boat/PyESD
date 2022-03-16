@@ -23,7 +23,7 @@ from sklearn.ensemble import ExtraTreesRegressor, ExtraTreesClassifier
 # class for recursive feature elimination 
 class RecursiveFeatureElimination():
     
-    def __init__(self, regressor_name):
+    def __init__(self, regressor_name="ARDRegression"):
         self.regressor_name = regressor_name
         self.cv = TimeSeriesSplit()
         self.n_jobs = -1
@@ -69,7 +69,7 @@ class RecursiveFeatureElimination():
         
 
 class TreeBasedSelection():
-    def __init__(self, regressor_name,):
+    def __init__(self, regressor_name="RandomForest"):
         self.regressor_name = regressor_name
         self.n_jobs = -1
         self.bootstrap = True
@@ -131,7 +131,7 @@ class TreeBasedSelection():
         
 
 class SequentialFeatureSelection():
-    def __init__(self, regressor_name, n_features, direction):
+    def __init__(self, regressor_name = "Ridge", n_features= 10, direction="forward"):
         self.regressor_name = regressor_name
         self.n_features =n_features
         self.scoring = "r2"

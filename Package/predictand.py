@@ -16,6 +16,7 @@ try:
     from .standardizer import MonthlyStandardizer, NoStandardizer
 except:
     from standardizer import MonthlyStandardizer, NoStandardizer
+    from feature_selection import RecursiveFeatureElimination, TreeBasedSelection, SequentialFeatureSelection
     
     
 class PredictandTimeseries():
@@ -80,6 +81,96 @@ class PredictandTimeseries():
             
         return pd.concat(Xs, axis=1)
     
+    def fit(self, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs):
+        
+        # checking attributes required before fitting
+        
+        if not hasattr(self, "model"):
+            raise ValueError("...set model before fitting...")
+            
+        if not hasattr(self, "predictors"):
+            raise ValueError("-----define predictor set first with set_predictors method....")
+            
+            
+        X = self._get_predictor_data(datarange, predictor_dataset, fit_predictors, **predictor_kwargs)
+        
+        y = self.get(datarange, anomalies=fit_predictors)
+        
+        # dropna values 
+        
+        X = X.loc[~np.nan(y)]
+        
+        y = y.dropna()
+        
+        if predictor_selector ==True:
+            
+            if selector_method == "Reccursive":
+                self.selector = RecursiveFeatureElimination(regressor_name=selector_regressor)
+                
+            elif selector_method == "TreeBased":
+                self.selector == TreeBasedSelection(regressor_name=selector_regressor)
+                
+            elif selector_method == "Sequential":
+                if num_predictors == None and selector_direction == None:
+                    self.selector = SequentialFeatureSelection(regressor_name=selector_regressor)
+                else:
+                    self.selector = SequentialFeatureSelection(regressor_name=selector_regressor, 
+                                                               n_features=num_predictors, direction=selector_direction)
+                    
+            else:
+                raise ValueError("....selector method not recognized .....")
+                
+            self.selector.fit(X, y)
+            
+            X_selected = self.selector.transform(X)
+            
+            self.model.fit(X_selected, y)
+            
+        else:
+            self.model.fit(X, y)
+            
+    def predict(self, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
+        
+        X = self._get_predictor_data(datarange, predictor_dataset, **predictor_kwargs)
+        
+        if not hasattr(self, "selector"):
+            
+            yhat = pd.Series(data=self.model.predict(X), index=datarange)
+            
+        else:
+            X_selected = self.selector.transform(X)
+            
+            yhat = pd.Series(data=self.model.predict(X_selected), index=datarange)
+            
+        if anomalies == True:
+            if self.standardizer is not None:
+                yhat = self.standardizer.inverse_transform(yhat)
+                
+            if self.transform is not None:
+                yhat = self.backtransform(yhat)
+        
+        return yhat
+    
+    
+    def cross_validate(self, datarange, predictor_dataset, **predictor_kwargs):
+        
+        X = self._get_predictor_data(datarange, predictor_dataset, **predictor_kwargs)
+        
+        y = self.get(datarange, anomalies=True)
+        
+        X = X.loc[~np.nan(y)]
+        
+        y = y.dropna()
+        
+        
+        
+                
+            
+                
+                    
+                
+            
 
             
         
