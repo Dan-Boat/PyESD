@@ -18,12 +18,14 @@ try:
     from feature_selection import RecursiveFeatureElimination, TreeBasedSelection, SequentialFeatureSelection
     from models import Regressors
     from ensemble_models import EnsembleRegressor
+    from metrics import Evaluate
     
 except:
     from .standardizer import MonthlyStandardizer, NoStandardizer
     from .feature_selection import RecursiveFeatureElimination, TreeBasedSelection, SequentialFeatureSelection
     from .models import Regressors
     from .ensemble_models import EnsembleRegressor
+    from .metrics import Evaluate
     
     
     
@@ -110,7 +112,8 @@ class PredictandTimeseries():
         return pd.concat(Xs, axis=1)
     
     def fit(self, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
-            selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs):
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
+            **predictor_kwargs):
         
         # checking attributes required before fitting
         
@@ -157,6 +160,29 @@ class PredictandTimeseries():
             
         else:
             self.model.fit(X, y)
+            
+            
+            
+        if cal_relative_importance == True:
+            
+            if not hasattr(self.model, "coef_"):
+                raise ValueError("The estimator should have coef_attributes..or must be fitted before this method....")
+                            
+            else:
+                
+                coef_ = self.model.coef_
+                score = self.model.score(X,y)
+                residual = np.sqrt(1 - score)
+                
+                normalized_coef_ = coef_ * np.std(X, axis=0)
+                
+                total = residual + np.sum(np.abs(normalized_coef_))
+                
+                self.predictor_relative_contribution = normalized_coef_ / total
+                
+                
+            
+            
             
     def predict(self, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
         
@@ -209,6 +235,51 @@ class PredictandTimeseries():
                   "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]), 
                   }
         return scores, y_pred
+    
+    def evaluate(self, datarnage, predictor_dataset, **predictor_kwargs):
+        
+        y_true = self.get(datarnage, anomalies=False)
+        
+        y_pred = self.predict(datarnage, predictor_dataset, anomalies=False, **predictor_kwargs)
+        
+        self.evaluate = Evaluate(y_true, y_pred)
+        
+        rmse = self.evaluate.RMSE()
+        nse = self.evaluate.NSE()
+        mse = self.evaluate.MSE()
+        mae = self.evaluate.MAE()
+        accuracy = self.evaluate.accuracy()
+        exp_var = self.evaluate.explained_variance()
+        r2 = self.evaluate.R2_score()
+        max_error = self.evaluate.max_error()
+        
+        scores = {"RMSE": rmse,
+                  "MSE": mse,
+                  "NSE": nse,
+                  "MAE": mae, 
+                  "accuracy": accuracy,
+                  "explained_variance": exp_var, 
+                  "r2": r2, 
+                  "max_error": max_error}
+        
+        return scores 
+        
+    def predictors_relative_performamce(self, datarange, predictor_datasets, **predictor_kwargs):
+        
+        if not hasattr(self, "model"):
+            raise ValueError("...set model before fitting...")
+            
+        if not hasattr(self, "predictors"):
+            raise ValueError("-----define predictor set first with set_predictors method....")
+            
+            
+        
+            
+            
+            
+            
+        
+        
             
             
         
