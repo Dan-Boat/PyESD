@@ -10,6 +10,10 @@ This routine contians all the utility classes and functions required for ESD fun
 import xarray as xr
 import pandas as pd 
 import numpy as np 
+import pickle 
+import os 
+from collections import OrderedDict 
+
 import matplotlib.pyplot as plt
 
 
@@ -110,6 +114,49 @@ def map_to_xarray(X, datarray):
     return new 
             
     
-    
+def store_pickle(stationname, varname, var, cachedir):
+    filename = stationname.replace(' ', '_')
+    fname = os.path.join(cachedir, filename + '_' + varname + '.pickle') 
+    with open(fname, 'wb') as f:
+        pickle.dump(var, f)
+
+
+def load_pickle(stationname, varname, path):
+    filename = stationname.replace(' ', '_')
+    fname = os.path.join(path, filename + '_' + varname + '.pickle')
+    with open(fname, 'rb') as f:
+        return pickle.load(f)
+
+def store_csv(stationname, varname, var, cachedir):
+    filename = stationname.replace(' ', '_')
+    fname = os.path.join(cachedir, filename + '_' + varname + '.csv') 
+    var.to_csv(fname)
+
+
+def load_csv(stationname, varname, path):
+    filename = stationname.replace(' ', '_')
+    fname = os.path.join(path, filename + '_' + varname + '.csv') 
+    return pd.read_csv(fname, index_col=0, parse_dates=True)
+
+
+
+def load_all_stations(varname, path, stationnames):
+    """
+    This assumes that the stored quantity is a dictionary
+
+    Returns a dictionary
+    """
+    values_dict = OrderedDict()
+
+    for stationname in stationnames:
+        values_dict[stationname] = load_pickle(stationname, varname, path)
+
+    df = pd.DataFrame(values_dict).transpose()
+   
+    # get right order
+    columns = list(values_dict[stationname].keys())
+    df =  df.loc[stationnames]
+    return df[columns]
+
     
     
