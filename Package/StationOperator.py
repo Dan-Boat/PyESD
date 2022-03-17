@@ -9,6 +9,9 @@ Created on Sun Nov 21 00:55:37 2021
 import pickle
 import numpy as np
 import pandas as pd
+import os 
+
+
 
 try:
     from .Predictor_Generator import *
@@ -74,20 +77,25 @@ class StationOperator():
         return self.variables[variable]._get_predictor_data(datarange, dataset, fit, **predictor_kwargs)
     
     def fit(self, variable, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
-            selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs):
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, **predictor_kwargs):
         
         return self.variables[variable].fit(datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
                 selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs)
     
     
-    def predict(self, variables, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
+    def predict(self, variable, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
         
         return self.variables[variable].predict(datarange, predictor_dataset, anomalies=False, **predictor_kwargs)
     
     
-    def cross_validate_and_predict(self, variables, datarange, predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, variable, datarange, predictor_dataset, **predictor_kwargs):
         
-        return self.variables[variables].cross_validate_and_predict(datarange, predictor_dataset, **predictor_kwargs)
+        return self.variables[variable].cross_validate_and_predict(datarange, predictor_dataset,
+                                                                    **predictor_kwargs)
+    
+    def evaluate(self, variable, datarnage, predictor_dataset, **predictor_kwargs):
+        
+        return self.variables[variable].evaluate(datarnage, predictor_dataset, **predictor_kwargs)
     
     
     
@@ -111,7 +119,8 @@ class StationOperator():
         if fname is None:
             fname = self.name.replace(' ', '_') + '.pickle'
         filename = os.path.join(directory, fname)
-        with open(f, 'wb') as f:
+        
+        with open(filename, 'wb') as f:
             pickle.dump(self, f)
             
             

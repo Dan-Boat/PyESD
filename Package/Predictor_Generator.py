@@ -10,11 +10,9 @@ Created on Fri Nov 12 14:03:09 2021
 import numpy as np
 import xarray as xr
 import pandas as pd
-import matplotlib
-from eofs.xarray import Eof
 
-from cartopy.mpl.gridliner import LatitudeFormatter, LongitudeFormatter
-import cartopy as ccrs
+
+
 
 try:
     from .Predictor_Base import Predictor
@@ -60,5 +58,3 @@ class RegionalAverage(Predictor):
         return pd.Series(data)
     
     
-    
-#define Class for NAO (But its not necessary because its correctly implemented for winter) or try to load NOA data

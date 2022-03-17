@@ -264,13 +264,6 @@ class PredictandTimeseries():
         
         return scores 
         
-    def predictors_relative_performamce(self, datarange, predictor_datasets, **predictor_kwargs):
-        
-        if not hasattr(self, "model"):
-            raise ValueError("...set model before fitting...")
-            
-        if not hasattr(self, "predictors"):
-            raise ValueError("-----define predictor set first with set_predictors method....")
             
             
         

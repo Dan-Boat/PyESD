@@ -4,11 +4,10 @@
 Created on Fri Nov 12 14:01:43 2021
 
 
-This routine handles the preprocessing of data downloaded directly from DWD. At the moment it only handles monthly data but different temporal resolution will be
-implemented shortly. 
+This routine handles the preprocessing of data downloaded directly from DWD. The default time series is monthly, others frequency must be pass to the function
 1. Extracting only stations with required number of years 
 2. Writing additional information into files (eg. station name, lat, lon and elevation), since its downloaded into a separate file using station codes
-3. All utils function to read stations into class required by the Downscaling package
+3. All utils function to read stations into pyESD Station operator class
 
 Note: This routine is specifically designed for data downloded from DWD (otherwise please contact daniel.boateng@uni-tuebingen.de for assistance on other datasets)
 
@@ -30,7 +29,7 @@ except:
     
 
 
-def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs, glob_name, varname="Precipitation", start_date=None,
+def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs=60, glob_name="data*.csv", varname="Precipitation", start_date=None,
                           end_date=None, data_freq=None):
     """
     1. make directory to store the data that satisfies the time criteria
@@ -64,20 +63,23 @@ def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs, glob_nam
     if all(par is not None for par in [start_date, end_date, data_freq]):
         daterange = pd.date_range(start=start_date, end=end_date, freq=data_freq)
     else:
-        daterange = pd.date_range(start="1958-01-01", end="2020-12-01", freq="MS") # time range for ERA5
+        print("------using the default time of ERA5 dataset: 1958-2020--------")
+        
+        daterange = pd.date_range(start="1958-01-01", end="2021-12-01", freq="MS") # time range for ERA5
     
     use_colums = ["Zeitstempel", "Wert"]
     
-    df_to_store = pd.DataFrame(columns=["Date", varname,])
+    df_to_store = pd.DataFrame(columns=["Time", varname,])
     
-    df_to_store["Date"] = daterange
-    df_to_store = df_to_store.set_index(["Date"], drop=True)
+    df_to_store["Time"] = daterange
+    df_to_store = df_to_store.set_index(["Time"], drop=True)
     
     
     # looping through directory
     for csv in p(path_to_data).glob(glob_name):
         df = pd.read_csv(csv, index_col=False, usecols=use_colums, parse_dates=["Zeitstempel"])
         df = df.set_index(["Zeitstempel"], drop=True)
+        
         df = df.loc[daterange[0]:daterange[-1]] # selects only available dates
         
         if data_freq is None or data_freq =="MS":
@@ -86,14 +88,20 @@ def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs, glob_nam
             raise Exception("different time period is not implemented")
         
         if yrs >= min_yrs: # data with more than 60 years
+        
+        
             df_to_store[varname][df.index] = df["Wert"][df.index]
             
             if varname == "Precipitation":
                 df_to_store = df_to_store.replace(np.nan, -9999)
+                
+                
             elif varname == "Temperature":
                 df_to_store = df_to_store.replace(np.nan, -8888)
+                
+                
             else:
-                raise ValueError("Varname not define well")
+                raise ValueError("Incorrect variable name")
             
             print("saving", csv.name)
             
@@ -140,6 +148,9 @@ def add_info_to_data(path_to_info, path_to_data, path_to_store, glob_name, varna
         
         # reading data from path (csv_file)
         data_in_glob = pd.read_csv(csv_file)
+        
+        print(csv_file)
+        
         time_len = len(data_in_glob["Time"])
         
         # creating new dataFrame to store the data in required format
@@ -159,7 +170,7 @@ def add_info_to_data(path_to_info, path_to_data, path_to_store, glob_name, varna
         df.at[3,0] = "Elevation"
         df.at[3,1] = csv_info["Hoehe_ueber_NN"]
         
-        df.at[5,0] = "Date"
+        df.at[5,0] = "Time"
         df.at[5,1] = varname
         
         #adding data from sorted file
@@ -184,9 +195,13 @@ def add_info_to_data(path_to_info, path_to_data, path_to_store, glob_name, varna
     # replace comma with dot
     
     df_info["Latitude"] = df_info["Latitude"].apply(lambda x:x.replace(",","."))
+    
     df_info["Longitude"] = df_info["Longitude"].apply(lambda x:x.replace(",","."))
+    
     df_info["Name"] = df_info["Name"].apply(lambda x:x.translate(special_char_map))
+    
     df_info = df_info.sort_values(by=["Name"], ascending=True)
+    
     df_info = df_info.reset_index(drop=True)
                                  
     
@@ -257,7 +272,7 @@ def read_station_csv(filename, varname):
         
         
     data = pd.read_csv(filename, sep=',', skiprows=6, usecols=[0,1,],
-                       parse_dates=[0], index_col=0, names=['Date',
+                       parse_dates=[0], index_col=0, names=['Time',
                        varname], na_values=-9999)
     
     data = data.dropna()
@@ -286,7 +301,20 @@ def read_station_csv(filename, varname):
     
     
 def read_weatherstations(path_to_data):
-    
+    """
+    Read all the station data in a directory.
+
+    Parameters
+    ----------
+    path_to_data : TYPE: STR
+        DESCRIPTION. relative or absolute path to the station folder
+
+    Returns
+    -------
+    stations : TYPE: DICT
+        DESCRIPTION. Dictionary containing all the datasets
+
+    """
     namedict = read_weatherstationnames(path_to_data)
     stations = {}
     for i in namedict:
