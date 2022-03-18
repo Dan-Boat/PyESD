@@ -76,7 +76,8 @@ class PredictandTimeseries():
         else:
             self.data_st = self.standardizer.fit_transform(self.data)
             
-    def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None):
+    def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None,
+                  datarange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
         
         self.cv = cv
         
@@ -87,11 +88,29 @@ class PredictandTimeseries():
             
             if estimators is None:
                 raise ValueError("...estimators list must be provided for ensemble models")
-                
-            else:
-                self.estimators = estimators
             
-            self.model = EnsembleRegressor(estimators=self.estimators, cv=self.cv, method=method, 
+            regressors = []    
+            for i in range(len(estimators)) :
+                regressor = Regressors(method=estimators[i], cv=self.cv)
+                
+                regressor.set_model()
+                
+                if estimators[i] == "MLPRegressor" or "SVR":
+                    
+                    X = self._get_predictor_data(datarange, predictor_dataset, fit_predictors, **predictor_kwargs)
+                    
+                    y = self.get(datarange, anomalies=fit_predictors)
+                    
+                    regressor.fit(X, y)
+                
+                regressors.append((estimators[i], regressor.estimator))
+                    
+                    
+                    
+                
+                
+            
+            self.model = EnsembleRegressor(estimators=regressors, cv=self.cv, method=method, 
                                            final_estimator_name=final_estimator_name)
         else:
             
@@ -130,13 +149,13 @@ class PredictandTimeseries():
         
         # dropna values 
         
-        X = X.loc[~np.nan(y)]
+        X = X.loc[~np.isnan(y)]
         
         y = y.dropna()
         
         if predictor_selector ==True:
             
-            if selector_method == "Reccursive":
+            if selector_method == "Recursive":
                 self.selector = RecursiveFeatureElimination(regressor_name=selector_regressor)
                 
             elif selector_method == "TreeBased":
@@ -153,6 +172,7 @@ class PredictandTimeseries():
                 raise ValueError("....selector method not recognized .....")
                 
             self.selector.fit(X, y)
+            self.selector.print_selected_features(X)
             
             X_selected = self.selector.transform(X)
             
@@ -263,7 +283,15 @@ class PredictandTimeseries():
                   "max_error": max_error}
         
         return scores 
-        
+    
+    def ensemble_transform(self):
+        pass
+    
+    
+    def relative_predictor_importance(self):
+        pass
+    
+    
             
             
         

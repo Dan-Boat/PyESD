@@ -60,7 +60,7 @@ class StationOperator():
                 
                 predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
                                                       standardizer_constructor=lambda:
-                                                          MonthlyStandardizer(detrending=detrending, scale=scaling)))
+                                                          MonthlyStandardizer(detrending=detrending, scaling=scaling)))
         
         self.variables[variable].set_predictors(predictor_list)
         
@@ -70,8 +70,16 @@ class StationOperator():
     def set_standardizer(self, variable, standardizer):
         self.variables[variable].set_standardizer(standardizer)
         
-    def set_model(self, variable, method):
-        self.variables[variable].set_model(method)
+        
+        
+    def set_model(self, variable, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None, 
+                  datarange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
+        
+        self.variables[variable].set_model(method, ensemble_learning=ensemble_learning, estimators=estimators, cv=cv, final_estimator_name=final_estimator_name, 
+                                           datarange=datarange, predictor_dataset=predictor_dataset, 
+                                           fit_predictors=fit_predictors, **predictor_kwargs)
+        
+        
     
     def _get_predictor_data(self,variable, datarange, dataset, fit, **predictor_kwargs):
         return self.variables[variable]._get_predictor_data(datarange, dataset, fit, **predictor_kwargs)
@@ -79,13 +87,20 @@ class StationOperator():
     def fit(self, variable, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, **predictor_kwargs):
         
-        return self.variables[variable].fit(datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
-                selector_regressor="Ridge", num_predictors=None, selector_direction=None, **predictor_kwargs)
+        
+        
+        return self.variables[variable].fit(datarange, predictor_dataset, fit_predictors=fit_predictors , predictor_selector=predictor_selector, 
+                                            selector_method=selector_method,
+                selector_regressor= selector_regressor,
+                num_predictors=num_predictors,
+                selector_direction= selector_direction,
+                **predictor_kwargs)
     
     
     def predict(self, variable, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
         
-        return self.variables[variable].predict(datarange, predictor_dataset, anomalies=False, **predictor_kwargs)
+        return self.variables[variable].predict(datarange, predictor_dataset, anomalies=anomalies,
+                                                **predictor_kwargs)
     
     
     def cross_validate_and_predict(self, variable, datarange, predictor_dataset, **predictor_kwargs):

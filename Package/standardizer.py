@@ -187,7 +187,7 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
         if self.detrending:
             values -= self.intercepts + np.outer(t, self.slopes) # remove trend
 
-        if self.scale:
+        if self.scaling:
             values /= self.std
 
         if X.values.ndim == 1:
@@ -217,7 +217,7 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
         if values.ndim == 1:
             values = values[:,np.newaxis]
 
-        if self.scale:
+        if self.scaling:
             values *= self.std
 
         # add the trend

@@ -43,5 +43,12 @@ station_dir = os.path.join(station_datadir, stationname + ".csv")
 SO = read_station_csv(filename=station_dir, varname=variable)
 
 SO.set_predictors(variable, predictors, predictordir, radius,)
+
 SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
-SO.set_model(variable, method=method, ensemble_learning=True, estimators=models, final_estimator=None)
+
+SO.set_model(variable, method=method, ensemble_learning=True, estimators=models, final_estimator_name=None)
+
+SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
+       selector_method="Recursive", selector_regressor="Ridge")
+
+score, ypred = SO.cross_validate_and_predict(variable, datarange, predictor_dataset, predictor_kwargs)
