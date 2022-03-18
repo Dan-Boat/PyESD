@@ -58,6 +58,7 @@ for i in range(len(models)):
     regressor.fit(train_X_new, train_y)
     
     score = regressor.cross_validate(train_X_new, train_y)
+    train_score = regressor.score(train_X_new, train_y)
     
     elapsed_time = time.time() - start_time
     
@@ -65,12 +66,14 @@ for i in range(len(models)):
     
     plot_regression_results(ax=axs[i], y_true=train_y, y_pred=y_pred, 
                             title= models[i], 
-                            scores = (r"$R^2={:.2f} \pm {:.2f}$" + "\n" + r"$RMSE={:.2f} \pm {:.2f}$").format(
+                            scores = (r"$R^2={:.2f} \pm {:.2f}$" + "\n" + r"$RMSE={:.2f} \pm {:.2f}$ " + "\n" + "train " + r"$R^2={:.2f}$").format(
             np.mean(score["test_r2"]),
             np.std(score["test_r2"]),
             -np.mean(score["test_neg_root_mean_squared_error"]),
-            np.std(score["test_neg_root_mean_squared_error"]),),
+            np.std(score["test_neg_root_mean_squared_error"]),
+            train_score),
                             elapsed_time=elapsed_time, )
+    
 plt.suptitle("Base models performance")
 plt.tight_layout()
 plt.subplots_adjust(top=0.9)

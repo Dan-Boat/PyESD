@@ -17,14 +17,14 @@ import numpy as np
 sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
 from Package.ESD_utils import Dataset
-from Package.WeatherstationPreprocessing import read_weatherstationnames, read_station_csv
+from Package.WeatherstationPreprocessing import read_weatherstationnames
 
 radius = 200 # km
 
 
 # paths 
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
-station_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Precipitation/cdc_download_2022-03-17_13/processed"
+station_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Precipitation/cdc_download_2022-03-17_13/processed/"
 predictordir    = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius)))
 cachedir        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache'))
 

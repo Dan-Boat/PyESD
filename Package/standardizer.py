@@ -107,9 +107,9 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
         Whether to remove a linear trend
     """
 
-    def __init__(self, detrending=False, scale=False):
+    def __init__(self, detrending=False, scaling=False):
         self.detrending = detrending
-        self.scale = scale
+        self.scaling = scaling
 
     def fit(self, X, y=None):
         """
@@ -157,7 +157,7 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
             # remove trend
             values -= self.intercepts + np.outer(t, self.slopes)
 
-        if self.scale:
+        if self.scaling:
             self.std = np.nanstd(values, axis=0)
 
         return self
