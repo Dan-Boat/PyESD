@@ -32,7 +32,7 @@ models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost",
           "RandomForest", "SGDRegressor", "ExtraTree", "Bagging", 
           "LassoCV", "RidgeCV", "XGBoost"]
 
-method = "stacking"
+method = "Stacking"
 
 num_of_stations = len(stationnames)
 

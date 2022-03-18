@@ -82,7 +82,7 @@ class PredictandTimeseries():
         self.cv = cv
         
         if ensemble_learning == True:
-            if method not in ["stacking", "voting"]:
+            if method not in ["Stacking", "Voting"]:
                 raise ValueError("ensemble method used either stacking or voting")
                 
             
@@ -95,11 +95,13 @@ class PredictandTimeseries():
                 
                 regressor.set_model()
                 
-                if estimators[i] == "MLPRegressor" or "SVR":
+                if estimators[i] in ["MLPRegressor", "SVR"]:
                     
-                    X = self._get_predictor_data(datarange, predictor_dataset, fit_predictors, **predictor_kwargs)
+                    X = self._get_predictor_data(datarange=datarange, predictor_dataset=predictor_dataset, 
+                                                 fit_predictors = fit_predictors,
+                                                 **predictor_kwargs)
                     
-                    y = self.get(datarange, anomalies=fit_predictors)
+                    y = self.get(datarange = datarange, anomalies=fit_predictors)
                     
                     regressor.fit(X, y)
                 

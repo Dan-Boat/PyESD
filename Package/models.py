@@ -191,7 +191,8 @@ class Regressors(MetaAttributes):
             self.estimator = SGDRegressor(loss = "squared_error", max_iter=2000, early_stopping=True, 
                                           random_state=42, validation_fraction=0.1, learning_rate="invscaling",
                                          )
-        
+        else:
+            raise ValueError("method name not recognized")
     
     def fit(self, X,y):
         if self.method == "MLPRegressor" or self.method=="SVR":
