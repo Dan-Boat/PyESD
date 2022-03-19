@@ -29,10 +29,10 @@ from predictor_settings import *
 
 
 models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost", 
-          "RandomForest", "SGDRegressor", "ExtraTree", "Bagging", 
-          "LassoCV", "RidgeCV", "XGBoost"]
+          "RandomForest", "ExtraTree", "Bagging", 
+          "LassoCV", "RidgeCV", "XGBoost", "MLPRegressor"]
 
-method = "Stacking"
+method = "Voting"
 
 num_of_stations = len(stationnames)
 
@@ -46,9 +46,18 @@ SO.set_predictors(variable, predictors, predictordir, radius,)
 
 SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
 
-SO.set_model(variable, method=method, ensemble_learning=True, estimators=models, final_estimator_name=None)
+SO.set_model(variable, method=method, ensemble_learning=True, estimators=models, final_estimator_name=None,
+             daterange = from1958to2010, predictor_dataset=ERA5Data)
 
 SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
        selector_method="Recursive", selector_regressor="Ridge")
 
-score, ypred = SO.cross_validate_and_predict(variable, datarange, predictor_dataset, predictor_kwargs)
+score, ypred = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
+
+test_score,test_y_pred = SO.cross_validate_and_predict(variable, from2011to2020 , ERA5Data)
+
+y_true = SO.get_var(variable, from1958to2010, anomalies=True)
+
+y_pred = SO.predict(variable, from1958to2010 , ERA5Data)
+
+scores = SO.evaluate(variable, from2011to2020 , ERA5Data)

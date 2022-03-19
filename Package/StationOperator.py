@@ -73,23 +73,23 @@ class StationOperator():
         
         
     def set_model(self, variable, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None, 
-                  datarange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
+                  daterange =None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
         
         self.variables[variable].set_model(method, ensemble_learning=ensemble_learning, estimators=estimators, cv=cv, final_estimator_name=final_estimator_name, 
-                                           datarange=datarange, predictor_dataset=predictor_dataset, 
+                                           daterange =daterange , predictor_dataset=predictor_dataset, 
                                            fit_predictors=fit_predictors, **predictor_kwargs)
         
         
     
-    def _get_predictor_data(self,variable, datarange, dataset, fit, **predictor_kwargs):
-        return self.variables[variable]._get_predictor_data(datarange, dataset, fit, **predictor_kwargs)
+    def _get_predictor_data(self,variable, daterange , dataset, fit, **predictor_kwargs):
+        return self.variables[variable]._get_predictor_data(daterange , dataset, fit, **predictor_kwargs)
     
-    def fit(self, variable, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+    def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, **predictor_kwargs):
         
         
         
-        return self.variables[variable].fit(datarange, predictor_dataset, fit_predictors=fit_predictors , predictor_selector=predictor_selector, 
+        return self.variables[variable].fit(daterange , predictor_dataset, fit_predictors=fit_predictors , predictor_selector=predictor_selector, 
                                             selector_method=selector_method,
                 selector_regressor= selector_regressor,
                 num_predictors=num_predictors,
@@ -97,20 +97,20 @@ class StationOperator():
                 **predictor_kwargs)
     
     
-    def predict(self, variable, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
+    def predict(self, variable, daterange , predictor_dataset, anomalies=False, **predictor_kwargs):
         
-        return self.variables[variable].predict(datarange, predictor_dataset, anomalies=anomalies,
+        return self.variables[variable].predict(daterange , predictor_dataset, anomalies=anomalies,
                                                 **predictor_kwargs)
     
     
-    def cross_validate_and_predict(self, variable, datarange, predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, variable, daterange , predictor_dataset, **predictor_kwargs):
         
-        return self.variables[variable].cross_validate_and_predict(datarange, predictor_dataset,
+        return self.variables[variable].cross_validate_and_predict(daterange , predictor_dataset,
                                                                     **predictor_kwargs)
     
-    def evaluate(self, variable, datarnage, predictor_dataset, **predictor_kwargs):
+    def evaluate(self, variable, daterange, predictor_dataset, anomalies=False, **predictor_kwargs):
         
-        return self.variables[variable].evaluate(datarnage, predictor_dataset, **predictor_kwargs)
+        return self.variables[variable].evaluate(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
     
     
     

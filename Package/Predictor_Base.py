@@ -125,6 +125,10 @@ class Predictor(ABC):
     @abstractmethod
     def _generate(self, daterange, dataset, fit, patterns_from, params_from):
         ...
+        
+        
+        
+        
     def plot(self, daterange, dataset, fit, regenerate=False, patterns_from=None, params_from=None, 
              **plot_kwargs):
         data = self.get(daterange, dataset, fit, regenerate, patterns_from, params_from)

@@ -20,27 +20,28 @@ class Evaluate():
         self.y_pred = y_pred 
         
     def RMSE(self):
-         error = (y_true - y_pred).dropna()
+         error = (self.y_true - self.y_pred).dropna()
          score = np.sqrt(np.mean(error **2))
          print("RMSE: {:2f}".format(score))
          
          return score 
      
     def NSE(self):
-        score = (1-(np.sum((yhat-y_test)**2))/np.sum((y_test - np.mean(y_test))**2))
+        score = (1-(np.sum((self.y_pred - self.y_true)**2))/np.sum((self.y_true - np.mean(self.y_true))**2))
+        
         print("Nach-Sutcliffe Efficiency(NSE): {:2f}".format(score))
         
         return score 
     
     def MSE(self):
-        score = mean_squared_error(y_true, y_pred, squared=False)
+        score = mean_squared_error(self.y_true, self.y_pred, squared=False)
         print("Mean Squared Error): {:.2f}".format(score))
         
         return score 
     
     
     def MAE(self):
-        score = mean_absolute_error(y_true, y_pred)
+        score = mean_absolute_error(self.y_true, self.y_pred)
         print("Mean Absolute Error): {:.2f}".format(score))
         
         return score 
@@ -48,28 +49,23 @@ class Evaluate():
     
     
     def R2_score(self):
-        score = r2_score(y_true, y_pred)
+        score = r2_score(self.y_true, self.y_pred)
         print("R² (Coefficient of determinaiton): {:.2f}".format(score))
         
         return score
     
     def explained_variance(self):
         
-        score = explained_variance_score(y_true, y_pred)
+        score = explained_variance_score(self.y_true, self.y_pred)
         print("Explained Variance: {:.2f}".format(score))
         
         return score
     
-    def accuracy(self):
 
-        score = accuracy_score(y_true, y_pred, normalize=True)
-        print("Accuracy score: {:2f}".format(score))
-       
-        return score
     
     def max_error(self):
         
-        score = max_error(y_true, y_pred)
+        score = max_error(self.y_true, self.y_pred)
         print("Maximum error: {:2f}".format(score))
         
         return score 

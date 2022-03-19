@@ -44,7 +44,7 @@ class PredictandTimeseries():
         self.set_standardizer(standardizer)
 
             
-    def get(self, daterange=None, anomalies=False):
+    def get(self, daterange=None, anomalies=True):
         if anomalies:
             if daterange is not None:
                 return self.data_st.loc[daterange]
@@ -77,7 +77,7 @@ class PredictandTimeseries():
             self.data_st = self.standardizer.fit_transform(self.data)
             
     def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None,
-                  datarange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
+                  daterange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
         
         self.cv = cv
         
@@ -97,13 +97,13 @@ class PredictandTimeseries():
                 
                 if estimators[i] in ["MLPRegressor", "SVR"]:
                     
-                    X = self._get_predictor_data(datarange=datarange, predictor_dataset=predictor_dataset, 
+                    X = self._get_predictor_data(daterange=daterange, dataset=predictor_dataset, 
                                                  fit_predictors = fit_predictors,
                                                  **predictor_kwargs)
                     
-                    y = self.get(datarange = datarange, anomalies=fit_predictors)
+                    y = self.get(daterange = daterange, anomalies=fit_predictors)
                     
-                    regressor.fit(X, y)
+                    regressor.fit(X.values, y.values)
                 
                 regressors.append((estimators[i], regressor.estimator))
                     
@@ -124,15 +124,15 @@ class PredictandTimeseries():
         for p in predictors:
             self.predictors[p.name] = p
             
-    def _get_predictor_data(self, daterange, dataset, fit, **predictor_kwargs):
+    def _get_predictor_data(self, daterange, dataset, fit=True, **predictor_kwargs):
         Xs = []
         
         for p in self.predictors:
-            Xs.append(self.predictors[p].get(daterange, dataset, fit, **predictor_kwargs))
+            Xs.append(self.predictors[p].get(daterange, dataset, fit=fit))
             
         return pd.concat(Xs, axis=1)
     
-    def fit(self, datarange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+    def fit(self, daterange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
             **predictor_kwargs):
         
@@ -145,9 +145,9 @@ class PredictandTimeseries():
             raise ValueError("-----define predictor set first with set_predictors method....")
             
             
-        X = self._get_predictor_data(datarange, predictor_dataset, fit_predictors, **predictor_kwargs)
+        X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors=fit_predictors, **predictor_kwargs)
         
-        y = self.get(datarange, anomalies=fit_predictors)
+        y = self.get(daterange, anomalies=fit_predictors)
         
         # dropna values 
         
@@ -206,20 +206,20 @@ class PredictandTimeseries():
             
             
             
-    def predict(self, datarange, predictor_dataset, anomalies=False, **predictor_kwargs):
+    def predict(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
         
-        X = self._get_predictor_data(datarange, predictor_dataset, **predictor_kwargs)
+        X = self._get_predictor_data(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
         
         if not hasattr(self, "selector"):
             
-            yhat = pd.Series(data=self.model.predict(X), index=datarange)
+            yhat = pd.Series(data=self.model.predict(X), index=daterange)
             
         else:
             X_selected = self.selector.transform(X)
             
-            yhat = pd.Series(data=self.model.predict(X_selected), index=datarange)
+            yhat = pd.Series(data=self.model.predict(X_selected), index=daterange)
             
-        if anomalies == True:
+        if anomalies == False:
             if self.standardizer is not None:
                 yhat = self.standardizer.inverse_transform(yhat)
                 
@@ -229,13 +229,13 @@ class PredictandTimeseries():
         return yhat
     
     
-    def cross_validate_and_predict(self, datarange, predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, daterange, predictor_dataset, **predictor_kwargs):
         
-        X = self._get_predictor_data(datarange, predictor_dataset, **predictor_kwargs)
+        X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
-        y = self.get(datarange, anomalies=True)
+        y = self.get(daterange, anomalies=True)
         
-        X = X.loc[~np.nan(y)]
+        X = X.loc[~np.isnan(y)]
         
         y = y.dropna()
         
@@ -253,16 +253,17 @@ class PredictandTimeseries():
         scores = {"test_r2": np.mean(val_score["test_r2"]),
                   "test_r2_std": np.std(val_score["test_r2"]),
                   "train_r2": fit_score,
-                  "test_rmse": np.mean(val_score["test_neg_root_mean_squared_error"]),
+                  "test_rmse": -np.mean(val_score["test_neg_root_mean_squared_error"]),
                   "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]), 
                   }
         return scores, y_pred
     
-    def evaluate(self, datarnage, predictor_dataset, **predictor_kwargs):
+    
+    def evaluate(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
         
-        y_true = self.get(datarnage, anomalies=False)
+        y_true = self.get(daterange, anomalies=True)
         
-        y_pred = self.predict(datarnage, predictor_dataset, anomalies=False, **predictor_kwargs)
+        y_pred = self.predict(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
         
         self.evaluate = Evaluate(y_true, y_pred)
         
@@ -270,7 +271,6 @@ class PredictandTimeseries():
         nse = self.evaluate.NSE()
         mse = self.evaluate.MSE()
         mae = self.evaluate.MAE()
-        accuracy = self.evaluate.accuracy()
         exp_var = self.evaluate.explained_variance()
         r2 = self.evaluate.R2_score()
         max_error = self.evaluate.max_error()
@@ -279,19 +279,53 @@ class PredictandTimeseries():
                   "MSE": mse,
                   "NSE": nse,
                   "MAE": mae, 
-                  "accuracy": accuracy,
                   "explained_variance": exp_var, 
                   "r2": r2, 
                   "max_error": max_error}
         
         return scores 
     
-    def ensemble_transform(self):
-        pass
+    def ensemble_transform(self, daterange, predictor_dataset, **predictor_kwargs):
+        
+        X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
+        
+        if not hasattr(self, "selector"):
+            
+            y_preds = self.model.transform(X)
+            
+        else:
+            X_selected = self.selector.transform(X)
+            
+            y_preds = self.model.transform(X_selected)
+        
+        return y_preds
     
     
     def relative_predictor_importance(self):
+        
+        if not hasattr(self,"predictor_relative_contribution"):
+            
+            raise ValueError("The relative varince must be calculated during fit")
+            
+        return self.predictor_relative_contribution
+    
+    
+    def selected_names(self):
+        
+        if not hasattr(self, "selector"):
+            raise ValueError("Predictor selection must be defined when fitting the model")
+            
+        return self.selector.select_names
+    
+    
+    
+    def tree_based_feature_importance(self):
         pass
+    
+    
+    
+    
+    
     
     
             

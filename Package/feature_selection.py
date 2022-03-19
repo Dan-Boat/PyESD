@@ -53,6 +53,9 @@ class RecursiveFeatureElimination():
     def print_selected_features(self, X):
         num_features = self.regressor.n_features_
         select_names = X.columns[self.regressor.support_]
+        
+        self.select_names = select_names
+        
         print("{0} : optimal number of predictors and selected variables are {1}".format(num_features, select_names))
     
     def transform(self, X):
@@ -128,6 +131,7 @@ class TreeBasedSelection():
         num_features = len(select_names)
         print("{0} : optimal number of predictors and selected variables are {1}".format(num_features, select_names))
         
+        self.select_names = select_names
         
 
 class SequentialFeatureSelection():

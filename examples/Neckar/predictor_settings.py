@@ -17,6 +17,6 @@ predictors_without_indices = ["t2m", "tp","msl", "v10", "u10",'z500', 'z850', 'q
 
 from1958to2010 = pd.date_range(start="1958-01-01", end="2010-12-31", freq="MS")
 
-from2011to2021 = pd.date_range(start="2011-01-01", end="2021-12-31", freq="MS")
+from2011to2020 = pd.date_range(start="2011-01-01", end="2020-12-31", freq="MS")
 
-from1958to2021 = pd.date_range(start="1958-01-01", end="2021-12-31", freq="MS")
+from1958to2020 = pd.date_range(start="1958-01-01", end="2020-12-31", freq="MS")
