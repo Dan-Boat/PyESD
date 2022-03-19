@@ -261,7 +261,7 @@ class PredictandTimeseries():
     
     def evaluate(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
         
-        y_true = self.get(daterange, anomalies=True)
+        y_true = self.get(daterange, anomalies=anomalies)
         
         y_pred = self.predict(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
         

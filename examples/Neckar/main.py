@@ -38,7 +38,7 @@ num_of_stations = len(stationnames)
 
 variable = "Precipitation"
 
-stationname = stationnames[0]
+stationname = stationnames[1]
 station_dir = os.path.join(station_datadir, stationname + ".csv")
 SO = read_station_csv(filename=station_dir, varname=variable)
 
@@ -50,14 +50,9 @@ SO.set_model(variable, method=method, ensemble_learning=True, estimators=models,
              daterange = from1958to2010, predictor_dataset=ERA5Data)
 
 SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-       selector_method="Recursive", selector_regressor="Ridge")
+       selector_method="Recursive", selector_regressor="ARDRegression")
 
 score, ypred = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
 
-test_score,test_y_pred = SO.cross_validate_and_predict(variable, from2011to2020 , ERA5Data)
-
-y_true = SO.get_var(variable, from1958to2010, anomalies=True)
-
-y_pred = SO.predict(variable, from1958to2010 , ERA5Data)
 
 scores = SO.evaluate(variable, from2011to2020 , ERA5Data)

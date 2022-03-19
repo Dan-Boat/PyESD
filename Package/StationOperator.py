@@ -38,8 +38,10 @@ class StationOperator():
         self.elevation = elevation
         print(name, lat, lon, elevation)
         
-    def get_var(self, variable, daterange, anomalies=False):
-        y = self.variables[variable].get(daterange, anomalies)
+    def get_var(self, variable, daterange, anomalies=True):
+        
+        y = self.variables[variable].get(daterange, anomalies=anomalies)
+       
         return y
     
     def set_predictors(self, variable, predictors, cachedir, radius=250, detrending=False, scaling=False):
@@ -65,9 +67,11 @@ class StationOperator():
         self.variables[variable].set_predictors(predictor_list)
         
     def set_transform(self, variable, transform):
+        
         self.variables[variable].set_transform(transform)
         
     def set_standardizer(self, variable, standardizer):
+        
         self.variables[variable].set_standardizer(standardizer)
         
         
@@ -75,16 +79,19 @@ class StationOperator():
     def set_model(self, variable, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None, 
                   daterange =None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
         
+        
         self.variables[variable].set_model(method, ensemble_learning=ensemble_learning, estimators=estimators, cv=cv, final_estimator_name=final_estimator_name, 
                                            daterange =daterange , predictor_dataset=predictor_dataset, 
                                            fit_predictors=fit_predictors, **predictor_kwargs)
         
         
     
-    def _get_predictor_data(self,variable, daterange , dataset, fit, **predictor_kwargs):
-        return self.variables[variable]._get_predictor_data(daterange , dataset, fit, **predictor_kwargs)
+    def _get_predictor_data(self,variable, daterange , dataset, fit=True, **predictor_kwargs):
+       
+        return self.variables[variable]._get_predictor_data(daterange , dataset, fit=fit, **predictor_kwargs)
     
     def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
+            
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, **predictor_kwargs):
         
         
@@ -97,7 +104,7 @@ class StationOperator():
                 **predictor_kwargs)
     
     
-    def predict(self, variable, daterange , predictor_dataset, anomalies=False, **predictor_kwargs):
+    def predict(self, variable, daterange , predictor_dataset, anomalies=True, **predictor_kwargs):
         
         return self.variables[variable].predict(daterange , predictor_dataset, anomalies=anomalies,
                                                 **predictor_kwargs)
@@ -108,7 +115,7 @@ class StationOperator():
         return self.variables[variable].cross_validate_and_predict(daterange , predictor_dataset,
                                                                     **predictor_kwargs)
     
-    def evaluate(self, variable, daterange, predictor_dataset, anomalies=False, **predictor_kwargs):
+    def evaluate(self, variable, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
         
         return self.variables[variable].evaluate(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
     

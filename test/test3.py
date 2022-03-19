@@ -72,13 +72,12 @@ for i in range(len(methods)) :
     
     score = ensemble.cross_validate(train_X_new, train_y)
     
-    test_score = ensemble.cross_validate(test_X_new, test_y)
     
     elapsed_time = time.time() - start_time
     
     y_pred = ensemble.cross_val_predict(train_X_new, train_y)
     
-    
+    test_score = ensemble.score(test_X_new, test_y)
     
     axs = np.ravel(axes)
     
