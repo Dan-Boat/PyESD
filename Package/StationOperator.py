@@ -120,6 +120,24 @@ class StationOperator():
         return self.variables[variable].evaluate(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
     
     
+    def ensemble_transform(self, variable, daterange, predictor_dataset, **predictor_kwargs):
+        
+        return self.variables[variable].ensemble_transform(daterange, predictor_dataset, **predictor_kwargs)
+    
+    def relative_predictor_importance(self, variable):
+        
+        return self.variables[variable].relative_predictor_importance()
+    
+    def selected_names(self, variable):
+        
+        return self.variables[variable].selected_names()
+    
+    
+    def tree_based_feature_importance(self, variable, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+        
+        return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, plot=False, **predictor_kwargs)
+    
+    
     
     
     

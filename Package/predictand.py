@@ -319,8 +319,23 @@ class PredictandTimeseries():
     
     
     
-    def tree_based_feature_importance(self):
-        pass
+    def tree_based_feature_importance(self, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+        
+        if not hasattr(self, "selector"):
+            raise ValueError("Predictor selection must be defined when fitting the model")
+            
+        if not hasattr(self.selector.estimator, "feature_importances_"):
+            raise TypeError("the feature selector must be treebased")
+            
+        X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
+        
+        y = self.get(daterange, anomalies=True)
+        
+        
+            
+        return self.selector.feature_importance(X,y, plot=plot)
+    
+    
     
     
     
