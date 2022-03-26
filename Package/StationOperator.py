@@ -101,6 +101,7 @@ class StationOperator():
                 selector_regressor= selector_regressor,
                 num_predictors=num_predictors,
                 selector_direction= selector_direction,
+                cal_relative_importance = cal_relative_importance, 
                 **predictor_kwargs)
     
     

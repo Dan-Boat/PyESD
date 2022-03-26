@@ -32,7 +32,17 @@ models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost",
           "RandomForest", "ExtraTree", "Bagging", 
           "LassoCV", "RidgeCV", "XGBoost", "MLPRegressor"]
 
-method = "Voting"
+models1 = ["LassoLarsCV", "ARD", "RidgeCV", "MLPRegressor"]
+
+models2 = ["AdaBoost", "GradientBoost", 
+          "RandomForest", "ExtraTree", "Bagging", 
+          "RidgeCV", "XGBoost"]
+
+
+
+method = "Stacking"
+
+method1 = "LassoLarsCV"
 
 num_of_stations = len(stationnames)
 
@@ -46,11 +56,12 @@ SO.set_predictors(variable, predictors, predictordir, radius,)
 
 SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
 
-SO.set_model(variable, method=method, ensemble_learning=True, estimators=models, final_estimator_name=None,
+SO.set_model(variable, method=method1, ensemble_learning=False, estimators=None, final_estimator_name=None,
              daterange = from1958to2010, predictor_dataset=ERA5Data)
 
 SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-       selector_method="Recursive", selector_regressor="ARDRegression")
+       selector_method="Recursive", selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=True)
+
 
 score, ypred = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
 

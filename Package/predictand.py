@@ -117,6 +117,7 @@ class PredictandTimeseries():
         else:
             
             self.model = Regressors(method=method, cv=self.cv)
+            self.model.set_model()
             
     
     def set_predictors(self, predictors):
@@ -187,16 +188,21 @@ class PredictandTimeseries():
             
         if cal_relative_importance == True:
             
-            if not hasattr(self.model, "coef_"):
+            if not hasattr(self.model, "coef"):
                 raise ValueError("The estimator should have coef_attributes..or must be fitted before this method....")
                             
             else:
+                coef_ = self.model.coef()
                 
-                coef_ = self.model.coef_
-                score = self.model.score(X,y)
-                residual = np.sqrt(1 - score)
+                if predictor_selector == True:
                 
-                normalized_coef_ = coef_ * np.std(X, axis=0)
+                    score = self.model.score(X_selected,y)
+                    residual = np.sqrt(1 - score)
+                    normalized_coef_ = coef_ * np.std(X_selected, axis=0)
+                else:
+                    score = self.model.score(X,y)
+                    residual = np.sqrt(1 - score)
+                    normalized_coef_ = coef_ * np.std(X, axis=0)
                 
                 total = residual + np.sum(np.abs(normalized_coef_))
                 
