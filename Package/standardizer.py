@@ -8,6 +8,7 @@ Created on Sun Nov 21 00:55:02 2021
 
 from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.preprocessing import StandardScaler, RobustScaler, Normalizer
+from sklearn.preprocessing import QuantileTransformer, PowerTransformer
 from copy import deepcopy
 import numpy as np
 import pandas as pd
@@ -235,7 +236,7 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
             return pd.DataFrame(data=values, index=X.index, columns=X.columns)
 
 
-class StandardScaling(TransformerMixin, BaseEstimator):
+class StandardScaling():
     
     def __init__(self, method=None, with_std=True, with_mean=True, unit_variance=False,
                  norm="l2"):
@@ -254,25 +255,53 @@ class StandardScaling(TransformerMixin, BaseEstimator):
         elif self.method == "normalize":
             self.standardizer = Normalizer(norm=self.norm)
         
+        elif self.method == "powertransformer":
+            self.standardizer = PowerTransformer(method="yeo-johnson", standardize=True)
+            
+        elif self.method == "quantiletransformer":
+            self.standardizer = QuantileTransformer(n_quantiles=1000, output_distribution="unifom")
+        
         else:
             raise ValueError("The standardizer do not recognize the defined method")
-            
+                
         
+    def fit(self, X, y=None):
         
-    def fit(self):
-        pass
+        self.standardizer.fit(X=X, y=y)
+        
+        return self 
     
-    def fit_transform(self):
-        pass
+    def fit_transform(self, X, y=None):
+        
+        values = self.standardizer.fit_transform(X=X, y=y)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index, name=X.name)
+        else:
+            return pd.DataFrame(data=values, index=X.index, columns=X.columns)
+        
     
-    def inverse_transform(self):
-        pass
+    def inverse_transform(self, X):
+        
+        values = self.standardizer.inverse_transform(X)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index, name=X.name)
+        else:
+            return pd.DataFrame(data=values, index=X.index, columns=X.columns)
+        
     
-    def transform(self):
-        pass
+    def transform(self, X):
+        values = self.standardizer.transform(X)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index, name=X.name)
+        else:
+            return pd.DataFrame(data=values, index=X.index, columns=X.columns)
+        
     
         
-class PCAScaling():
+class PCAScaling(TransformerMixin, BaseEstimator):
     
     def __init__(self):
         pass

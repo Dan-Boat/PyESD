@@ -18,7 +18,7 @@ from collections import OrderedDict
 sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
 from Package.WeatherstationPreprocessing import read_station_csv
-from Package.standardizer import MonthlyStandardizer
+from Package.standardizer import MonthlyStandardizer, StandardScaling
 from Package.ESD_utils import store_pickle, store_csv
 
 #relative imports 
@@ -54,7 +54,8 @@ SO = read_station_csv(filename=station_dir, varname=variable)
 
 SO.set_predictors(variable, predictors, predictordir, radius,)
 
-SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
+#SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
+SO.set_standardizer(variable, standardizer=StandardScaling(method="standardscaler"))
 
 SO.set_model(variable, method=method1, ensemble_learning=False, estimators=None, final_estimator_name=None,
              daterange = from1958to2010, predictor_dataset=ERA5Data)
