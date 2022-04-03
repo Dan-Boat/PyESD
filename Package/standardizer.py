@@ -7,6 +7,7 @@ Created on Sun Nov 21 00:55:02 2021
 """
 
 from sklearn.base import TransformerMixin, BaseEstimator
+from sklearn.preprocessing import StandardScaler, RobustScaler, Normalizer
 from copy import deepcopy
 import numpy as np
 import pandas as pd
@@ -232,3 +233,58 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
             return pd.Series(data=values[:,0], index=X.index, name=X.name)
         else:
             return pd.DataFrame(data=values, index=X.index, columns=X.columns)
+
+
+class StandardScaling(TransformerMixin, BaseEstimator):
+    
+    def __init__(self, method=None, with_std=True, with_mean=True, unit_variance=False,
+                 norm="l2"):
+        self.method = method 
+        self.with_std = with_std
+        self.with_mean = with_mean
+        self.unit_variance = unit_variance
+        
+        
+        if self.method == None or "standardscaler":
+            self.standardizer = StandardScaling(with_mean=self.with_mean,
+                                                with_std=self.with_std)
+        elif self.method == "robustscaler":
+            self.standardizer = RobustScaler(with_centering=self.with_mean, with_scaling=self.with_std)
+        
+        elif self.method == "normalize":
+            self.standardizer = Normalizer(norm=self.norm)
+        
+        else:
+            raise ValueError("The standardizer do not recognize the defined method")
+            
+        
+        
+    def fit(self):
+        pass
+    
+    def fit_transform(self):
+        pass
+    
+    def inverse_transform(self):
+        pass
+    
+    def transform(self):
+        pass
+    
+        
+class PCAScaling():
+    
+    def __init__(self):
+        pass
+    
+    def fit(self):
+        pass
+    
+    def fit_transform(self):
+        pass
+    
+    def inverse_transform(self):
+        pass
+    
+    def transform(self):
+        pass 
