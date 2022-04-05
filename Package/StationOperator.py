@@ -44,7 +44,8 @@ class StationOperator():
        
         return y
     
-    def set_predictors(self, variable, predictors, cachedir, radius=250, detrending=False, scaling=False):
+    def set_predictors(self, variable, predictors, cachedir, radius=250, detrending=False, scaling=False,
+                       standardizer=None):
         predictor_list = []
         
         for name in predictors:
@@ -60,9 +61,14 @@ class StationOperator():
                 predictor_list.append(EAWR(cachedir=cachedir))
             else:
                 
-                predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
+                if standardizer == None: 
+                    predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
                                                       standardizer_constructor=lambda:
                                                           MonthlyStandardizer(detrending=detrending, scaling=scaling)))
+                else: 
+                    predictor_list.append(RegionalAverage(name, self.lat, self.lon, radius=radius, cachedir=cachedir,
+                                                      standardizer_constructor=lambda:
+                                                          standardizer))
         
         self.variables[variable].set_predictors(predictor_list)
         
@@ -136,7 +142,12 @@ class StationOperator():
     
     def tree_based_feature_importance(self, variable, daterange, predictor_dataset, plot=False, **predictor_kwargs):
         
-        return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, plot=False, **predictor_kwargs)
+        return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, plot=plot, **predictor_kwargs)
+    
+    
+    def tree_based_feature_permutation_importance(self, variable, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+        
+        return self.variables[variable].tree_based_feature_permutation_importance(daterange, predictor_dataset, plot=plot, **predictor_kwargs)
     
     
     

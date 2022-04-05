@@ -30,6 +30,7 @@ class RecursiveFeatureElimination():
         self.min_features = 5
         self.scoring = "r2"
         
+        
         if self.regressor_name == "ARDRegression":
             self.estimator = ARDRegression()
         elif self.regressor_name == "BayesianRidge":
@@ -40,6 +41,8 @@ class RecursiveFeatureElimination():
             self.estimator = LassoCV()
         elif self.regressor_name == "Ridge":
             self.estimator = Ridge()
+        elif self.regressor_name == "RandomForest":
+            self.estimator = RandomForestRegressor()
         else:
             raise ValueError("Check the regressor if implemented")
         
@@ -70,6 +73,7 @@ class RecursiveFeatureElimination():
         score = self.regressor.score(X,y)
         return score
         
+        
 
 class TreeBasedSelection():
     def __init__(self, regressor_name="RandomForest"):
@@ -80,7 +84,8 @@ class TreeBasedSelection():
         self.scoring = "r2"
         
         if self.regressor_name == "RandomForest":
-            self.estimator = RandomForestRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap)
+            self.estimator = RandomForestRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap, 
+                                                   n_estimators=200)
         elif self.regressor_name == "ExtraTree":
             self.estimator = ExtraTreesRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap)
         else:
@@ -170,4 +175,7 @@ class SequentialFeatureSelection():
         select_names = X.columns[self.regressor.get_support(indices=True)]
         num_features = len(select_names)
         print("{0} : optimal number of predictors and selected variables are {1}".format(num_features, select_names))
+        
+        
+        self.select_names = select_names
     

@@ -44,10 +44,13 @@ class RegionalAverage(Predictor):
         da = dataset.get(self.varname)
         da = da.sel(time=daterange)
         
+        if hasattr(da, "longitude"):
+            da = da.rename({"longitude":"lon", "latitude":"lat"})
+            
         if "indices" not in params or fit is True:
             params["indices"] = extract_indices_around(da, self.lat, self.lon, self.radius)
-        values = da.isel(latitude=params["indices"][0], longitude=params["indices"][1])
-        data = values.mean(dim=("latitude", "longitude")).to_series().astype(np.double)
+        values = da.isel(lat=params["indices"][0], lon=params["indices"][1])
+        data = values.mean(dim=("lat", "lon")).to_series().astype(np.double)
         
         if self.standardizer_constructor is not None:
             if fit:

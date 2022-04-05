@@ -162,7 +162,7 @@ class PredictandTimeseries():
                 self.selector = RecursiveFeatureElimination(regressor_name=selector_regressor)
                 
             elif selector_method == "TreeBased":
-                self.selector == TreeBasedSelection(regressor_name=selector_regressor)
+                self.selector = TreeBasedSelection(regressor_name=selector_regressor)
                 
             elif selector_method == "Sequential":
                 if num_predictors == None and selector_direction == None:
@@ -176,6 +176,8 @@ class PredictandTimeseries():
                 
             self.selector.fit(X, y)
             self.selector.print_selected_features(X)
+            
+            
             
             X_selected = self.selector.transform(X)
             
@@ -267,7 +269,7 @@ class PredictandTimeseries():
     
     def evaluate(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
         
-        y_true = self.get(daterange, anomalies=anomalies)
+        y_true = self.get(daterange, anomalies=anomalies).dropna()
         
         y_pred = self.predict(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
         
@@ -330,6 +332,26 @@ class PredictandTimeseries():
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
             
+        if not hasattr(self.selector, "feature_importance"):
+            raise TypeError("the feature selector must be treebased")
+            
+        X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
+        
+        y = self.get(daterange, anomalies=True)
+        
+        X = X.loc[~np.isnan(y)]
+        
+        y = y.dropna()
+        
+        
+        return self.selector.feature_importance(X,y, plot=plot)
+    
+    
+    def tree_based_feature_permutation_importance(self, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+        
+        if not hasattr(self, "selector"):
+            raise ValueError("Predictor selection must be defined when fitting the model")
+            
         if not hasattr(self.selector.estimator, "feature_importances_"):
             raise TypeError("the feature selector must be treebased")
             
@@ -338,7 +360,10 @@ class PredictandTimeseries():
         y = self.get(daterange, anomalies=True)
         
         
-            
+        X = X.loc[~np.isnan(y)]
+        
+        y = y.dropna()
+        
         return self.selector.feature_importance(X,y, plot=plot)
     
     

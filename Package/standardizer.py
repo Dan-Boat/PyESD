@@ -9,6 +9,7 @@ Created on Sun Nov 21 00:55:02 2021
 from sklearn.base import TransformerMixin, BaseEstimator
 from sklearn.preprocessing import StandardScaler, RobustScaler, Normalizer
 from sklearn.preprocessing import QuantileTransformer, PowerTransformer
+from sklearn.decomposition import PCA, KernelPCA, IncrementalPCA, SparsePCA
 from copy import deepcopy
 import numpy as np
 import pandas as pd
@@ -236,7 +237,7 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
             return pd.DataFrame(data=values, index=X.index, columns=X.columns)
 
 
-class StandardScaling():
+class StandardScaling(BaseEstimator, TransformerMixin):
     
     def __init__(self, method=None, with_std=True, with_mean=True, unit_variance=False,
                  norm="l2"):
@@ -244,46 +245,54 @@ class StandardScaling():
         self.with_std = with_std
         self.with_mean = with_mean
         self.unit_variance = unit_variance
+        self.norm = norm
         
         
         if self.method == None or "standardscaler":
-            self.standardizer = StandardScaling(with_mean=self.with_mean,
+            self.scaler = StandardScaler(with_mean=self.with_mean,
                                                 with_std=self.with_std)
         elif self.method == "robustscaler":
-            self.standardizer = RobustScaler(with_centering=self.with_mean, with_scaling=self.with_std)
+            self.scaler = RobustScaler(with_centering=self.with_mean, with_scaling=self.with_std)
         
         elif self.method == "normalize":
-            self.standardizer = Normalizer(norm=self.norm)
+            self.scaler = Normalizer(norm=self.norm)
         
         elif self.method == "powertransformer":
-            self.standardizer = PowerTransformer(method="yeo-johnson", standardize=True)
+            self.scaler = PowerTransformer(method="yeo-johnson", standardize=True)
             
         elif self.method == "quantiletransformer":
-            self.standardizer = QuantileTransformer(n_quantiles=1000, output_distribution="unifom")
+            self.scaler = QuantileTransformer(n_quantiles=1000, output_distribution="unifom")
         
         else:
             raise ValueError("The standardizer do not recognize the defined method")
                 
         
-    def fit(self, X, y=None):
+    def fit(self, X):
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
         
-        self.standardizer.fit(X=X, y=y)
+        self.scaler.fit(X_values)
         
         return self 
     
-    def fit_transform(self, X, y=None):
+    # def fit_transform(self, X, y=None):
         
-        values = self.standardizer.fit_transform(X=X, y=y)
+    #     values = self.scaler.fit_transform(X=X, y=y)
         
-        if X.values.ndim == 1:
-            return pd.Series(data=values[:,0], index=X.index, name=X.name)
-        else:
-            return pd.DataFrame(data=values, index=X.index, columns=X.columns)
+    #     if X.values.ndim == 1:
+    #         return pd.Series(data=values[:,0], index=X.index, name=X.name)
+    #     else:
+    #         return pd.DataFrame(data=values, index=X.index, columns=X.columns)
         
     
     def inverse_transform(self, X):
         
-        values = self.standardizer.inverse_transform(X)
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+        
+        values = self.scaler.inverse_transform(X_values)
         
         if X.values.ndim == 1:
             return pd.Series(data=values[:,0], index=X.index, name=X.name)
@@ -292,7 +301,11 @@ class StandardScaling():
         
     
     def transform(self, X):
-        values = self.standardizer.transform(X)
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+            
+        values = self.scaler.transform(X_values)
         
         if X.values.ndim == 1:
             return pd.Series(data=values[:,0], index=X.index, name=X.name)
@@ -303,17 +316,75 @@ class StandardScaling():
         
 class PCAScaling(TransformerMixin, BaseEstimator):
     
-    def __init__(self):
-        pass
+    def __init__(self, n_components=None, kernel="linear", method=None):
+        self.n_components = n_components
+        self.kernel = kernel
+        self.method = method
+        
+        
+        if self.method == "PCA" or None:
+            self.scaler = PCA(n_components=self.n_components)
+            
+        elif self.method == "IncrementalPCA":
+            self.scaler = IncrementalPCA(n_components=self.n_components)
+            
+        elif self.method == "KernelPCA":
+            self.scaler = KernelPCA(n_components=self.n_components, kernel=self.kernel)
+            
+        elif self.method == "SparsePCA":
+            self.scaler = SparsePCA(n_components=self.n_components)
+        
+        else:
+            raise ValueError("The method passed to the PCAscaling object is not defined")
+            
+            
+    def fit(self, X):
+        
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+        
+        self.scaler.fit(X_values)
+        
     
-    def fit(self):
-        pass
+    def fit_transform(self, X):
+        
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+            
+        
+        values = self.scaler.fit_transform(X_values)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index)
+        else:
+            return pd.DataFrame(data=values, index=X.index)
+        
     
-    def fit_transform(self):
-        pass
+    def inverse_transform(self, X):
+        
+        X_values = X.values 
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+        
+        values = self.scaler.inverse_transform(X_values)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index)
+        else:
+            return pd.DataFrame(data=values, index=X.index)
     
-    def inverse_transform(self):
-        pass
-    
-    def transform(self):
-        pass 
+    def transform(self, X):
+        X_values = X.values 
+        
+        if X_values.ndim == 1:
+            X_values = X_values[:,np.newaxis]
+            
+        values = self.scaler.transform(X_values)
+        
+        if X.values.ndim == 1:
+            return pd.Series(data=values[:,0], index=X.index)
+        else:
+            return pd.DataFrame(data=values, index=X.index)
+        

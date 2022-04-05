@@ -273,9 +273,10 @@ def read_station_csv(filename, varname):
         
     data = pd.read_csv(filename, sep=',', skiprows=6, usecols=[0,1,],
                        parse_dates=[0], index_col=0, names=['Time',
-                       varname], na_values=-9999)
+                       varname])
     
     data = data.dropna()
+    
     if varname == "Precipitation":
         pr = data[varname]
         pr[pr == -9999] = np.nan
@@ -292,7 +293,7 @@ def read_station_csv(filename, varname):
         
         data = {varname:t}
     else:
-        raise ValueError("Define varname well")
+        raise ValueError("The model does not recognize the variable name")
         
     so = StationOperator(data, name, lat, lon, elev)
     return so
