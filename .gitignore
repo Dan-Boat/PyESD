@@ -1,4 +1,5 @@
 /examples/Neckar/.predictors_200
+/examples/Neckar/final_cache
 *.pickel
 modules.txt
 
