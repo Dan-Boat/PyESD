@@ -125,17 +125,17 @@ class PredictandTimeseries():
         for p in predictors:
             self.predictors[p.name] = p
             
-    def _get_predictor_data(self, daterange, dataset, fit=True, **predictor_kwargs):
+    def _get_predictor_data(self, daterange, dataset, fit_predictors=True, **predictor_kwargs):
         Xs = []
         
         for p in self.predictors:
-            Xs.append(self.predictors[p].get(daterange, dataset, fit=fit))
+            Xs.append(self.predictors[p].get(daterange, dataset, fit=fit_predictors))
             
         return pd.concat(Xs, axis=1)
     
     def fit(self, daterange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
-            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
-            **predictor_kwargs):
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False,
+            fit_predictand=True, **predictor_kwargs):
         
         # checking attributes required before fitting
         
@@ -148,7 +148,7 @@ class PredictandTimeseries():
             
         X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors=fit_predictors, **predictor_kwargs)
         
-        y = self.get(daterange, anomalies=fit_predictors)
+        y = self.get(daterange, anomalies=fit_predictand)
         
         # dropna values 
         
@@ -214,9 +214,10 @@ class PredictandTimeseries():
             
             
             
-    def predict(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
+    def predict(self, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True,
+                **predictor_kwargs):
         
-        X = self._get_predictor_data(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
+        X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors, **predictor_kwargs)
         
         if not hasattr(self, "selector"):
             
@@ -227,7 +228,7 @@ class PredictandTimeseries():
             
             yhat = pd.Series(data=self.model.predict(X_selected), index=daterange)
             
-        if anomalies == False:
+        if fit_predictand == False:
             if self.standardizer is not None:
                 yhat = self.standardizer.inverse_transform(yhat)
                 
@@ -237,11 +238,11 @@ class PredictandTimeseries():
         return yhat
     
     
-    def cross_validate_and_predict(self, daterange, predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, daterange, predictor_dataset, fit_predictand=True, **predictor_kwargs):
         
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
-        y = self.get(daterange, anomalies=True)
+        y = self.get(daterange, anomalies=fit_predictand)
         
         X = X.loc[~np.isnan(y)]
         
@@ -267,11 +268,11 @@ class PredictandTimeseries():
         return scores, y_pred
     
     
-    def evaluate(self, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
+    def evaluate(self, daterange, predictor_dataset, fit_predictand=True, **predictor_kwargs):
         
-        y_true = self.get(daterange, anomalies=anomalies).dropna()
+        y_true = self.get(daterange, anomalies=fit_predictand).dropna()
         
-        y_pred = self.predict(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
+        y_pred = self.predict(daterange, predictor_dataset, anomalies=fit_predictand, **predictor_kwargs)
         
         self.evaluate = Evaluate(y_true, y_pred)
         
@@ -327,7 +328,7 @@ class PredictandTimeseries():
     
     
     
-    def tree_based_feature_importance(self, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+    def tree_based_feature_importance(self, daterange, predictor_dataset, fit_predictand=True, plot=False, **predictor_kwargs):
         
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
@@ -337,7 +338,7 @@ class PredictandTimeseries():
             
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
-        y = self.get(daterange, anomalies=True)
+        y = self.get(daterange, anomalies=fit_predictand)
         
         X = X.loc[~np.isnan(y)]
         
@@ -347,7 +348,8 @@ class PredictandTimeseries():
         return self.selector.feature_importance(X,y, plot=plot)
     
     
-    def tree_based_feature_permutation_importance(self, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+    def tree_based_feature_permutation_importance(self, daterange, predictor_dataset, fit_predictand=True, 
+                                                  plot=False, **predictor_kwargs):
         
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
@@ -357,7 +359,7 @@ class PredictandTimeseries():
             
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
-        y = self.get(daterange, anomalies=True)
+        y = self.get(daterange, anomalies=fit_predictand)
         
         
         X = X.loc[~np.isnan(y)]

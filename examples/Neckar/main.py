@@ -42,7 +42,7 @@ models2 = ["AdaBoost", "GradientBoost",
 
 method = "Stacking"
 
-method1 = "LassoLarsCV"
+method1 = "GammaRegressor"
 
 num_of_stations = len(stationnames)
 
@@ -50,20 +50,22 @@ variable = "Precipitation"
 
 stationname = stationnames[1]
 station_dir = os.path.join(station_datadir, stationname + ".csv")
+
 SO = read_station_csv(filename=station_dir, varname=variable)
 
 SO.set_predictors(variable, predictors, predictordir, radius, 
-                  standardizer=PCAScaling(method="PCA"))
+                  standardizer=MonthlyStandardizer(detrending=False, scaling=False))
+                  
 
-#SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
-#SO.set_standardizer(variable, standardizer=StandardScaling(method="standardscaler"))
-SO.set_standardizer(variable, standardizer=PCAScaling(method="PCA"))
+SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False, scaling=False))
+
 
 SO.set_model(variable, method=method1, ensemble_learning=False, estimators=None, final_estimator_name=None,
              daterange = from1958to2010, predictor_dataset=ERA5Data)
 
 SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-       selector_method="Recursive", selector_regressor="ARDRegression", num_predictors=None, selector_direction=None, cal_relative_importance=True)
+       selector_method="Recursive", selector_regressor="ARDRegression", num_predictors=None, selector_direction=None, cal_relative_importance=True,
+       fit_predictand=False)
 
 
 score, ypred = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)

@@ -92,13 +92,15 @@ class StationOperator():
         
         
     
-    def _get_predictor_data(self,variable, daterange , dataset, fit=True, **predictor_kwargs):
+    def _get_predictor_data(self,variable, daterange , dataset, fit_predictors=True, **predictor_kwargs):
        
-        return self.variables[variable]._get_predictor_data(daterange , dataset, fit=fit, **predictor_kwargs)
+        return self.variables[variable]._get_predictor_data(daterange , dataset, fit_predictors=fit_predictors, **predictor_kwargs)
+    
     
     def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             
-            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, **predictor_kwargs):
+            selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
+            fit_predictand=True, **predictor_kwargs):
         
         
         
@@ -108,23 +110,27 @@ class StationOperator():
                 num_predictors=num_predictors,
                 selector_direction= selector_direction,
                 cal_relative_importance = cal_relative_importance, 
+                fit_predictand = fit_predictand,
                 **predictor_kwargs)
     
     
-    def predict(self, variable, daterange , predictor_dataset, anomalies=True, **predictor_kwargs):
+    def predict(self, variable, daterange , predictor_dataset, fit_predictand=True, fit_predictors=True, **predictor_kwargs):
         
-        return self.variables[variable].predict(daterange , predictor_dataset, anomalies=anomalies,
+        return self.variables[variable].predict(daterange , predictor_dataset, fit_predictand=fit_predictand,
+                                                fit_predictors=fit_predictors,
                                                 **predictor_kwargs)
     
     
-    def cross_validate_and_predict(self, variable, daterange , predictor_dataset, **predictor_kwargs):
+    def cross_validate_and_predict(self, variable, daterange , predictor_dataset, fit_predictand=True,
+                                   **predictor_kwargs):
         
-        return self.variables[variable].cross_validate_and_predict(daterange , predictor_dataset,
+        return self.variables[variable].cross_validate_and_predict(daterange , predictor_dataset, 
+                                                                   fit_predictand=fit_predictand,
                                                                     **predictor_kwargs)
     
-    def evaluate(self, variable, daterange, predictor_dataset, anomalies=True, **predictor_kwargs):
+    def evaluate(self, variable, daterange, predictor_dataset,  fit_predictand=True, **predictor_kwargs):
         
-        return self.variables[variable].evaluate(daterange, predictor_dataset, anomalies=anomalies, **predictor_kwargs)
+        return self.variables[variable].evaluate(daterange, predictor_dataset,  fit_predictand=fit_predictand, **predictor_kwargs)
     
     
     def ensemble_transform(self, variable, daterange, predictor_dataset, **predictor_kwargs):
@@ -140,14 +146,18 @@ class StationOperator():
         return self.variables[variable].selected_names()
     
     
-    def tree_based_feature_importance(self, variable, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+    def tree_based_feature_importance(self, variable, daterange, predictor_dataset, fit_predictand=True,
+                                      plot=False, **predictor_kwargs):
         
-        return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, plot=plot, **predictor_kwargs)
+        return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, fit_predictand=fit_predictand,
+                                                                      plot=plot, **predictor_kwargs)
     
     
-    def tree_based_feature_permutation_importance(self, variable, daterange, predictor_dataset, plot=False, **predictor_kwargs):
+    def tree_based_feature_permutation_importance(self, variable, daterange, predictor_dataset, fit_predictand=True, 
+                                                  plot=False, **predictor_kwargs):
         
-        return self.variables[variable].tree_based_feature_permutation_importance(daterange, predictor_dataset, plot=plot, **predictor_kwargs)
+        return self.variables[variable].tree_based_feature_permutation_importance(daterange, predictor_dataset, fit_predictand=fit_predictand,
+                                                                                  plot=plot, **predictor_kwargs)
     
     
     

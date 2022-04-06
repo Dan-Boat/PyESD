@@ -30,11 +30,11 @@ from predictor_settings import *
 
 model = "ARD"
 
-variable = "Precipitation"
+variable = "Temperature"
 
 num_of_stations = len(stationnames)
 
-variable = "Precipitation"
+#variable = "Precipitation"
 
 # reading data (loop through all stations)
 
