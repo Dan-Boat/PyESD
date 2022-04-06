@@ -34,3 +34,22 @@ final_estimator = "ExtraTree"
 
 variable = "Precipitation"
 
+num_of_stations = len(stationnames)
+    
+for i in range(num_of_stations):
+    
+    stationname = stationnames[i]
+    station_dir = os.path.join(station_datadir, stationname + ".csv")
+    SO = read_station_csv(filename=station_dir, varname=variable)
+    
+    
+    #setting predictors 
+    SO.set_predictors(variable, predictors, predictordir, radius,)
+    
+    #setting standardardizer
+    SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+                                                                    scaling=False))
+    #setting model
+    SO.set_model(variable, method=ensemble_methods[1], ensemble_learning=True, 
+                 estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
+                 predictor_dataset=ERA5Data)

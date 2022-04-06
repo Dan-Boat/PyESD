@@ -254,10 +254,15 @@ class PredictandTimeseries():
             val_score = self.model.cross_validate(X_selected, y)
             fit_score = self.model.score(X_selected, y)
             y_pred = self.model.cross_val_predict(X_selected, y)
+            
+            
         else:
             fit_score = self.model.score(X, y)
             val_score = self.model.cross_validate(X, y)
             y_pred = self.model.cross_val_predict(X, y)
+            
+            
+            
             
         scores = {"test_r2": np.mean(val_score["test_r2"]),
                   "test_r2_std": np.std(val_score["test_r2"]),
@@ -265,15 +270,23 @@ class PredictandTimeseries():
                   "test_rmse": -np.mean(val_score["test_neg_root_mean_squared_error"]),
                   "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]), 
                   }
+        
+        y_pred = pd.DataFrame({"obs": y,
+                               "prediction" : y_pred})
         return scores, y_pred
     
     
     def evaluate(self, daterange, predictor_dataset, fit_predictand=True, **predictor_kwargs):
         
-        y_true = self.get(daterange, anomalies=fit_predictand).dropna()
+        y_true = self.get(daterange, anomalies=fit_predictand)
         
         y_pred = self.predict(daterange, predictor_dataset, anomalies=fit_predictand, **predictor_kwargs)
         
+        y_pred = y_pred.loc[~np.isnan(y_true)]
+        
+        y_true = y_true.dropna()
+        
+    
         self.evaluate = Evaluate(y_true, y_pred)
         
         rmse = self.evaluate.RMSE()

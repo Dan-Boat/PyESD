@@ -28,7 +28,7 @@ def run_experiment2(variable, regressor):
 
     num_of_stations = len(stationnames)
     
-    for i in range(num_of_stations):
+    for i in range(2,num_of_stations):
         
         stationname = stationnames[i]
         station_dir = os.path.join(station_datadir, stationname + ".csv")
@@ -56,17 +56,29 @@ def run_experiment2(variable, regressor):
         
         score_test = SO.evaluate(variable, from2011to2020, ERA5Data)
         
+        ypred_train = SO.predict(variable, from1958to2010, ERA5Data)
+        
         ypred_test = SO.predict(variable, from2011to2020, ERA5Data)
         
+        y_obs_train = SO.get_var(variable, from1958to2010, anomalies=True)
+        
+        y_obs_test = SO.get_var(variable, from2011to2020, anomalies=True)
+        
+        y_obs_full = SO.get_var(variable, from1958to2020, anomalies=True)
+        
+        
         predictions = pd.DataFrame({
-            "obs" : y_obs,
-            "ERA5 1958-2010" : ypred_fit,
+            "obs_full": y_obs_full,
+            "obs_train" : y_obs_train,
+            "obs_test": y_obs_test,
+            "ERA5 1958-2010" : ypred_train,
             "ERA5 2011-2020" : ypred_test})
         
         
         #storing of results
         
         store_pickle(stationname, "validation_score_" + regressor, score_fit, cachedir)
+        store_csv(stationname, "validation_predictions_" + regressor, ypred_fit, cachedir)
         store_pickle(stationname, "test_score_" + regressor, score_test, cachedir)
         store_csv(stationname, "predictions_" + regressor, predictions, cachedir)
 
