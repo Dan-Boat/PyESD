@@ -4,9 +4,10 @@ Created on Mon Apr  4 18:29:07 2022
 
 @author: dboateng
 
-This experiment tackles the inter-model comparison for feature selection method.
+This experiment tackles the inter-method comparison for feature selection options.
 The models are set up with all the feature selection approaches (ie. recurssive, sequential and tree-based selection)
-to analyse their performance on the study catchment
+to analyse their performance on the station data. A beyesian regressor is used as base model after selection 
+of the suitable predictors
 """
 
 import os 

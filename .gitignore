@@ -1,6 +1,10 @@
 /examples/Neckar/.predictors_200
-/examples/Neckar/final_cache
+/examples/Neckar/final_cache_Precipitation
 /examples/Neckar/final_cache_Temperature
+/examples/Neckar/final_cache
+/exaples/Neckar/experiment1
+/examples/Neckar/experiment2
+/exmaples/neckar/experiment3
 *.pickel
 modules.txt
 
