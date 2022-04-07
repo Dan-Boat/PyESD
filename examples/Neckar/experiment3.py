@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     final_estimator = "ExtraTree"
 
-    variable = "Temperature"
+    variable = "Precipitation"
     
     for ensemble_method in ensemble_methods:
         
