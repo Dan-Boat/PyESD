@@ -103,6 +103,10 @@ class PredictandTimeseries():
                     
                     y = self.get(daterange = daterange, anomalies=fit_predictors)
                     
+                    X = X.loc[~np.isnan(y)]
+                    
+                    y = y.dropna()
+                    
                     regressor.fit(X.values, y.values)
                 
                 regressors.append((estimators[i], regressor.estimator))
@@ -296,6 +300,7 @@ class PredictandTimeseries():
         exp_var = self.evaluate.explained_variance()
         r2 = self.evaluate.R2_score()
         max_error = self.evaluate.max_error()
+        adj_r2 = self.evaluate.adjusted_r2()
         
         scores = {"RMSE": rmse,
                   "MSE": mse,
@@ -303,7 +308,8 @@ class PredictandTimeseries():
                   "MAE": mae, 
                   "explained_variance": exp_var, 
                   "r2": r2, 
-                  "max_error": max_error}
+                  "max_error": max_error,
+                  "adj_r2": adj_r2}
         
         return scores 
     

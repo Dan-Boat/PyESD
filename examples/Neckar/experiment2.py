@@ -28,7 +28,7 @@ def run_experiment2(variable, regressor):
 
     num_of_stations = len(stationnames)
     
-    for i in range(2,num_of_stations):
+    for i in range(num_of_stations):
         
         stationname = stationnames[i]
         station_dir = os.path.join(station_datadir, stationname + ".csv")
@@ -86,7 +86,7 @@ def run_experiment2(variable, regressor):
 
 if __name__ == "__main__":
     
-    variable = "Precipitation"
+    variable = "Temperature"
 
     regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging"]
     

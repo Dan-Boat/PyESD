@@ -69,5 +69,17 @@ class Evaluate():
         print("Maximum error: {:2f}".format(score))
         
         return score 
+    
+    def adjusted_r2(self):
+        
+        r2 = r2_score(self.y_true, self.y_pred)
+        
+        adj_r2 = (1 - (1- r2) * ((self.y_true.shape[0]- 1) / 
+                  (self.y_true.shape[0] - self.y_true[1] -1)))
+        
+        print("Adjusted R²: {:.2f}".format(adj_r2))
+        
+        return adj_r2
+
 
 

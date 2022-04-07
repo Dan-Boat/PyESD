@@ -71,6 +71,13 @@ for i in range(num_of_stations):
     
     y_obs = SO.get_var(variable, from1958to2010, anomalies=True).dropna()
     
+    
+    # just export the ypred due to update
+    
+    # store selected names also
+    
+    # store predictions in csv 
+    
     predictions = pd.DataFrame({
         "obs": y_obs,
         "ERA5 1958-2010": ypred})
@@ -115,6 +122,8 @@ for i in range(num_of_stations):
     predictions = pd.DataFrame({
         "obs": y_obs,
         "ERA5 1958-2010": ypred})
+    
+    # store permutation importance instance (relatively only temp and tp are selected)
     
     #storing results
     
