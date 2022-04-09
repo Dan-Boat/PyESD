@@ -4,7 +4,9 @@
 /examples/Neckar/final_cache
 /examples/Neckar/experiment1
 /examples/Neckar/experiment2
-/exmaples/Neckar/experiment3
+/examples/Neckar/experiment3
+/examples/Neckar/experiment4
+/examples/__pycache__
 *.pickel
 modules.txt
 
