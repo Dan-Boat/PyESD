@@ -26,7 +26,7 @@ def run_experiment3(variable, ensemble_method, final_estimator, base_estimators)
 
     num_of_stations = len(stationnames)
         
-    for i in range(6,num_of_stations):
+    for i in range(num_of_stations):
         
         stationname = stationnames[i]
         station_dir = os.path.join(station_datadir, stationname + ".csv")
@@ -73,17 +73,17 @@ def run_experiment3(variable, ensemble_method, final_estimator, base_estimators)
             
         #storing of results
             
-        # store_pickle(stationname, "validation_score_" + ensemble_method, score_fit, cachedir)
-        # store_csv(stationname, "validation_predictions_" + ensemble_method, ypred_fit, cachedir)
-        # store_pickle(stationname, "test_score_" + ensemble_method, score_test, cachedir)
-        # store_csv(stationname, "predictions_" + ensemble_method, predictions, cachedir)
+        store_pickle(stationname, "validation_score_" + ensemble_method, score_fit, cachedir)
+        store_csv(stationname, "validation_predictions_" + ensemble_method, ypred_fit, cachedir)
+        store_pickle(stationname, "test_score_" + ensemble_method, score_test, cachedir)
+        store_csv(stationname, "predictions_" + ensemble_method, predictions, cachedir)
     
     
     
 if __name__ == "__main__":
     
     ensemble_methods = ["Stacking", "Voting"]
-
+ 
     base_estimators = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging"]
 
     final_estimator = "ExtraTree"

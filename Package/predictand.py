@@ -9,6 +9,7 @@ import sys
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 from copy import copy
 from collections import OrderedDict
 
@@ -136,6 +137,30 @@ class PredictandTimeseries():
             Xs.append(self.predictors[p].get(daterange, dataset, fit=fit_predictors))
             
         return pd.concat(Xs, axis=1)
+    
+    def predictor_correlation(self, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True, 
+                              method="pearson", **predictor_kwargs):
+        
+        X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors=fit_predictors, 
+                                     **predictor_kwargs)
+        
+        y = self.get(daterange, anomalies=fit_predictand)
+        
+        # dropna values 
+        
+        X = X.loc[~np.isnan(y)]
+        
+        y = y.dropna()
+        
+        
+        corr = X.corrwith(other=y, axis=0, drop=True, method=method)
+        
+        corr = corr.to_frame()
+        
+        return  corr.T
+            
+            
+        
     
     def fit(self, daterange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False,
@@ -343,7 +368,11 @@ class PredictandTimeseries():
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
             
-        return self.selector.select_names
+        names = self.selector.select_names
+        
+        names = names.to_frame()
+        
+        return names.T
     
     
     

@@ -97,6 +97,15 @@ class StationOperator():
         return self.variables[variable]._get_predictor_data(daterange , dataset, fit_predictors=fit_predictors, **predictor_kwargs)
     
     
+    
+    def predictor_correlation(self, variable, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True, 
+                              method="pearson", **predictor_kwargs):
+        
+        return self.variables[variable].predictor_correlation(daterange, predictor_dataset, fit_predictors=fit_predictors, 
+                                                              fit_predictand=fit_predictand, 
+                                  method= method, **predictor_kwargs)
+    
+    
     def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
