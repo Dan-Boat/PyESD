@@ -159,4 +159,19 @@ def load_all_stations(varname, path, stationnames):
     return df[columns]
 
     
+
+
+def ranksums_test():
     
+    # use scipy.stats ranksums
+    pass
+
+def levene_test():
+    
+    # use scipy.stats.levene
+    pass
+
+def ks_test():
+    # use scipy.stats.ks_2samp
+    
+    pass
