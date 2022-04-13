@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np 
 import seaborn as sns
 import os 
+import matplotlib as mpl
 
 try:  
     from plot_utils import *
@@ -19,7 +20,7 @@ except:
 
 
 def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cbar_ax=None, 
-                        add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=None,
+                        add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=None, fig_name=None,
                         xlabel=None, ylabel=None, fig=None):
     
     if ax is None:
@@ -60,11 +61,12 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
     plt.subplots_adjust(left=0.15, right=0.88, top=0.97, bottom=0.05)
     
     if fig_path is not None:
-        plt.savefig(os.path.join(fig_path, "corr_fig.png"), bbox_inches="tight")
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")
         
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
-            varname="test_r2", varname_std="test_r2_std", filename="validation_score_", legend=True):
+            varname="test_r2", varname_std="test_r2_std", filename="validation_score_", legend=True,
+            fig_path=None, fig_name=None,):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))
@@ -75,7 +77,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
     
-    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20)
+    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=18)
     
     if xlabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
@@ -84,5 +86,39 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     if legend ==True:    
         ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True)
     plt.tight_layout()
-    plt.subplots_adjust(left=0.15, right=0.88, top=0.97, bottom=0.05)
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+    
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")
         
+
+def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
+            varname="test_r2", filename="validation_score_",
+            fig_path=None, fig_name=None):
+    
+    if ax is None:
+        fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
+    
+    
+    scores = boxplot_data(regressors, stationnames, path_to_data, filename=filename, 
+                     varname=varname)
+    
+    color = { "boxes": black,
+              "whiskers": green,
+              "medians": orange,
+              "caps": black,
+               }
+    
+    
+    scores.plot(kind= "box", rot=0, ax=ax, fontsize=16, color= color, sym="r+", grid=False,
+                )
+    
+    if xlabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+    
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")

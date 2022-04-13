@@ -7,6 +7,7 @@ Created on Thu Apr  7 15:06:04 2022
 import os 
 import sys
 import matplotlib.pyplot as plt 
+import matplotlib as mpl
 import pandas as pd 
 import numpy as np 
 from collections import OrderedDict
@@ -18,8 +19,8 @@ sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 from Package.ESD_utils import load_all_stations, load_pickle, load_csv
 from Package.WeatherstationPreprocessing import read_weatherstationnames
 
-from Package.plot import barplot, correlation_heatmap
-from Package.plot_utils import apply_style, correlation_data, count_predictors
+from Package.plot import barplot, correlation_heatmap, boxplot
+from Package.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data
 
 from predictor_settings import predictors
 
@@ -36,16 +37,70 @@ num_stations_prec = len(stationnames_prec)
 stationname_prec = stationnames_prec
 
 
-path_data_precipitation = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment1/final_cache_Precipitation"
-path_data_temperature = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment1/final_cache_Temperature"
+path_data_precipitation = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2/final_cache_Precipitation"
+path_data_temperature = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2/final_cache_Temperature"
 
-methods = ["Recursive", "TreeBased", "Sequential"]
+#experiment 3
+
+regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging", "Stacking", "Voting"]
+
+
+font = {'weight' : 'semibold',
+    'size'   : 18}
+
+mpl.rc('font', **font)
+
+
+fig, ax = plt.subplots(1,1, figsize=(20,15))
+
+boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
+            varname="test_r2", filename="validation_score_", xlabel="Estimators",
+            ylabel="Validattion r²")
+
+plt.tight_layout()
+plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+plt.savefig("inter_estimators_r2.png", bbox_inches="tight")
+
+
+
+fig, ax = plt.subplots(1,1, figsize=(20,15))
+
+boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
+            varname="test_rmse", filename="validation_score_", xlabel="Estimators",
+            ylabel="Validattion RMSE")
+
+plt.tight_layout()
+plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+plt.savefig("inter_estimators_rmse.png", bbox_inches="tight")
+
+#experiment 2
+
+#regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging"]
+
+
+
+# fig, ax = plt.subplots(1,1, figsize=(18,15))
+
+# boxplot(regressors, stationnames_prec, path_data_precipitation, ax=None,  
+#             varname="test_r2", filename="validation_score_", xlabel="Regressors",
+#             ylabel="Validattion r²")
+
+# plt.tight_layout()
+# plt.subplots_adjust(left=0.15, right=0.88, top=0.97, bottom=0.05)
+# plt.savefig("inter_model.png")
+
+#plt.show()
+
+
+#experiment 1 analysis 
+
+#methods = ["Recursive", "TreeBased", "Sequential"]
 
 #count predictors 
 
-df = count_predictors(methods, stationnames_prec, path_data_precipitation,
-                      "selected_predictors_", predictors)
-df.to_csv("predictors_count.csv")
+# df = count_predictors(methods, stationnames_prec, path_data_precipitation,
+#                       "selected_predictors_", predictors)
+# df.to_csv("predictors_count.csv")
 
 #plot predictor correlation with station
 
@@ -84,7 +139,6 @@ df.to_csv("predictors_count.csv")
 # plt.savefig("prec_selectors.png")
 
 
-#write a function that counts the number of predictor selected in all stations and store in csv file
 
 
 

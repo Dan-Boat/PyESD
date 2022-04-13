@@ -7,6 +7,7 @@
 /examples/Neckar/experiment3
 /examples/Neckar/experiment4
 /examples/__pycache__
+/examples/Neckar/plots
 *.pickel
 modules.txt
 

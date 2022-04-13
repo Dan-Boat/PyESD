@@ -10,6 +10,7 @@ import matplotlib as mpl
 import matplotlib.patches as mpatches
 import pandas as pd
 from cycler import cycler
+from matplotlib import rc
 
 try:
     from ESD_utils import load_all_stations, load_csv, load_pickle
@@ -46,7 +47,7 @@ selector_method_colors = {
 
 
 
-def apply_style(fontsize=10, style="bmh", linewidth=2):
+def apply_style(fontsize=20, style=None, linewidth=2):
     """
     
 
@@ -62,11 +63,11 @@ def apply_style(fontsize=10, style="bmh", linewidth=2):
     None.
 
     """
-    small_size=fontsize - 4
-    plt.style.use(style)    
-    plt.rcParams['text.latex.preamble'] = [r"\usepackage{lmodern}"]
+    if style is not None:
+        plt.style.use(style)  
+        
+    rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
     mpl.rc('text', usetex=True)
-    mpl.rc('font', size=13, family='serif')
     mpl.rc('xtick', labelsize=fontsize)
     mpl.rc('ytick', labelsize=fontsize)
     mpl.rc('legend', fontsize=fontsize)
@@ -134,4 +135,18 @@ def count_predictors(methods, stationnames, path_to_data, filename, predictors):
     
     return df_count
 
+def boxplot_data(regressors, stationnames,  path_to_data, filename="validation_score_", 
+                 varname="test_r2"):
+    
+    df = pd.DataFrame(index=stationnames, columns=regressors)
+    
+    for regressor in regressors:
+        scores = load_all_stations(filename + regressor, path_to_data, stationnames)
+        
+        df[regressor] = scores[varname]
+        
+    df.reset_index(drop=True, inplace=True)
+    df.index += 1
+    
+    return df 
         

@@ -103,7 +103,7 @@ if __name__ == "__main__":
     
         regressor = "ARD"
 
-        variable = "Precipitation"
+        variable = "Temperature"
         
         selector_methods = ["Recursive", "TreeBased", "Sequential"]
         
