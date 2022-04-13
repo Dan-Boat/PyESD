@@ -77,14 +77,14 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
     
-    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=18, capsize=4)
+    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
     
     if xlabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
         
     if legend ==True:    
-        ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True)
+        ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True, fontsize=20)
     plt.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
     
@@ -110,7 +110,7 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
                }
     
     
-    scores.plot(kind= "box", rot=0, ax=ax, fontsize=16, color= color, sym="r+", grid=False,
+    scores.plot(kind= "box", rot=0, ax=ax, fontsize=20, color= color, sym="r+", grid=False,
                 )
     
     if xlabel is not None:
