@@ -77,7 +77,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
     
-    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=18)
+    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=18, capsize=4)
     
     if xlabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)

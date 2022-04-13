@@ -7,22 +7,17 @@ Created on Tue Apr 12 16:46:03 2022
 
 import os 
 import sys
-import matplotlib.pyplot as plt 
-import matplotlib as mpl
-import pandas as pd 
-import numpy as np 
-from collections import OrderedDict
-import seaborn as sns
+import matplotlib.pyplot as plt  
+ 
 
 # setting model path
 
 sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.ESD_utils import load_all_stations, load_pickle, load_csv
 from Package.WeatherstationPreprocessing import read_weatherstationnames
 
-from Package.plot import barplot, correlation_heatmap, boxplot
-from Package.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data
+from Package.plot import barplot, correlation_heatmap
+from Package.plot_utils import apply_style, correlation_data, count_predictors
 
 from predictor_settings import predictors
 
@@ -58,7 +53,7 @@ df_temp = correlation_data(stationnames_temp, exp_dir_temp,
                     filename= "corrwith_predictors_" + selector_methods[0], predictors=predictors)
 
 
-apply_style(fontsize=20, style="bmh") 
+apply_style(fontsize=22, style=None) 
 
 fig, ax = plt.subplots(1,1, figsize=(20,15))
                         
