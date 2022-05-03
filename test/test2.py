@@ -34,7 +34,9 @@ df_X_test = pd.read_csv(os.path.join(data_path, "predictors_test_2000-2019.csv")
 selector = RecursiveFeatureElimination(regressor_name="ARDRegression")
 selector.fit(df_X_train, df_y_train.squeeze())
 selector.print_selected_features(df_X_train)
+
 print(selector.cv_test_score())
+
 train_X_new = selector.transform(df_X_train)
 test_X_new = selector.transform(df_X_test)
 
@@ -45,15 +47,17 @@ models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost",
           "RandomForest", "SGDRegressor", "ExtraTree", "Bagging", 
           "LassoCV", "MLPRegressor", "RidgeCV", "XGBoost"]
 
-plot_style()
-fig, axes = plt.subplots(3, 4, sharey=True, sharex = True, figsize=(23, 18))
-axs = np.ravel(axes)
+model1 = "SVR"
+
+#plot_style()
+#fig, axes = plt.subplots(3, 4, sharey=True, sharex = True, figsize=(23, 18))
+#axs = np.ravel(axes)
 
 for i in range(len(models)):
     import time 
     start_time = time.time()
     
-    regressor = Regressors(method= models[i], cv=10)
+    regressor = Regressors(method= model1, cv=10, hyper_method="BayesSearchCV")
     regressor.set_model()
     regressor.fit(train_X_new, train_y)
     

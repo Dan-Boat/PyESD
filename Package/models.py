@@ -27,6 +27,9 @@ from sklearn.model_selection import cross_val_score, cross_validate, cross_val_p
 
 from xgboost import XGBRegressor
 
+from skopt import BayesSearchCV
+from skopt.space import Real, Categorical, Integer
+
 
 try:
     from .splitter import MonthlyBooststrapper
@@ -75,6 +78,12 @@ class HyperparameterOptimize(MetaAttributes):
         elif self.method == "RandomizedSearchCV":
             self.hyper = RandomizedSearchCV(estimator= self.regressor, param_distributions=self.param_grid,
                                           scoring=self.scoring, cv=self.cv)
+        elif self.method == "BayesSearchCV":
+            self.hyper = BayesSearchCV(estimator=self.regressor, search_spaces=self.param_grid, scoring=self.scoring, 
+                                       cv=self.cv,)
+        else:
+            raise ValueError("The defined hyperparameter search can't be recognized")
+            
     def fit(self, X, y):
         self.hyper = self.hyper.fit(X,y)
         self.estimator = self.hyper.best_estimator_
@@ -109,15 +118,22 @@ class HyperparameterOptimize(MetaAttributes):
 
 class Regressors(MetaAttributes):
     
-    def __init__(self, method, cv=None):
+    def __init__(self, method, cv=None, hyper_method=None):
         self.method = method
         self.cv = cv
+        self.hyper_method = hyper_method
         if self.cv == None:
             
             print(".....Using monthly bootstrapper as default splitter....")
             self.cv = MonthlyBooststrapper(n_splits=500, block_size=12)
             
         self.selection = "random"
+        
+        if hyper_method == None:
+            self.hyper_method = "GridSearchCV"
+            
+            
+            
         
         
     def set_model(self):
@@ -143,6 +159,7 @@ class Regressors(MetaAttributes):
         #Generalized Linear Models 
         elif self.method == "GammaRegressor":
             self.estimator = GammaRegressor()
+            
         elif self.method == "PoissonRegressor":
             self.estimator = PoissonRegressor()
             
@@ -152,14 +169,21 @@ class Regressors(MetaAttributes):
                                      n_iter_no_change=20)
              param_grid = {"hidden_layer_sizes": [200,300], "alpha": [0.0001, 1.5, 2,5, 10],
                               "learning_rate": ["adaptive"], "solver": ["adam"]}
-             self.hyper = HyperparameterOptimize(method="GridSearchCV", param_grid= param_grid, regressor=regressor)
+             self.hyper = HyperparameterOptimize(method=self.hyper_method , param_grid= param_grid, regressor=regressor)
              
         #Support Vector Machines (it very expensive to do hyperparamiter search)
         elif self.method == "SVR":
             regressor = SVR()
-            param_grid = {"C":[0.1, 1, 10], "gamma":["auto", 1, 0.1, 0.01, 0.0001, 0.2, 0.5, 10], 
-                         "kernel":["rbf", "poly", "linear"]}
-            self.hyper = HyperparameterOptimize(method="RandomizedSearchCV", param_grid= param_grid, regressor=regressor)
+            if self.hyper_method == "BayesSearchCV":
+                param_grid =  {"C":Real(0.1, 10, prior="uniform"),
+                               "gamma": Real(0.1,10, prior="uniform"),
+                             "kernel":Categorical(["linear"]), 
+                             }
+            else:
+                param_grid = {"C":[0.1, 1, 10], "gamma":[0.1], 
+                             "kernel":["linear"]}
+            
+            self.hyper = HyperparameterOptimize(method=self.hyper_method, param_grid= param_grid, regressor=regressor)
         
         # Ensemble tree based algorithms    
         elif self.method == "RandomForest":
@@ -167,10 +191,12 @@ class Regressors(MetaAttributes):
             
         elif self.method == "ExtraTree":
             self.estimator = ExtraTreesRegressor(n_estimators=100, random_state=42, n_jobs=-1)
-            
+         
+        # Bagging    
         elif self.method == "Bagging":
             self.estimator = BaggingRegressor(n_estimators=100, random_state=42, n_jobs=-1)
         
+        #Boosting
         elif self.method == "AdaBoost":
             self.estimator = AdaBoostRegressor(n_estimators=100, loss= "linear", random_state=42)
             
