@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyESD.WeatherstationPreprocessing &mdash; pyESD 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> pyESD
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">pyESD</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyESD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>pyESD.WeatherstationPreprocessing</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyESD.WeatherstationPreprocessing</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Fri Nov 12 14:01:43 2021</span>
+
+
+<span class="sd">This routine handles the preprocessing of data downloaded directly from DWD. The default time series is monthly, others frequency must be pass to the function</span>
+<span class="sd">1. Extracting only stations with required number of years </span>
+<span class="sd">2. Writing additional information into files (eg. station name, lat, lon and elevation), since its downloaded into a separate file using station codes</span>
+<span class="sd">3. All utils function to read stations into pyESD Station operator class</span>
+
+<span class="sd">Note: This routine is specifically designed for data downloded from DWD (otherwise please contact daniel.boateng@uni-tuebingen.de for assistance on other datasets)</span>
+
+<span class="sd">@author: dboateng</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># importing packages</span>
+<span class="kn">import</span> <span class="nn">os</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span> <span class="k">as</span> <span class="n">p</span>
+
+
+<span class="c1">#local packages</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.StationOperator</span> <span class="kn">import</span> <span class="n">StationOperator</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">StationOperator</span> <span class="kn">import</span> <span class="n">StationOperator</span>
+    
+
+
+<div class="viewcode-block" id="extract_DWDdata_with_more_yrs"><a class="viewcode-back" href="../../pyESD.html#pyESD.WeatherstationPreprocessing.extract_DWDdata_with_more_yrs">[docs]</a><span class="k">def</span> <span class="nf">extract_DWDdata_with_more_yrs</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> <span class="n">path_to_store</span><span class="p">,</span> <span class="n">min_yrs</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">glob_name</span><span class="o">=</span><span class="s2">&quot;data*.csv&quot;</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="s2">&quot;Precipitation&quot;</span><span class="p">,</span> <span class="n">start_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                          <span class="n">end_date</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">data_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    1. make directory to store the data that satisfies the time criteria</span>
+<span class="sd">    2. Set a glob name that can be used to read all data in directory eg. *data*.csv or *.csv</span>
+<span class="sd">    The function basically check if the station has more that certain number of year and its then written into another folder (path_to_store)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_to_data : TYPE: str</span>
+<span class="sd">        DESCRIPTION. path the directory containing all data </span>
+<span class="sd">    path_to_store : TYPE: str</span>
+<span class="sd">        DESCRIPTION. path to store satisfied data</span>
+<span class="sd">    yrs : TYPE: int</span>
+<span class="sd">        DESCRIPTION. The number of years required for analysis</span>
+<span class="sd">    glob_name : TYPE: str</span>
+<span class="sd">        DESCRIPTION. The global pattern used to extract data (eg. *.csv)</span>
+<span class="sd">    varname : TYPE: str, optional</span>
+<span class="sd">        DESCRIPTION. The default is &quot;Precipitation&quot;.</span>
+<span class="sd">    start_date : TYPE:str, optional</span>
+<span class="sd">        DESCRIPTION. The default is None. Start date required for the analysis eg. 1958-01-01</span>
+<span class="sd">    end_date : TYPE: str, optional</span>
+<span class="sd">        DESCRIPTION. The default is None. End date for data</span>
+<span class="sd">    data_freq : TYPE:str, optional</span>
+<span class="sd">        DESCRIPTION. The default is None. The frequency of data (eg. MS), must follow pandas setting</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">par</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">par</span> <span class="ow">in</span> <span class="p">[</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">,</span> <span class="n">data_freq</span><span class="p">]):</span>
+        <span class="n">daterange</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">data_freq</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;------using the default time of ERA5 dataset: 1958-2020--------&quot;</span><span class="p">)</span>
+        
+        <span class="n">daterange</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;1958-01-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2021-12-01&quot;</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="s2">&quot;MS&quot;</span><span class="p">)</span> <span class="c1"># time range for ERA5</span>
+    
+    <span class="n">use_colums</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Zeitstempel&quot;</span><span class="p">,</span> <span class="s2">&quot;Wert&quot;</span><span class="p">]</span>
+    
+    <span class="n">df_to_store</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">,</span> <span class="n">varname</span><span class="p">,])</span>
+    
+    <span class="n">df_to_store</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">daterange</span>
+    <span class="n">df_to_store</span> <span class="o">=</span> <span class="n">df_to_store</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;Time&quot;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    
+    <span class="c1"># looping through directory</span>
+    <span class="k">for</span> <span class="n">csv</span> <span class="ow">in</span> <span class="n">p</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">glob_name</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">use_colums</span><span class="p">,</span> <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Zeitstempel&quot;</span><span class="p">])</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;Zeitstempel&quot;</span><span class="p">],</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">daterange</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">daterange</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="c1"># selects only available dates</span>
+        
+        <span class="k">if</span> <span class="n">data_freq</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">data_freq</span> <span class="o">==</span><span class="s2">&quot;MS&quot;</span><span class="p">:</span>
+            <span class="n">yrs</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">/</span><span class="mi">12</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;different time period is not implemented&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">yrs</span> <span class="o">&gt;=</span> <span class="n">min_yrs</span><span class="p">:</span> <span class="c1"># data with more than 60 years</span>
+        
+        
+            <span class="n">df_to_store</span><span class="p">[</span><span class="n">varname</span><span class="p">][</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;Wert&quot;</span><span class="p">][</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">]</span>
+            
+            <span class="k">if</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;Precipitation&quot;</span><span class="p">:</span>
+                <span class="n">df_to_store</span> <span class="o">=</span> <span class="n">df_to_store</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">-</span><span class="mi">9999</span><span class="p">)</span>
+                
+                
+            <span class="k">elif</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;Temperature&quot;</span><span class="p">:</span>
+                <span class="n">df_to_store</span> <span class="o">=</span> <span class="n">df_to_store</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="o">-</span><span class="mi">8888</span><span class="p">)</span>
+                
+                
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Incorrect variable name&quot;</span><span class="p">)</span>
+            
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;saving&quot;</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            
+            <span class="n">df_to_store</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_store</span><span class="p">,</span> <span class="n">csv</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            
+            
+            
+            
+<div class="viewcode-block" id="add_info_to_data"><a class="viewcode-back" href="../../pyESD.html#pyESD.WeatherstationPreprocessing.add_info_to_data">[docs]</a><span class="k">def</span> <span class="nf">add_info_to_data</span><span class="p">(</span><span class="n">path_to_info</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">path_to_store</span><span class="p">,</span> <span class="n">glob_name</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function locate the data info in data_to_info by using the station code and then append it to the start of the data </span>
+<span class="sd">    This function also stores a summary info file (station names and station loc) that can be used to interate all the stations when applying the downscaling package</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_to_info : TYPE: str</span>
+<span class="sd">        DESCRIPTION. Path to the data containing all the station infomation</span>
+<span class="sd">    path_to_data : TYPE: str</span>
+<span class="sd">        DESCRIPTION. Path to data required for appending info</span>
+<span class="sd">    glob_name : TYPE: str</span>
+<span class="sd">        DESCRIPTION. The global pattern used to extract data (eg. *.csv)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SDO_ID&quot;</span><span class="p">,</span><span class="s2">&quot;SDO_Name&quot;</span><span class="p">,</span><span class="s2">&quot;Geogr_Laenge&quot;</span><span class="p">,</span><span class="s2">&quot;Geogr_Breite&quot;</span><span class="p">,</span><span class="s2">&quot;Hoehe_ueber_NN&quot;</span><span class="p">]</span>
+    
+    
+    <span class="n">df_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span> <span class="n">info_cols</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    
+    <span class="k">for</span> <span class="n">csv_file</span> <span class="ow">in</span> <span class="n">p</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">)</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">glob_name</span><span class="p">):</span>
+        <span class="n">sep_filename</span> <span class="o">=</span> <span class="n">csv_file</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+        <span class="n">csv_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">sep_filename</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        
+       <span class="c1"># data = pd.read_csv(csv_file)</span>
+        <span class="n">data_info</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_to_info</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">info_cols</span><span class="p">)</span>
+        <span class="n">data_info</span> <span class="o">=</span> <span class="n">data_info</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s2">&quot;SDO_ID&quot;</span><span class="p">])</span>
+        
+        <span class="n">df_info</span> <span class="o">=</span> <span class="n">df_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">csv_id</span><span class="p">])</span>
+        
+        <span class="n">csv_info</span> <span class="o">=</span> <span class="n">data_info</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">csv_id</span><span class="p">]</span>
+        
+        <span class="c1"># reading data from path (csv_file)</span>
+        <span class="n">data_in_glob</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="n">csv_file</span><span class="p">)</span>
+        
+        <span class="n">time_len</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data_in_glob</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">])</span>
+        
+        <span class="c1"># creating new dataFrame to store the data in required format</span>
+        
+        <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">800</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        
+        <span class="c1"># filling the df up using csv_file</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Station&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_info</span><span class="p">[</span><span class="s2">&quot;SDO_Name&quot;</span><span class="p">]</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Latitude&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">csv_info</span><span class="p">[</span><span class="s2">&quot;Geogr_Breite&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">))</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Longitude&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">csv_info</span><span class="p">[</span><span class="s2">&quot;Geogr_Laenge&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">))</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Elevation&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">csv_info</span><span class="p">[</span><span class="s2">&quot;Hoehe_ueber_NN&quot;</span><span class="p">]</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Time&quot;</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">varname</span>
+        
+        <span class="c1">#adding data from sorted file</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">time_len</span><span class="p">):</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">6</span><span class="o">+</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_in_glob</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">6</span><span class="o">+</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_in_glob</span><span class="p">[</span><span class="n">varname</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        
+        <span class="c1"># saving the file with station name</span>
+        
+        <span class="n">name</span> <span class="o">=</span> <span class="n">csv_info</span><span class="p">[</span><span class="s2">&quot;SDO_Name&quot;</span><span class="p">]</span>
+        
+        <span class="c1"># replacing special characters eg. German umlaute</span>
+        <span class="n">special_char_map</span> <span class="o">=</span> <span class="p">{</span><span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;ä&#39;</span><span class="p">):</span><span class="s1">&#39;ae&#39;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;ü&#39;</span><span class="p">):</span><span class="s1">&#39;ue&#39;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;ö&#39;</span><span class="p">):</span><span class="s1">&#39;oe&#39;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s1">&#39;ß&#39;</span><span class="p">):</span><span class="s1">&#39;ss&#39;</span><span class="p">,</span> 
+                            <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span> <span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="p">:</span> <span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">):</span><span class="s2">&quot;_&quot;</span><span class="p">,</span> <span class="nb">ord</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span><span class="s2">&quot;&quot;</span><span class="p">,}</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">special_char_map</span><span class="p">)</span>
+        
+        <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_store</span><span class="p">,</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.csv&quot;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        
+    <span class="n">df_info</span> <span class="o">=</span> <span class="n">df_info</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;SDO_Name&quot;</span><span class="p">:</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span><span class="s2">&quot;Geogr_Laenge&quot;</span><span class="p">:</span><span class="s2">&quot;Longitude&quot;</span><span class="p">,</span>
+                                        <span class="s2">&quot;Geogr_Breite&quot;</span><span class="p">:</span><span class="s2">&quot;Latitude&quot;</span><span class="p">,</span><span class="s2">&quot;Hoehe_ueber_NN&quot;</span><span class="p">:</span><span class="s2">&quot;Elevation&quot;</span><span class="p">})</span>
+    
+    <span class="c1"># replace comma with dot</span>
+    
+    <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Latitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Latitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+    
+    <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Longitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Longitude&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span><span class="s2">&quot;.&quot;</span><span class="p">))</span>
+    
+    <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_info</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="n">special_char_map</span><span class="p">))</span>
+    
+    <span class="n">df_info</span> <span class="o">=</span> <span class="n">df_info</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">df_info</span> <span class="o">=</span> <span class="n">df_info</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                                 
+    
+    <span class="n">df_info</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_store</span><span class="p">,</span> <span class="s2">&quot;stationnames.csv&quot;</span><span class="p">))</span>
+    
+    <span class="n">df_info</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="n">df_info</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_store</span><span class="p">,</span> <span class="s2">&quot;stationloc.csv&quot;</span><span class="p">))</span></div>
+
+
+
+
+<div class="viewcode-block" id="read_weatherstationnames"><a class="viewcode-back" href="../../pyESD.html#pyESD.WeatherstationPreprocessing.read_weatherstationnames">[docs]</a><span class="k">def</span> <span class="nf">read_weatherstationnames</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This function reads all the station names in the data directory</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_to_data : TYPE: str</span>
+<span class="sd">        DESCRIPTION. The directory path to where all the station data are stored</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    namedict : TYPE: dict</span>
+<span class="sd">        DESCRIPTION.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">nr</span><span class="p">,</span> <span class="n">name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> <span class="s1">&#39;stationnames.csv&#39;</span><span class="p">),</span>
+                              <span class="n">delimiter</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">nr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nr</span><span class="p">]</span>
+    <span class="n">namedict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">nr</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">namedict</span></div>
+
+
+<div class="viewcode-block" id="read_station_csv"><a class="viewcode-back" href="../../pyESD.html#pyESD.WeatherstationPreprocessing.read_station_csv">[docs]</a><span class="k">def</span> <span class="nf">read_station_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">varname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : TYPE: str</span>
+<span class="sd">        DESCRIPTION. Name of the station in path </span>
+<span class="sd">    varname : TYPE: str</span>
+<span class="sd">        DESCRIPTION. The name of the varibale to downscale (eg. Precipitation, Temperature)</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        DESCRIPTION.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ws : TYPE</span>
+<span class="sd">        DESCRIPTION.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="c1"># reading headers info with readline </span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+        <span class="n">elev</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">))</span>
+        
+        
+        
+    <span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="n">skiprows</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,],</span>
+                       <span class="n">parse_dates</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span>
+                       <span class="n">varname</span><span class="p">])</span>
+    
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;Precipitation&quot;</span><span class="p">:</span>
+        <span class="n">pr</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span>
+        <span class="n">pr</span><span class="p">[</span><span class="n">pr</span> <span class="o">==</span> <span class="o">-</span><span class="mi">9999</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">pr</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">1e-2</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">pr</span> <span class="o">&gt;</span> <span class="mi">2000</span><span class="p">)</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">varname</span><span class="p">:</span><span class="n">pr</span><span class="p">}</span>
+        
+    <span class="k">elif</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;Temperature&quot;</span><span class="p">:</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span>
+        <span class="n">t</span><span class="p">[</span><span class="n">t</span> <span class="o">==</span> <span class="o">-</span><span class="mi">8888</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">t</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">50</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">varname</span><span class="p">:</span><span class="n">t</span><span class="p">}</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The model does not recognize the variable name&quot;</span><span class="p">)</span>
+        
+    <span class="n">so</span> <span class="o">=</span> <span class="n">StationOperator</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">elev</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">so</span></div>
+    
+    
+    
+    
+<div class="viewcode-block" id="read_weatherstations"><a class="viewcode-back" href="../../pyESD.html#pyESD.WeatherstationPreprocessing.read_weatherstations">[docs]</a><span class="k">def</span> <span class="nf">read_weatherstations</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read all the station data in a directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    path_to_data : TYPE: STR</span>
+<span class="sd">        DESCRIPTION. relative or absolute path to the station folder</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    stations : TYPE: DICT</span>
+<span class="sd">        DESCRIPTION. Dictionary containing all the datasets</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">namedict</span> <span class="o">=</span> <span class="n">read_weatherstationnames</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">)</span>
+    <span class="n">stations</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">namedict</span><span class="p">:</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">namedict</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.csv&#39;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Reading&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">ws</span> <span class="o">=</span> <span class="n">read_station_csv</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">))</span>
+        <span class="n">stations</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ws</span>
+    <span class="k">return</span> <span class="n">stations</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Daniel Boateng.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

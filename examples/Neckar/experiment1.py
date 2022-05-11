@@ -16,12 +16,11 @@ import pandas as pd
 import numpy as np 
 from collections import OrderedDict
 
+#sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
-
-from Package.WeatherstationPreprocessing import read_station_csv
-from Package.standardizer import MonthlyStandardizer, StandardScaling
-from Package.ESD_utils import store_pickle, store_csv
+from pyESD.WeatherstationPreprocessing import read_station_csv
+from pyESD.standardizer import MonthlyStandardizer, StandardScaling
+from pyESD.ESD_utils import store_pickle, store_csv
 
 #relative imports 
 from read_data import *

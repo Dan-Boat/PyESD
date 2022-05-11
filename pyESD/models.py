@@ -180,7 +180,7 @@ class Regressors(MetaAttributes):
                              "kernel":Categorical(["linear"]), 
                              }
             else:
-                param_grid = {"C":[0.1, 1, 10], "gamma":[0.1], 
+                param_grid = {"C":[0.1, 1, 10], "gamma":[0.1,1, 10], 
                              "kernel":["linear"]}
             
             self.hyper = HyperparameterOptimize(method=self.hyper_method, param_grid= param_grid, regressor=regressor)

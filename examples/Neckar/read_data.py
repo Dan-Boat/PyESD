@@ -14,10 +14,10 @@ import socket
 import pandas as pd
 import numpy as np
 
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
+#sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.ESD_utils import Dataset
-from Package.WeatherstationPreprocessing import read_weatherstationnames
+from pyESD.ESD_utils import Dataset
+from pyESD.WeatherstationPreprocessing import read_weatherstationnames
 
 radius = 200 # km
 
