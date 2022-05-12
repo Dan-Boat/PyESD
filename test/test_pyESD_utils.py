@@ -22,6 +22,6 @@ class TestHaversine(unittest.TestCase):
         self.distance = haversine(lon1=0, lat1=47, lon2=10, lat2=47)
     
     def test_distance(self):
-        self.assertGreater(self.distance, 700, "The estimated distance between the two coordinates is correct")
+        self.assertGreater(self.distance, 700, "The estimated distance between the two coordinates is incorrect")
         
 unittest.main()
