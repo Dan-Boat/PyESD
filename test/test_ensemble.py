@@ -66,4 +66,5 @@ class TestEnsembleRegressor(unittest.TestCase):
         self.assertGreaterEqual(np.mean(val_score), 0.99,
                                 "The model is not well calibrating, check parameters")
         
-unittest.main()
+if __name__ == '__main__': 
+    unittest.main()

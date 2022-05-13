@@ -20,7 +20,7 @@ class TestRegressors(unittest.TestCase):
     
     
     @classmethod
-    def setUp(self):
+    def setUpClass(self):
         self.regressor_lasso = Regressors(method="LassoLarsCV", cv=5)
         
         self.regressor_mlp = Regressors(method="MLPRegressor", cv=5, 
@@ -97,4 +97,5 @@ class TestRegressors(unittest.TestCase):
         
 
 
-unittest.main()
+if __name__ == '__main__': 
+    unittest.main()

@@ -24,4 +24,5 @@ class TestHaversine(unittest.TestCase):
     def test_distance(self):
         self.assertGreater(self.distance, 700, "The estimated distance between the two coordinates is incorrect")
         
-unittest.main()
+if __name__ == '__main__': 
+    unittest.main()

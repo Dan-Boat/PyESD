@@ -7,6 +7,8 @@ Created on Thu May 12 14:57:29 2022
 import numpy as np
 import pandas as pd 
 
+from pyESD.Predictor_Base import Predictor
+
 def generate_syn_data():
     
 
@@ -32,3 +34,18 @@ def generate_syn_data():
     y = pd.Series(y, index=daterange)
     
     return X , y
+
+
+class Syn_predictor(Predictor):
+    
+    def __init__(self, X, i, **kwargs):
+        self.X = X.iloc[:, i]
+        super().__init__(str(i), **kwargs)
+        
+    def _generate(self, daterange, dataset, fit, fitted_with, fitted_from):
+        return self.X[daterange]
+    
+    
+
+    
+    
