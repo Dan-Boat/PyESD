@@ -7,8 +7,6 @@ Created on Thu May 12 14:06:41 2022
 
 import unittest
 import numpy as np
-import pandas as pd 
-from sklearn.linear_model import LassoLarsCV
 from sklearn.utils.validation import check_is_fitted
 
 
@@ -73,16 +71,30 @@ class TestRegressors(unittest.TestCase):
     def test_predict(self):
         self.routine()
         
-        yhat = self.regressor_lasso.predict(X)
+        yhat_lasso = self.regressor_lasso.predict(X)
         
-        self.assertGreaterEqual(np.corrcoef(y,yhat)[0,1], 0.99,
+        yhat_mlp = self.regressor_mlp.predict(X)
+        
+        self.assertGreaterEqual(np.corrcoef(y,yhat_lasso)[0,1], 0.99,
                                 "The model is not well calibrating, check parameters")
         
+        self.assertGreaterEqual(np.corrcoef(y,yhat_mlp)[0,1], 0.99,
+                                "The model is not well calibrating, check parameters")
         
-        pass
     
     def test_cross_val_score(self):
-        pass
+        self.routine()
+        
+        val_score_lasso = self.regressor_lasso.cross_val_score(X, y)
+        
+        self.assertGreaterEqual(np.mean(val_score_lasso), 0.99,
+                                "The model is not well calibrating, check parameters")
+        
+        val_score_mlp = self.regressor_mlp.cross_val_score(X, y)
+        
+        self.assertGreaterEqual(np.mean(val_score_mlp), 0.99,
+                                "The model is not well calibrating, check parameters")
+        
 
 
 unittest.main()

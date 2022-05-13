@@ -11,11 +11,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.feature_selection import RecursiveFeatureElimination, TreeBasedSelection
-from Package.models import Regressors
-from Package.ensemble_models import EnsembleRegressor
+
+from pyESD.feature_selection import RecursiveFeatureElimination, TreeBasedSelection
+from pyESD.models import Regressors
+from pyESD.ensemble_models import EnsembleRegressor
 
 
 data_path = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/data/"
@@ -41,8 +41,7 @@ train_X_new = selector.transform(df_X_train)
 test_X_new = selector.transform(df_X_test)
 
 models = ["AdaBoost", "LassoLarsCV", "ARD", "GradientBoost", 
-          "RandomForest", "SGDRegressor", "ExtraTree", "Bagging", 
-          "LassoCV", "MLPRegressor", "RidgeCV", "XGBoost"]
+          "RandomForest", "Bagging", "XGBoost"]
 
 estimators = []
 
@@ -54,7 +53,7 @@ for i in range(len(models)):
         regressor.fit(train_X_new, train_y)
     estimators.append((models[i], regressor.estimator))
 
-methods = ["Voting", "Stacking"] 
+methods = ["Stacking"] 
 
 from test_utils import plot_regression_results, plot_style
 import time
@@ -69,6 +68,7 @@ for i in range(len(methods)) :
     
     ensemble.fit(train_X_new, train_y)
     train_score = ensemble.score(train_X_new, train_y)
+    y_preds = ensemble.transform(train_X_new)
     
     score = ensemble.cross_validate(train_X_new, train_y)
     

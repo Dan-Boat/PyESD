@@ -69,6 +69,12 @@ class EnsembleRegressor():
         y_preds = self.ensemble.transform(X)
         return y_preds
     
+    def predict_average(self, X):
+        y_preds = self.transform(X)
+        y_avg = y_preds.mean(axis=1)
+        
+        return y_avg
+    
     def cross_val_score(self, X, y):
         return cross_val_score(self.ensemble, X, y, cv=self.cv)
     
