@@ -21,7 +21,7 @@ def _check_data_available(data, daterange):
         
 class Predictor(ABC):
     
-    def __init__(self, name, longname=None, cachedir=None, resampler=None):
+    def __init__(self, name, longname=None, cachedir=None):
         
         self.name = name
         if longname is not None:
