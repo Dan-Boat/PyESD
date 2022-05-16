@@ -57,12 +57,16 @@ class Predictor(ABC):
             
             # serialize the the predictor data with dump()
             pickle.dump(predictordata, f)
+    
     def load(self):
         filename_to_store = os.path.join(self.cachedir, self.longname + ".pickle")
         
         if not os.path.exists(filename_to_store):
             raise FileNotFoundError("Predictor data may not be available in serialize form")
+            
+            
         with open(filename_to_store, "rb") as f:
+            
             predictordata = pickle.load(f)
             self.data = predictordata["data"]
             self.params = predictordata["params"]

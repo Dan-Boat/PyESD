@@ -23,7 +23,7 @@ from sklearn.ensemble import ExtraTreesRegressor, ExtraTreesClassifier
 # class for recursive feature elimination 
 class RecursiveFeatureElimination():
     
-    def __init__(self, regressor_name="ARDRegression"):
+    def __init__(self, regressor_name="ARD"):
         self.regressor_name = regressor_name
         self.cv = TimeSeriesSplit()
         self.n_jobs = -1
@@ -31,7 +31,7 @@ class RecursiveFeatureElimination():
         self.scoring = "r2"
         
         
-        if self.regressor_name == "ARDRegression":
+        if self.regressor_name == "ARD":
             self.estimator = ARDRegression()
         elif self.regressor_name == "BayesianRidge":
             self.estimator = BayesianRidge()
@@ -146,7 +146,7 @@ class SequentialFeatureSelection():
         self.scoring = "r2"
         self.direction = direction
         
-        if self.regressor_name == "ARDRegression":
+        if self.regressor_name == "ARD":
             self.estimator = ARDRegression()
         elif self.regressor_name == "BayesianRidge":
             self.estimator = BayesianRidge()

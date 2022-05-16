@@ -14,7 +14,6 @@ import socket
 import pandas as pd
 import numpy as np
 
-#sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
 from pyESD.ESD_utils import Dataset
 from pyESD.WeatherstationPreprocessing import read_weatherstationnames
@@ -33,7 +32,8 @@ cmip5_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP85"
 station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Temperature/cdc_download_2022-03-17_13-38/processed"
 station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Precipitation/cdc_download_2022-03-17_13/processed"
 predictordir    = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius)))
-cachedir        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature'))
+cachedir_temp        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature'))
+cachedir_prec        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Precipitation'))
 
 
 ERA5Data = Dataset('ERA5', {

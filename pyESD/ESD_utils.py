@@ -25,12 +25,13 @@ class Dataset():
         self.data = {}
         
     def get(self, varname, domain="NH"):
+        
         try:
             data=self.data[varname]
         
         except KeyError:
             
-            self.data[varname] = xr.open_dataarray(self.variables[varname])
+            self.data[varname] = xr.open_dataset(self.variables[varname])
             
             data = self.data[varname]
             

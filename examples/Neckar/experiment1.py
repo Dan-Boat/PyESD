@@ -16,8 +16,6 @@ import pandas as pd
 import numpy as np 
 from collections import OrderedDict
 
-#sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
-
 from pyESD.WeatherstationPreprocessing import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
@@ -27,10 +25,11 @@ from read_data import *
 from predictor_settings import *
 
 
-
-def run_experiment1(variable, regressor, selector_method):
+def run_experiment1(variable, regressor, selector_method, cachedir, stationnames,
+                    station_datadir):
     
     num_of_stations = len(stationnames)
+    
 
 
 
@@ -60,7 +59,7 @@ def run_experiment1(variable, regressor, selector_method):
         
         if selector_method == "Recursive":
             SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                    selector_method=selector_method , selector_regressor="ARDRegression", 
+                    selector_method=selector_method , selector_regressor="ARD", 
                     cal_relative_importance=False)
             
         elif selector_method == "TreeBased":
@@ -71,7 +70,7 @@ def run_experiment1(variable, regressor, selector_method):
         elif selector_method == "Sequential":
         
             SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                   selector_method=selector_method , selector_regressor="ARDRegression", num_predictors=10, 
+                   selector_method=selector_method , selector_regressor="ARD", num_predictors=10, 
                    selector_direction="forward")
         else:
             raise ValueError("Define selector not recognized")
@@ -101,14 +100,23 @@ if __name__ == "__main__":
     
     
         regressor = "ARD"
-
-        variable = "Temperature"
         
-        selector_methods = ["Recursive", "TreeBased", "Sequential"]
+        cachedir = [cachedir_temp, cachedir_prec]
         
-        for selector_method in selector_methods:
+        variable = ["Temperature", "Precipitation"]
+        
+        stationnames = [stationnames_temp, stationnames_prec]
+        
+        station_datadir = [station_temp_datadir, station_prec_datadir]
+        
+        for i,idx in enumerate(variable):
             
-            print("------ runing for model: ", selector_method, "----------")
+            selector_methods = ["Recursive", "TreeBased", "Sequential"]
+        
+            for selector_method in selector_methods:
             
-            run_experiment1(variable, regressor, selector_method)
+                print("------ runing for model: ", selector_method, "----------")
+            
+                run_experiment1(idx, regressor, selector_method, cachedir[i], stationnames[i], 
+                                station_datadir[i])
                      
