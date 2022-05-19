@@ -12,12 +12,10 @@ import matplotlib.pyplot as plt
 
 # setting model path
 
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
+from pyESD.WeatherstationPreprocessing import read_weatherstationnames
 
-from Package.WeatherstationPreprocessing import read_weatherstationnames
-
-from Package.plot import barplot, correlation_heatmap
-from Package.plot_utils import apply_style, correlation_data, count_predictors
+from pyESD.plot import barplot, correlation_heatmap
+from pyESD.plot_utils import apply_style, correlation_data, count_predictors
 
 from predictor_settings import predictors
 
@@ -59,14 +57,14 @@ fig, ax = plt.subplots(1,1, figsize=(20,15))
                         
 correlation_heatmap(data=df_prec, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
-                        xlabel="Predictors", ylabel="Stations", fig_name="prec_corr.png",)
+                        xlabel="Predictors", ylabel="Stations", fig_name="fig s1a.svg",)
 
 
 fig, ax = plt.subplots(1,1, figsize=(20,15))
 
 correlation_heatmap(data=df_temp, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
-                        xlabel="Predictors", ylabel="Stations", fig_name="temp_corr.png",)
+                        xlabel="Predictors", ylabel="Stations", fig_name="fig s1b.svg",)
 
 # plotting model performance based on predictor selector approach
 
@@ -81,7 +79,7 @@ barplot(methods=selector_methods, stationnames=stationnames_prec , path_to_data=
         filename="validation_score_", ax=ax2, legend=False)
 
 plt.tight_layout()
-plt.savefig(os.path.join(fig_path,"prec_selectors_score.png"))
+plt.savefig(os.path.join(fig_path,"fig1.svg"))
 
 
 
@@ -96,7 +94,7 @@ barplot(methods=selector_methods, stationnames=stationnames_temp , path_to_data=
         filename="validation_score_", ax=ax2, legend=False)
 
 plt.tight_layout()
-plt.savefig(os.path.join(fig_path,"temp_selectors_score.png"))
+plt.savefig(os.path.join(fig_path,"fig2.svg"))
 
 
 

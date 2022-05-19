@@ -61,7 +61,7 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
     plt.subplots_adjust(left=0.15, right=0.88, top=0.97, bottom=0.05)
     
     if fig_path is not None:
-        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
         
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
@@ -89,7 +89,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
     
     if fig_path is not None:
-        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
         
 
 def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
@@ -121,4 +121,4 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
     
     if fig_path is not None:
-        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight")
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")

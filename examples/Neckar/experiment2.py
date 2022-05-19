@@ -20,7 +20,9 @@ from read_data import *
 from predictor_settings import *
 
 
-def run_experiment2(variable, regressor):
+def run_experiment2(variable, estimator, cachedir, stationnames, 
+                    station_datadir, base_estimators=None, 
+                    final_estimator=None):
 
 
 
@@ -28,8 +30,8 @@ def run_experiment2(variable, regressor):
     
     for i in range(num_of_stations):
         
-        stationname = stationnames_prec[i]
-        station_dir = os.path.join(station_prec_datadir, stationname + ".csv")
+        stationname = stationnames[i]
+        station_dir = os.path.join(station_datadir, stationname + ".csv")
         SO = read_station_csv(filename=station_dir, varname=variable)
         
         
@@ -40,19 +42,28 @@ def run_experiment2(variable, regressor):
         SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                         scaling=False))
         #setting model
-        SO.set_model(variable, method=regressor)
+        
+        if estimator == "Stacking":
+            
+            SO.set_model(variable, method=estimator, ensemble_learning=True, 
+                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
+                     predictor_dataset=ERA5Data)
+        else:
+            
+            
+            SO.set_model(variable, method=estimator)
         
         #fitting model (with predictor selector optioin)
         
         selector_method = "Recursive"
         
-        SO.fit(variable, fullAMIP, AMIPData, fit_predictors=True, predictor_selector=True, 
+        SO.fit(variable,  from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
                 selector_method=selector_method , selector_regressor="ARD",
                 cal_relative_importance=False)
         
-        score_fit, ypred_fit = SO.cross_validate_and_predict(variable, fullAMIP, AMIPData)
+        score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1958to2010, ERA5Data,)
         
-        score_test = SO.evaluate(variable, fullAMIP, AMIPData)
+        score_test = SO.evaluate(variable,  from1958to2010, ERA5Data,)
         
         ypred_train = SO.predict(variable, from1958to2010, ERA5Data)
         
@@ -75,18 +86,25 @@ def run_experiment2(variable, regressor):
         
         #storing of results
         
-        store_pickle(stationname, "validation_score_" + regressor, score_fit, cachedir_prec)
-        store_csv(stationname, "validation_predictions_" + regressor, ypred_fit, cachedir_prec)
-        store_pickle(stationname, "test_score_" + regressor, score_test, cachedir_prec)
-        store_csv(stationname, "predictions_" + regressor, predictions, cachedir_prec)
+        store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
+        store_csv(stationname, "validation_predictions_" + estimator, ypred_fit, cachedir)
+        store_pickle(stationname, "test_score_" + estimator, score_test, cachedir)
+        store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
 
 
 
 if __name__ == "__main__":
     
-    variable = "Precipitation"
+    cachedir = [cachedir_temp, cachedir_prec]
+       
+    variable = ["Temperature", "Precipitation"]
+       
+    stationnames = [stationnames_temp, stationnames_prec]
+       
+    station_datadir = [station_temp_datadir, station_prec_datadir]
+    
 
-    regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging"]
+    estimators = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging", "Stacking"]
     
     #run_experiment2(variable, regressors[5])
     for regressor in regressors:

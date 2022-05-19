@@ -8,9 +8,9 @@ Created on Mon May 16 15:59:40 2022
 import xarray as xr
 import pandas as pd 
  
-path = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP/t2m_monthly.nc"
+path = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP/t850_monthly.nc"
 
-path_era = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/t2m_monthly.nc"
+path_era = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/z700_monthly.nc"
 
 data = xr.open_dataset(path,  )
 

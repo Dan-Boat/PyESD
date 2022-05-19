@@ -157,14 +157,14 @@ class Regressors(MetaAttributes):
             self.estimator = BayesianRidge(n_iter=500)
         
         #Generalized Linear Models 
-        elif self.method == "GammaRegressor":
+        elif self.method == "Gamma":
             self.estimator = GammaRegressor()
             
-        elif self.method == "PoissonRegressor":
+        elif self.method == "Poisson":
             self.estimator = PoissonRegressor()
             
         # Neural Networks models (Perceptron) 
-        elif self.method == "MLPRegressor":
+        elif self.method == "MLP":
              regressor= MLPRegressor(random_state=42, max_iter=1000, early_stopping=True, batch_size=50,
                                      n_iter_no_change=20)
              param_grid = {"hidden_layer_sizes": [200,300], "alpha": [0.0001, 1.5, 2,5, 10],
@@ -213,7 +213,7 @@ class Regressors(MetaAttributes):
             
         
         # gradient descent regression 
-        elif self.method == "SGDRegressor":
+        elif self.method == "SGD":
             self.estimator = SGDRegressor(loss = "squared_error", max_iter=2000, early_stopping=True, 
                                           random_state=42, validation_fraction=0.1, learning_rate="invscaling",
                                          )
@@ -221,7 +221,7 @@ class Regressors(MetaAttributes):
             raise ValueError("method name not recognized")
     
     def fit(self, X,y):
-        if self.method == "MLPRegressor" or self.method=="SVR":
+        if self.method == "MLP" or self.method=="SVR":
             self.estimator = self.hyper.fit(X,y)
             
             return self.estimator

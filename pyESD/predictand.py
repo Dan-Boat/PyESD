@@ -96,7 +96,7 @@ class PredictandTimeseries():
                 
                 regressor.set_model()
                 
-                if estimators[i] in ["MLPRegressor", "SVR"]:
+                if estimators[i] in ["MLP", "SVR"]:
                     
                     X = self._get_predictor_data(daterange=daterange, dataset=predictor_dataset, 
                                                  fit_predictors = fit_predictors,

@@ -131,7 +131,13 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
         self
         """
         # be careful: X might contain NaNs
-        t = X.index.values.astype('datetime64[M]').astype(int)
+        
+        if np.issubdtype(X.index.values.dtype, np.datetime64) == False:
+            t = X.index.values.astype('datetime64[M]').astype(int)
+            
+        else:
+            t = X.index.values.astype(int)
+            
         values = np.array(X.values) # deep copy
         # X might be a Series or a DataFrame
         if values.ndim == 1:
