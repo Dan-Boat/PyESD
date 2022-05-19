@@ -31,7 +31,7 @@ class Dataset():
         
         except KeyError:
             
-            self.data[varname] = xr.open_dataset(self.variables[varname])
+            self.data[varname] = xr.open_dataarray(self.variables[varname])
             
             if self.data[varname].time[0].dt.is_month_start == False:
                 

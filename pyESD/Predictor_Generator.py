@@ -45,7 +45,7 @@ class RegionalAverage(Predictor):
         
         da = da.sel(time=daterange)
         
-        da = da[self.varname]
+        #da = da[self.varname]
         
         if hasattr(da, "longitude"):
             da = da.rename({"longitude":"lon", "latitude":"lat"})

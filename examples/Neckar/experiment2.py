@@ -26,7 +26,7 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
 
 
 
-    num_of_stations = 1 #len(stationnames)
+    num_of_stations = len(stationnames)
     
     for i in range(num_of_stations):
         
@@ -103,13 +103,21 @@ if __name__ == "__main__":
        
     station_datadir = [station_temp_datadir, station_prec_datadir]
     
-
-    estimators = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging", "Stacking"]
+    final_estimator = "ExtraTree"
     
-    #run_experiment2(variable, regressors[5])
-    for regressor in regressors:
+    base_estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging"]
+    
+
+    estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
+    
+    for i,idx in enumerate(variable):
         
-        print("------ runing for model: ", regressor, "----------")
+        for estimator in estimators:
+            
+            print("--------- runing model for:", estimator, "-----------")
         
-        run_experiment2(variable, regressor)
+            run_experiment2(idx, estimator, cachedir[i], stationnames[i], station_datadir[i], 
+                            base_estimators, final_estimator)
+            
+            
     

@@ -58,6 +58,8 @@ def remove_seasonal_cycle(t, X, mean):
 
 
 def get_annual_mean_cycle(t, X):
+    np.seterr("raise")
+    
     N = len(t)
     M = X.shape[1]
     mean = np.zeros((12, M))
@@ -132,11 +134,14 @@ class MonthlyStandardizer(BaseEstimator, TransformerMixin):
         """
         # be careful: X might contain NaNs
         
-        if np.issubdtype(X.index.values.dtype, np.datetime64) == False:
-            t = X.index.values.astype('datetime64[M]').astype(int)
+        t = X.index.values.astype('datetime64[M]').astype(int)
+        
+        
+        # if np.issubdtype(X.index.values.dtype, np.datetime64) == False:
+        #     t = X.index.values.astype('datetime64[M]').astype(int)
             
-        else:
-            t = X.index.values.astype(int)
+        # else:
+        #     t = X.index.values.astype(int)
             
         values = np.array(X.values) # deep copy
         # X might be a Series or a DataFrame
