@@ -66,7 +66,7 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
             varname="test_r2", varname_std="test_r2_std", filename="validation_score_", legend=True,
-            fig_path=None, fig_name=None,):
+            fig_path=None, fig_name=None, show_error=False):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))
@@ -77,8 +77,15 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
     
-    df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
-    
+    if show_error == True:
+        
+        df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
+    else:
+        
+        df.plot(kind="bar", rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
+        
+        
+        
     if xlabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)

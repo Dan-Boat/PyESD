@@ -7,32 +7,34 @@ Created on Mon May 16 15:59:40 2022
 
 import xarray as xr
 import pandas as pd 
- 
-path = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP/t850_monthly.nc"
+import os 
 
-path_era = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/z700_monthly.nc"
 
-data = xr.open_dataset(path,  )
+path = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP"
 
-if data.time[0].dt.is_month_start == False:
+path_to_save = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP_new"
+
+
+data = xr.open_dataarray(os.path.join(path, "t500_monthly.nc"))
+
+# formating script for cmip dataset (start month, remove other coords, change coordinate name)
+
+for file in os.listdir(path):
+
+    varname = file.split("_")[0]
+      
+    data = xr.open_dataset(os.path.join(path, file))
     
-    # code it in a nice way in the ESD_utils to solve the different time start problem
-    start = str(data.time[0].dt.strftime("%Y-%m-%d"))[40: 48] + "01"
     
-    end  = str(data.time[-1].dt.strftime("%Y-%m-%d"))[40: 48] + "31"
-    
-    time = pd.date_range(start=start, end=end, freq = "MS")
-    
-    data["time"] = time 
+    if "plev" in data.coords and len(data.plev) == 1:
+        data = data.drop("plev")
     
     
+    data["time"] = data.time.values.astype("datetime64[M]")
     
-
-data_era = xr.open_dataset(path_era,)
-
-fullAMIP   = pd.date_range(start='1980-01-01', end='2006-12-31', freq='MS')
-
-da = data.sel(time=fullAMIP)
-
-
-print(data)
+    data = data[varname]
+    
+    
+    data.to_netcdf(os.path.join(path_to_save, file))
+    
+    

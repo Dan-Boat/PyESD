@@ -44,27 +44,27 @@ fig_path = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar
 
 # extracting correlation data
 
-df_prec = correlation_data(stationnames_prec, exp_dir_prec, 
-                    filename= "corrwith_predictors_" + selector_methods[0], predictors=predictors)
+# df_prec = correlation_data(stationnames_prec, exp_dir_prec, 
+#                     filename= "corrwith_predictors_" + selector_methods[0], predictors=predictors)
 
-df_temp = correlation_data(stationnames_temp, exp_dir_temp, 
-                    filename= "corrwith_predictors_" + selector_methods[0], predictors=predictors)
+# df_temp = correlation_data(stationnames_temp, exp_dir_temp, 
+#                     filename= "corrwith_predictors_" + selector_methods[0], predictors=predictors)
 
 
-apply_style(fontsize=22, style=None) 
+# apply_style(fontsize=22, style=None) 
 
-fig, ax = plt.subplots(1,1, figsize=(20,15))
+# fig, ax = plt.subplots(1,1, figsize=(20,15))
                         
-correlation_heatmap(data=df_prec, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
-                        add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
-                        xlabel="Predictors", ylabel="Stations", fig_name="fig s1a.svg",)
+# correlation_heatmap(data=df_prec, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
+#                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
+#                         xlabel="Predictors", ylabel="Stations", fig_name="fig s1a.svg",)
 
 
-fig, ax = plt.subplots(1,1, figsize=(20,15))
+# fig, ax = plt.subplots(1,1, figsize=(20,15))
 
-correlation_heatmap(data=df_temp, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
-                        add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
-                        xlabel="Predictors", ylabel="Stations", fig_name="fig s1b.svg",)
+# correlation_heatmap(data=df_temp, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
+#                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=fig_path,
+#                         xlabel="Predictors", ylabel="Stations", fig_name="fig s1b.svg",)
 
 # plotting model performance based on predictor selector approach
 
@@ -101,11 +101,11 @@ plt.savefig(os.path.join(fig_path,"fig2.svg"))
 # extrating the frequency of predictors selected
 
 
-df_prec = count_predictors(selector_methods, stationnames_prec, exp_dir_prec,
-                      "selected_predictors_", predictors)
+# df_prec = count_predictors(selector_methods, stationnames_prec, exp_dir_prec,
+#                       "selected_predictors_", predictors)
 
-df_temp = count_predictors(selector_methods, stationnames_temp, exp_dir_temp,
-                      "selected_predictors_", predictors)
+# df_temp = count_predictors(selector_methods, stationnames_temp, exp_dir_temp,
+#                       "selected_predictors_", predictors)
 
-df_prec.to_csv(os.path.join(fig_path, "predictors_count_prec.csv"))
-df_temp.to_csv(os.path.join(fig_path, "predictors_count_temp.csv"))
+# df_prec.to_csv(os.path.join(fig_path, "predictors_count_prec.csv"))
+# df_temp.to_csv(os.path.join(fig_path, "predictors_count_temp.csv"))

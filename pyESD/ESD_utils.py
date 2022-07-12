@@ -35,18 +35,13 @@ class Dataset():
             
             if self.data[varname].time[0].dt.is_month_start == False:
                 
-                # code it in a nice way in the ESD_utils to solve the different time start problem
-                start = str(self.data[varname].time[0].dt.strftime("%Y-%m-%d"))[40: 48] + "01"
                 
-                end  = str(self.data[varname].time[-1].dt.strftime("%Y-%m-%d"))[40: 48] + "31"
+                #convert date to month start
+                self.data["time"] = self.data.time.values.astype("datetime64[M]")
                 
-                time = pd.date_range(start=start, end=end, freq = "MS")
+            if hasattr(self.data[varname], "plev"):
                 
-                self.data[varname]["time"] = time
-                
-                if hasattr(self.data[varname], "plev"):
-                    
-                    self.data[varname] = self.data[varname].drop_vars(["plev"])
+                self.data[varname] = self.data[varname].drop_vars(["plev"])     
                     
             
             data = self.data[varname]

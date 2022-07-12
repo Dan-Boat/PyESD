@@ -14,11 +14,11 @@ import matplotlib as mpl
 
 sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
-from Package.ESD_utils import load_all_stations, load_pickle, load_csv
-from Package.WeatherstationPreprocessing import read_weatherstationnames
+from pyESD.ESD_utils import load_all_stations, load_pickle, load_csv
+from pyESD.WeatherstationPreprocessing import read_weatherstationnames
 
-from Package.plot import barplot, correlation_heatmap, boxplot
-from Package.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data
+from pyESD.plot import barplot, correlation_heatmap, boxplot
+from pyESD.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data
 
 from predictor_settings import predictors
 
@@ -44,8 +44,8 @@ fig_path = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar
 
 
 
-regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost",
-              "Bagging", "Stacking", "Voting"]
+regressors = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost",
+              "Bagging", "Stacking"]
 
 
 # font = {'weight' : 'semibold',
@@ -64,8 +64,7 @@ boxplot(regressors, stationnames_prec, exp_dir_prec, ax=ax,
 
 plt.tight_layout()
 plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-#_ = ax.vlines(x=6.5, ymax=1, ymin=0, color="r", linestyle="--", label="Multi-models")
-plt.savefig(os.path.join(fig_path, "prec_inter_estimators_r2.png"), bbox_inches="tight")
+plt.savefig(os.path.join(fig_path, "fig 3.svg"), bbox_inches="tight")
 
 
 
@@ -77,8 +76,7 @@ boxplot(regressors, stationnames_prec, exp_dir_prec, ax=ax,
 
 plt.tight_layout()
 plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-#_ = ax.vlines(x=6.5, ymax=30, ymin=15, color="r", linestyle="--", label="Multi-models")
-plt.savefig(os.path.join(fig_path, "prec_inter_estimators_rmse.png"), bbox_inches="tight")
+plt.savefig(os.path.join(fig_path, "fig4.svg"), bbox_inches="tight")
 
 
 fig, ax = plt.subplots(1,1, figsize=(20,15))
@@ -89,8 +87,7 @@ boxplot(regressors, stationnames_temp, exp_dir_temp, ax=ax,
 
 plt.tight_layout()
 plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-#_ = ax.vlines(x=6.5, ymax=1, ymin=0.4, color="r", linestyle="--", label="Multi-models")
-plt.savefig(os.path.join(fig_path, "temp_inter_estimators_r2.png"), bbox_inches="tight")
+plt.savefig(os.path.join(fig_path, "fig5.svg"), bbox_inches="tight")
 
 
 
@@ -102,5 +99,4 @@ boxplot(regressors, stationnames_temp, exp_dir_temp, ax=ax,
 
 plt.tight_layout()
 plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-#_ = ax.vlines(x=6.5, ymax=1.0, ymin=0.2, color="r", linestyle="--", label="Multi-models")
-plt.savefig(os.path.join(fig_path, "temp_inter_estimators_rmse.png"), bbox_inches="tight")
+plt.savefig(os.path.join(fig_path, "fig6.svg"), bbox_inches="tight")
