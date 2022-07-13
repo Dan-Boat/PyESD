@@ -76,6 +76,8 @@ def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True,
         eofs_cov = xr.concat(ls_eofs, pd.Index(range(1, neofs+1), name="eof_number"))
         
         eofs_cov = eofs_cov.sortby(eofs_cov.lon)
+        
+    
     else:
         raise ValueError("Define the method or defaut of EOF package is used")
         
@@ -134,13 +136,14 @@ class NAO(Predictor):
             
         anomalies /= params["std_field"]
         
+        #np.seterr(under="ignore") #! this might be dangerous due to float point errors
         
         if fit == True:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=1, method="sklearn_package", apply_equal_wtgs=True, 
                                             pcscaling=1)
             
         else:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=1, method="sklearn_package", apply_equal_wtgs=True, 
                                             pcscaling=0)
         
         if fit ==True:
@@ -283,37 +286,56 @@ class EAWR(Predictor):
         group = data.groupby("time.month")
             
             
-        if fit == True:
+        if fit:
+            params["monthly_means"] = group.mean(dim="time")
+            
+            anomalies = group.apply(
+            lambda x: x - params["monthly_means"].sel(month=_get_month(x[0].time.values))
+        )
             params["monthly_means"] = group.mean(dim="time")
         
-        anomalies = group - params["monthly_means"]
+        
+        #anomalies = group - params["monthly_means"]
         anomalies = anomalies.drop("month")
         
-        if fit ==True:
+        if fit:
             params["std_field"] = anomalies.std(dim="time")
             
         anomalies /= params["std_field"]
         
+        area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
-        if fit == True:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=1)
-            
-        else:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=0)
         
-        if fit ==True:
+        if fit:
             self.patterns[dataset.name] = {}
-            self.patterns[dataset.name]["eof"] = eofs[3]
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="sklearn_package", apply_equal_wtgs=True, 
+                                                pcscaling=0)
+            
+            self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=4)
         
-        ea_wr = pcs[:, 3]
+        #ea_wr = pcs[:, 3]
+        ea_wr = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
         ea_wr.name = "EAWR"
+        
+        
+        if fit:
+            self.patterns[dataset.name]["std"] = ea_wr.std()
+            
+        ea_wr /= self.patterns[patterns_from]["std"]
         
         ea_wr_series = ea_wr.to_series()
         
         
         return ea_wr_series
     
+    
     def plot_cov_matrix(ax=None):
         pass
+    
+def _get_month(npdatetime64):
+ """
+ Returns the month for a given npdatetime64 object, 1 for January, 2 for
+ February, ...
+ """
+ month =  npdatetime64.astype('datetime64[M]').astype(int) % 12 + 1
+ return month

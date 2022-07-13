@@ -69,6 +69,8 @@ def run_experiment3(variable, cachedir,
         yhat_CMIP5_AMIP_R1 = SO.predict(variable, fullAMIP, 
                                         AMIPData, anomalies=True, params_from="AMIPData", patterns_from= "AMIPData")
         
+        
+        yhat_CMIP5_AMIP_R1.plot()
         # predictions = pd.DataFrame({
         #     "obs_full": y_obs_full,
         #     "obs_train" : y_obs_train,
