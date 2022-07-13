@@ -233,38 +233,48 @@ class SCAN(Predictor):
         # removing monthly cycle
         group = data.groupby("time.month")
             
+        if fit:
+            params["monthly_means"] = group.mean(dim="time")
             
-        if fit == True:
+            anomalies = group.apply(
+            lambda x: x - params["monthly_means"].sel(month=_get_month(x[0].time.values))
+        )
             params["monthly_means"] = group.mean(dim="time")
         
-        anomalies = group - params["monthly_means"]
+        
+        #anomalies = group - params["monthly_means"]
         anomalies = anomalies.drop("month")
         
-        if fit ==True:
+        if fit:
             params["std_field"] = anomalies.std(dim="time")
             
         anomalies /= params["std_field"]
         
+        area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
-        if fit == True:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=1)
-            
-        else:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=0)
         
-        if fit ==True:
+        if fit:
             self.patterns[dataset.name] = {}
-            self.patterns[dataset.name]["eof"] = eofs[1]
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=3, method="sklearn_package", apply_equal_wtgs=True, 
+                                                pcscaling=0)
+            
+            self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=3)
         
-        scan = pcs[:, 1]
+     
+        scan = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
         scan.name = "SCAN"
+        
+        
+        if fit:
+            self.patterns[dataset.name]["std"] = scan.std()
+            
+        scan /= self.patterns[patterns_from]["std"]
         
         scan_series = scan.to_series()
         
         
-        return scan_series
+        return scan_series    
+        
     
     def plot_cov_matrix(ax=None):
         pass

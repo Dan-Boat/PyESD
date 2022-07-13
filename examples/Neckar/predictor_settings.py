@@ -13,7 +13,8 @@ import pandas as pd
 #                "EA", "SCAN", "EAWR"]
 
 
-predictors = ["t2m", "tp","msl", "v10", "u10", "t850", "u850", "v850", "EAWR"]
+predictors = ["t2m", "tp","msl", "v10", "u10", "t850", "u850", "v850", "EAWR", "SCAN", "NAO", "EA",
+              ]
                
 
 predictors_amip = ["t2m", "tp","msl", "v10", "u10", "r850", "r500",
