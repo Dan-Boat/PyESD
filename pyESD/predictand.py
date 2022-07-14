@@ -160,7 +160,17 @@ class PredictandTimeseries():
         return  corr.T
             
             
+    def fit_predictor(self, name, daterange, predictor_dataset):
         
+        if type(name) == list:
+            
+            for n in name:
+                self.predictors[n].fit(daterange, predictor_dataset)
+        else:
+            self.predictors[name].fit(daterange, predictor_dataset)
+            
+            
+            
     
     def fit(self, daterange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False,

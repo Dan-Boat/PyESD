@@ -20,6 +20,27 @@ from pyESD.ESD_utils import store_pickle, store_csv
 from read_data import *
 from predictor_settings import *
 
+"""
+
+This script runs all the necessary routines for statistical downscaling of 
+precipitation and temperature for the Elb subcatachment. 
+
+1. Reads the predictand, predictors and the future predictors required for the 
+future climate change estimates. 
+
+2. Trians the selected algorithm based on the station data and the selected 
+predictors for the period 1958-2000 and validate the optimized algorithm on the 
+indepedent data period of 2001-2020.
+
+3. The model is also retrain with the AMIP simulation that overlaps the time peroids and
+predict based on the trained models 
+
+4. The trained models with the perfect predictors are also used to predict the future 
+trends of the assumed scenarios (RCP 2.6, 4.5, and 8.5)of the cmip5 climate model simulation
+
+Experiment 3: Feature selection: Recurssive, model: Stacking regression (with 6 based models)
+"""
+
 def run_experiment3(variable, cachedir, 
                     stationnames, station_datadir, 
                     ensemble_method, final_estimator,
@@ -37,6 +58,10 @@ def run_experiment3(variable, cachedir,
         SO = read_station_csv(filename=station_dir, varname=variable)
         
         
+        # USING ERA5 DATA
+        # ================
+        
+        
         #setting predictors 
         SO.set_predictors(variable, predictors, predictordir, radius,)
         
@@ -48,13 +73,18 @@ def run_experiment3(variable, cachedir,
                       estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
                       predictor_dataset=ERA5Data)
         
+        
+        # MODEL TRAINING (1958-2000)
+        # ==========================
+        
+        
         SO.fit(variable, from1958to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
                     selector_method="Recursive" , selector_regressor="ARD",
                     cal_relative_importance=False)
             
         score_fit, ypred_fit = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
             
-        # score_test = SO.evaluate(variable, from2011to2020, ERA5Data)
+        score_test = SO.evaluate(variable, from2011to2020, ERA5Data)
         
         # ypred_train = SO.predict(variable, from1958to2010, ERA5Data)
             
@@ -65,9 +95,23 @@ def run_experiment3(variable, cachedir,
         # y_obs_test = SO.get_var(variable, from2011to2020, anomalies=True)
             
         # y_obs_full = SO.get_var(variable, from1958to2020, anomalies=True)
-            
+        
+        
+        #USISNG CMIP5 DATA + MODEL 1958-2000
+        #====================================
+        
+        SO.fit_predictor(variable, predictors, fullAMIP, CMIP5_AMIP_R1)    
         yhat_CMIP5_AMIP_R1 = SO.predict(variable, fullAMIP, 
-                                        AMIPData, anomalies=True, params_from="AMIPData", patterns_from= "AMIPData")
+                                        CMIP5_AMIP_R1, fit_predictors=True, fit_predictand=True, 
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        yhat_CMIP5_RCP26_R1 = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP26_R1, fit_predictors=True, fit_predictand=True,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        yhat_CMIP5_RCP45_R1 = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP45_R1, fit_predictors=True, fit_predictand=True,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
         
         
         yhat_CMIP5_AMIP_R1.plot()

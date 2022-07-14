@@ -106,6 +106,13 @@ class StationOperator():
                                   method= method, **predictor_kwargs)
     
     
+    
+    def fit_predictor(self, variable, name, daterange, predictor_dataset):
+        
+        self.variables[variable].fit_predictor(name, daterange, predictor_dataset)
+        
+        
+        
     def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 

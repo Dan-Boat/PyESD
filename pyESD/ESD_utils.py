@@ -39,11 +39,6 @@ class Dataset():
                 #convert date to month start
                 self.data["time"] = self.data.time.values.astype("datetime64[M]")
                 
-            if hasattr(self.data[varname], "plev"):
-                
-                self.data[varname] = self.data[varname].drop_vars(["plev"])     
-                    
-            
             data = self.data[varname]
             
             

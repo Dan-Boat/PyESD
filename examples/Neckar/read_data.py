@@ -77,7 +77,7 @@ ERA5Data = Dataset('ERA5', {
     'd2m':os.path.join(era5_datadir, 'd2m_monthly.nc'), })
 
 
-AMIPData = Dataset('AMIP', {
+CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
     't2m':os.path.join(amip_datadir, 't2m_monthly.nc'),
     'msl':os.path.join(amip_datadir, 'msl_monthly.nc'),
     'u10':os.path.join(amip_datadir, 'u10_monthly.nc'),
@@ -111,7 +111,7 @@ AMIPData = Dataset('AMIP', {
     })
 
 
-CMIP5_26_Data = Dataset('CMIP5_26', {
+CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
     't2m':os.path.join(cmip5_26_datadir, 't2m_monthly.nc'),
     'msl':os.path.join(cmip5_26_datadir, 'msl_monthly.nc'),
     'u10':os.path.join(cmip5_26_datadir, 'u10_monthly.nc'),
@@ -146,7 +146,7 @@ CMIP5_26_Data = Dataset('CMIP5_26', {
 
 
 
-CMIP5_45_Data = Dataset('CMIP_45', {
+CMIP5_RCP45_R1 = Dataset('CMIP5_RCP45_R1', {
     't2m':os.path.join(cmip5_45_datadir, 't2m_monthly.nc'),
     'msl':os.path.join(cmip5_45_datadir, 'msl_monthly.nc'),
     'u10':os.path.join(cmip5_45_datadir, 'u10_monthly.nc'),
@@ -179,7 +179,7 @@ CMIP5_45_Data = Dataset('CMIP_45', {
     'v1000':os.path.join(cmip5_45_datadir, 'v1000_monthly.nc'),
     })
 
-CMIP5_85_Data = Dataset('CMIP_85', {
+CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
     't2m':os.path.join(cmip5_85_datadir, 't2m_monthly.nc'),
     'msl':os.path.join(cmip5_85_datadir, 'msl_monthly.nc'),
     'u10':os.path.join(cmip5_85_datadir, 'u10_monthly.nc'),

@@ -18,8 +18,6 @@ import cartopy.feature as cfeature
 from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
 from cartopy.util import add_cyclic_point
 
-#from local
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
 
 try:
     from .Predictor_Base import Predictor
@@ -44,6 +42,8 @@ def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True,
         
     if method == "eof_package":
         
+        print("The EoF Package implementation of EOF analysis is used! for the teleconnections")
+        
         solver = Eof(data)
         eofs_cov = solver.eofsAsCovariance(neofs=neofs, pcscaling=pcscaling)
         
@@ -53,7 +53,7 @@ def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True,
         
     elif method == "sklearn_package":
         
-        print("The eof_package method is more realistic, unless you have more reason to use this approach")
+        print("The sklearn implementation of EOF analysis is used! for the teleconnections")
         
         time_mean = data.mean(dim="time")
         pcs = np.empty(neofs)
@@ -124,34 +124,55 @@ class NAO(Predictor):
         # removing monthly cycle
         group = data.groupby("time.month")
             
+        if fit:
+            params["monthly_means"] = group.mean(dim="time")
             
-        if fit == True:
+            anomalies = group.apply(
+            lambda x: x - params["monthly_means"].sel(month=_get_month(x[0].time.values))
+        )
             params["monthly_means"] = group.mean(dim="time")
         
-        anomalies = group - params["monthly_means"]
+        
+        #anomalies = group - params["monthly_means"]
         anomalies = anomalies.drop("month")
         
-        if fit ==True:
+        if fit:
             params["std_field"] = anomalies.std(dim="time")
             
         anomalies /= params["std_field"]
         
-        #np.seterr(under="ignore") #! this might be dangerous due to float point errors
+        area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
-        if fit == True:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=1, method="sklearn_package", apply_equal_wtgs=True, 
-                                            pcscaling=1)
+        
+        method_name = "eof_package"
+        
+        if fit:
             
-        else:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=1, method="sklearn_package", apply_equal_wtgs=True, 
-                                            pcscaling=0)
-        
-        if fit ==True:
             self.patterns[dataset.name] = {}
-            self.patterns[dataset.name]["eof"] = eofs[0]
-        
-        nao = pcs[:, 0]
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=1, method=method_name, apply_equal_wtgs=True, 
+                                                pcscaling=0)
+            
+            
+            if hasattr(eofs, "eof_number"):
+                self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=1)
+            
+            else:
+                self.patterns[dataset.name]["eof"] = eofs.sel(mode=0)
+                
+        if method_name == "sklearn_package":
+            nao = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
+            
+        else: 
+            
+            nao = pcs.sel(mode=0)
+            
         nao.name = "NAO"
+        
+        
+        if fit:
+            self.patterns[dataset.name]["std"] = nao.std()
+            
+        nao /= self.patterns[patterns_from]["std"]
         
         nao_series = nao.to_series()
         
@@ -180,38 +201,60 @@ class EA(Predictor):
         # removing monthly cycle
         group = data.groupby("time.month")
             
+        if fit:
+            params["monthly_means"] = group.mean(dim="time")
             
-        if fit == True:
+            anomalies = group.apply(
+            lambda x: x - params["monthly_means"].sel(month=_get_month(x[0].time.values))
+        )
             params["monthly_means"] = group.mean(dim="time")
         
-        anomalies = group - params["monthly_means"]
+        
+        #anomalies = group - params["monthly_means"]
         anomalies = anomalies.drop("month")
         
-        if fit ==True:
+        if fit:
             params["std_field"] = anomalies.std(dim="time")
             
         anomalies /= params["std_field"]
         
+        area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
-        if fit == True:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=1)
+        method_name = "eof_package"
+        
+        if fit:
             
-        else:
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="eof_package", apply_equal_wtgs=True, 
-                                            pcscaling=0)
-        
-        if fit ==True:
             self.patterns[dataset.name] = {}
-            self.patterns[dataset.name]["eof"] = eofs[2]
-        
-        ea = pcs[:, 2]
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=2, method=method_name, apply_equal_wtgs=True, 
+                                                pcscaling=0)
+            
+            
+            if hasattr(eofs, "eof_number"):
+                self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=2)
+            
+            else:
+                self.patterns[dataset.name]["eof"] = eofs.sel(mode=1)
+                
+        if method_name == "sklearn_package":
+            ea = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
+            
+        else: 
+            
+            ea = pcs.sel(mode=1)
+            
         ea.name = "EA"
+        
+        
+        if fit:
+            self.patterns[dataset.name]["std"] = ea.std()
+            
+        ea /= self.patterns[patterns_from]["std"]
         
         ea_series = ea.to_series()
         
         
-        return ea_series
+        return ea_series   
+
     
     def plot_cov_matrix(ax=None):
         pass
@@ -252,16 +295,28 @@ class SCAN(Predictor):
         
         area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
+        method_name = "sklearn_package"
         
         if fit:
+            
             self.patterns[dataset.name] = {}
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=3, method="sklearn_package", apply_equal_wtgs=True, 
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=3, method=method_name, apply_equal_wtgs=True, 
                                                 pcscaling=0)
             
-            self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=3)
+            
+            if hasattr(eofs, "eof_number"):
+                self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=3)
+            
+            else:
+                self.patterns[dataset.name]["eof"] = eofs.sel(mode=2)
+                
+        if method_name == "sklearn_package":
+            scan = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
+            
+        else: 
+            
+            scan = pcs.sel(mode=2)
         
-     
-        scan = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
         scan.name = "SCAN"
         
         
@@ -315,16 +370,28 @@ class EAWR(Predictor):
         
         area_weighted = anomalies * np.sqrt(np.abs(np.cos(anomalies.lat*np.pi/180))) 
         
+        method_name = "sklearn_package"
         
         if fit:
+            
             self.patterns[dataset.name] = {}
-            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method="sklearn_package", apply_equal_wtgs=True, 
+            eofs, pcs, wtgs  = eof_analysis(data=anomalies, neofs=4, method=method_name, apply_equal_wtgs=True, 
                                                 pcscaling=0)
             
-            self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=4)
+            
+            if hasattr(eofs, "eof_number"):
+                self.patterns[dataset.name]["eof"] = eofs.sel(eof_number=4)
+            
+            else:
+                self.patterns[dataset.name]["eof"] = eofs.sel(mode=3)
+                
+        if method_name == "sklearn_package":
+            ea_wr = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
+            
+        else: 
+            
+            ea_wr = pcs.sel(mode=3)
         
-        #ea_wr = pcs[:, 3]
-        ea_wr = (self.patterns[patterns_from]["eof"] * area_weighted).sum(dim=("lat", "lon"))
         ea_wr.name = "EAWR"
         
         
