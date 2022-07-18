@@ -23,9 +23,9 @@ from predictor_settings import *
 """
 
 This script runs all the necessary routines for statistical downscaling of 
-precipitation and temperature for the Elb subcatachment. 
+precipitation and temperature for the Elb-neckar subcatachment. 
 
-1. Reads the predictand, predictors and the future predictors required for the 
+1. Reads the predictand, predictors and the future predictors datasetsrequired for the 
 future climate change estimates. 
 
 2. Trians the selected algorithm based on the station data and the selected 
@@ -39,6 +39,7 @@ predict based on the trained models
 trends of the assumed scenarios (RCP 2.6, 4.5, and 8.5)of the cmip5 climate model simulation
 
 Experiment 3: Feature selection: Recurssive, model: Stacking regression (with 6 based models)
+
 """
 
 def run_experiment3(variable, cachedir, 
@@ -46,9 +47,9 @@ def run_experiment3(variable, cachedir,
                     ensemble_method, final_estimator,
                     base_estimators):
 
-    #num_of_stations = len(stationnames)
+    num_of_stations = len(stationnames)
     
-    num_of_stations = 1
+    
     
         
     for i in range(num_of_stations):
@@ -82,53 +83,107 @@ def run_experiment3(variable, cachedir,
                     selector_method="Recursive" , selector_regressor="ARD",
                     cal_relative_importance=False)
             
-        score_fit, ypred_fit = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
+        score_1958to2010, ypred_1958to2010 = SO.cross_validate_and_predict(variable, from1958to2010, ERA5Data)
             
-        score_test = SO.evaluate(variable, from2011to2020, ERA5Data)
+        score_2011to2020 = SO.evaluate(variable, from2011to2020, ERA5Data)
         
-        # ypred_train = SO.predict(variable, from1958to2010, ERA5Data)
+        ypred_1958to2010 = SO.predict(variable, from1958to2010, ERA5Data)
             
-        # ypred_test = SO.predict(variable, from2011to2020, ERA5Data)
-            
-        # y_obs_train = SO.get_var(variable, from1958to2010, anomalies=True)
-            
-        # y_obs_test = SO.get_var(variable, from2011to2020, anomalies=True)
-            
-        # y_obs_full = SO.get_var(variable, from1958to2020, anomalies=True)
+        ypred_2011to2020 = SO.predict(variable, from2011to2020, ERA5Data)
         
+        # STORING SCORES
+        # ==============
+            
+        store_pickle(stationname, "validation_score_" + ensemble_method, score_1958to2010, cachedir)
+        store_pickle(stationname, "test_score_" + ensemble_method, score_2011to2020, cachedir)
         
-        #USISNG CMIP5 DATA + MODEL 1958-2000
+        #USING CMIP5 DATA + MODEL 1958-2000
         #====================================
         
-        SO.fit_predictor(variable, predictors, fullAMIP, CMIP5_AMIP_R1)    
-        yhat_CMIP5_AMIP_R1 = SO.predict(variable, fullAMIP, 
+        print("fitting the AMIP predictors based on the selected model---all from realisation 1")
+        SO.fit_predictor(variable, predictors, fullAMIP, CMIP5_AMIP_R1) 
+        
+        print("predicting based on the AMIP predictors")
+        yhat_CMIP5_AMIP_R1_anomalies = SO.predict(variable, fullAMIP, 
                                         CMIP5_AMIP_R1, fit_predictors=True, fit_predictand=True, 
                                         params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
         
-        yhat_CMIP5_RCP26_R1 = SO.predict(variable, fullCMIP5, 
+        print("predicting based on the RCP 2.6 predictors")
+        yhat_CMIP5_RCP26_R1_anomalies = SO.predict(variable, fullCMIP5, 
                                         CMIP5_RCP26_R1, fit_predictors=True, fit_predictand=True,
                                         params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
         
-        yhat_CMIP5_RCP45_R1 = SO.predict(variable, fullCMIP5, 
+        print("predicting based on the RCP 4.5 predictors")
+        yhat_CMIP5_RCP45_R1_anomalies = SO.predict(variable, fullCMIP5, 
                                         CMIP5_RCP45_R1, fit_predictors=True, fit_predictand=True,
                                         params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
         
+        print("predicting based on the RCP 8.5 predictors")
+        yhat_CMIP5_RCP85_R1_anomalies = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP85_R1, fit_predictors=True, fit_predictand=True,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
         
-        yhat_CMIP5_AMIP_R1.plot()
-        # predictions = pd.DataFrame({
-        #     "obs_full": y_obs_full,
-        #     "obs_train" : y_obs_train,
-        #     "obs_test": y_obs_test,
-        #     "ERA5 1958-2010" : ypred_train,
-        #     "ERA5 2011-2020" : ypred_test})
+        
+        
+        # PREDICTING THE ABSOLUTE VALUES
+        # ===============================
+        
+        print("predicting based on the AMIP predictors")
+        yhat_CMIP5_AMIP_R1 = SO.predict(variable, fullAMIP, 
+                                        CMIP5_AMIP_R1, fit_predictors=True, fit_predictand=False, 
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        print("predicting based on the RCP 2.6 predictors")
+        yhat_CMIP5_RCP26_R1 = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP26_R1, fit_predictors=True, fit_predictand=False,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        print("predicting based on the RCP 4.5 predictors")
+        yhat_CMIP5_RCP45_R1 = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP45_R1, fit_predictors=True, fit_predictand=False,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        print("predicting based on the RCP 8.5 predictors")
+        yhat_CMIP5_RCP85_R1 = SO.predict(variable, fullCMIP5, 
+                                        CMIP5_RCP85_R1, fit_predictors=True, fit_predictand=False,
+                                        params_from="CMIP5_AMIP_R1", patterns_from= "CMIP5_AMIP_R1")
+        
+        
+        # STORING OF RESULTS
+        # ===================
+        
+        y_obs_1958to2010 = SO.get_var(variable, from1958to2010, anomalies=True)
             
+        y_obs_2011to2020 = SO.get_var(variable, from2011to2020, anomalies=True)
             
-        # #storing of results
-            
-        # store_pickle(stationname, "validation_score_" + ensemble_method, score_fit, cachedir)
-        # store_csv(stationname, "validation_predictions_" + ensemble_method, ypred_fit, cachedir)
-        # store_pickle(stationname, "test_score_" + ensemble_method, score_test, cachedir)
-        # store_csv(stationname, "predictions_" + ensemble_method, predictions, cachedir)
+        y_obs_1958to2020 = SO.get_var(variable, from1958to2020, anomalies=True)
+        
+        y_obs_1958to2020_true = SO.get_var(variable, from1958to2020, anomalies=False)
+        
+        
+        predictions = pd.DataFrame({
+            "obs": y_obs_1958to2020_true,
+            "obs anomalies": y_obs_1958to2020,
+            "obs 1958-2010": y_obs_1958to2010,
+            "obs 2011-2020": y_obs_2011to2020,
+            "ERA5 1958-2010": ypred_1958to2010,
+            "ERA5 2011-2020": ypred_2011to2020,
+            "CMIP5 AMIP anomalies": yhat_CMIP5_AMIP_R1_anomalies,
+            "CMIP5 RCP2.6 anomalies":yhat_CMIP5_RCP26_R1_anomalies,
+            "CMIP5 RCP4.5 anomalies":yhat_CMIP5_RCP45_R1_anomalies,
+            "CMIP5 RCP8.5 anomalies":yhat_CMIP5_RCP85_R1_anomalies,
+            "CMIP5 AMIP": yhat_CMIP5_AMIP_R1,
+            "CMIP5 RCP2.6":yhat_CMIP5_RCP26_R1,
+            "CMIP5 RCP4.5":yhat_CMIP5_RCP45_R1,
+            "CMIP5 RCP8.5":yhat_CMIP5_RCP85_R1,
+            })
+        
+                  
+           
+        
+       
+       
+        store_csv(stationname, "predictions_" + ensemble_method, predictions, cachedir)
     
     
     
@@ -149,9 +204,12 @@ if __name__ == "__main__":
 
     final_estimator = "ExtraTree"
 
-         
-    run_experiment3(variable[1], cachedir[1], 
-                        stationnames[1], station_datadir[1],
+    for i,idx in enumerate(variable):
+        
+        
+        print("---------- running for variable: ", idx, "-------")
+        run_experiment3(idx, cachedir[i], 
+                        stationnames[i], station_datadir[i],
                         ensemble_method, final_estimator, base_estimators)
         
         

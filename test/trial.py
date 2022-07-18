@@ -10,7 +10,7 @@ import pandas as pd
 import os 
 
 
-path_to_save = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP45"
+path_to_save = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP85"
 
 path = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/preprosessed"
 
