@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.patches as mpatches
 import pandas as pd
+import numpy as np 
 from cycler import cycler
 from matplotlib import rc
 
@@ -149,4 +150,85 @@ def boxplot_data(regressors, stationnames,  path_to_data, filename="validation_s
     df.index += 1
     
     return df 
+
+
+
+def resample_seasonally(data, daterange):
+    df = data.resample("Q-NOV").mean()
+    df = df[daterange]
+    winter = df[df.index.quarter == 1].mean()
+    spring = df[df.index.quarter == 2].mean()
+    summer = df[df.index.quarter == 3].mean()
+    autumn = df[df.index.quarter == 4].mean()
+    
+    return winter, spring, summer, autumn
+
+def resample_monthly(data, daterange):
+    
+    df = data.resample("MS").mean()
+    df = df[daterange]
+    
+    Jan = df[df.index.quarter == 1].mean()
+    Feb = df[df.index.quarter == 2].mean()
+    Mar = df[df.index.quarter == 3].mean()
+    Apr = df[df.index.quarter == 4].mean()
+    May = df[df.index.quarter == 5].mean()
+    Jun = df[df.index.quarter == 6].mean()
+    Jul = df[df.index.quarter == 7].mean()
+    Aug = df[df.index.quarter == 8].mean()
+    Sep = df[df.index.quarter == 9].mean()
+    Oct = df[df.index.quarter == 10].mean()
+    Nov = df[df.index.quarter == 11].mean()
+    Dec = df[df.index.quarter == 12].mean()
+    
+    
+    month_means = [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]
+    
+    return month_means
+
+
+def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name):
+
+    
+    df_stations = pd.DataFrame(index=stationnames, columns=["DJF", "MAM", "JJA", "SON"])
+    
+    for i,stationname in enumerate(stationnames):
+        df = load_csv(stationname, filename, path_to_data)
+        obs = df[id_name]
+        winter, spring, summer, autumn = resample_seasonally(obs, daterange)
+        obs_mean = obs.mean()
+        means = [ winter, spring, summer, autumn, obs_mean]
+        columns=["Mean", "DJF", "MAM", "JJA", "SON"]
+        for j,season in enumerate(columns):
+            df_stations.loc[stationname][season] = means[j]
+    
+    df_stations.reset_index(drop=True, inplace=True)
+    df_stations.index +=1
+    df_stations = df_stations.T.astype(float)
+    
+    return df_stations
+             
+def monthly_mean(stationnames, path_to_data, filename, daterange, id_name):
+    
+    import calendar	
+    month_names = [calendar.month_abbr[im+1] for im in np.arange(12)]
+    df_stations = pd.DataFrame(index=stationnames, columns=month_names)
+    
+    for i,stationname in enumerate(stationnames):
+        df = load_csv(stationname, filename, path_to_data)
+        obs = df[id_name]
+        month_means = resample_monthly(obs, daterange)
         
+        for j,month in enumerate(month_names):
+            df_stations.loc[stationname][month] = month_means[j]
+            
+    df_stations.reset_index(drop=True, inplace=True)
+    df_stations.index +=1
+    df_stations = df_stations.T.astype(float)
+    
+    return df_stations
+        
+    
+    
+    
+    

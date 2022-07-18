@@ -11,6 +11,7 @@ import numpy as np
 import seaborn as sns
 import os 
 import matplotlib as mpl
+import seaborn as sns 
 
 try:  
     from plot_utils import *
@@ -129,3 +130,37 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
     
     if fig_path is not None:
         plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
+
+
+def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=None, ax=None,
+             cbar=True, cbar_ax=None):
+    
+    if ax is None:
+        fig,ax = plt.subplots(1,1, figsize=(20,15))
+        plt.subplots_adjust(left=0.02, right=1-0.02, top=0.94, bottom=0.45, hspace=0.25)
+    
+    if all(parameter is not None for parameter in [vmax, vmin, center]):
+        
+        if cbar == False:
+            sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
+                        square=True, cbar=cbar, linewidth=0.3)
+        else:
+            sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
+                        square=True, cbar=cbar, cbar_kws={"label":label, 
+                                                          "shrink":.50,}, cbar_ax=cbar_ax,
+                        linewidth=0.3)
+    else:
+        if cbar == False:
+            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.3)
+        else:
+            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
+                        cbar_kws={"label":label,"shrink":.50,}, cbar_ax=cbar_ax,
+                        linewidth=0.3)
+        
+    ax.set_title(title)
+    
+    
+    
+    
+    
+    
