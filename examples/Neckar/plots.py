@@ -3,6 +3,16 @@
 Created on Thu Apr  7 15:06:04 2022
 
 @author: dboateng
+
+
+This script uses the plot and plot utils functions to generate the figures 
+for the illustrative case studies
+
+1. Plot the seasonal and annual means of all the stations
+2. Plot the performance metrics of the predictor selection method 
+3. Plot the performance metrics of the different models experiment 
+4. Plot the some prediction examples of the selected algorithm
+5. Plot the seasonal trends of the station-based future estimates
 """
 import os 
 import sys
@@ -14,64 +24,92 @@ from collections import OrderedDict
 import seaborn as sns
 
 
-sys.path.append("C:/Users/dboateng/Desktop/Python_scripts/ESD_Package")
+from pyESD.ESD_utils import load_all_stations, load_pickle, load_csv
+from pyESD.plot import barplot, correlation_heatmap, boxplot, heatmaps
+from pyESD.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data, seasonal_mean
 
-from Package.ESD_utils import load_all_stations, load_pickle, load_csv
-from Package.WeatherstationPreprocessing import read_weatherstationnames
+from predictor_settings import *
+from read_data import station_prec_datadir, station_temp_datadir
+from read_data import stationnames_prec, stationnames_temp
 
-from Package.plot import barplot, correlation_heatmap, boxplot
-from Package.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data
-
-from predictor_settings import predictors
-
-temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Temperature/cdc_download_2022-03-17_13-38/processed"
-
-prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Precipitation/cdc_download_2022-03-17_13/processed"
+# DIRECTORY SPECIFICATION
+# =======================
 
 
-namedict_prec  = read_weatherstationnames(prec_datadir)
-stationnames_prec = list(namedict_prec.values())
+path_exp1 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment1"
+path_exp2 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2"
+path_exp3 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment3"
+path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/plots"
 
 
-num_stations_prec = len(stationnames_prec)
-stationname_prec = stationnames_prec
+prec_folder_name = "final_cache_Precipitation"
+temp_folder_name = "final_cache_Temperature"
+
+# PLOTTING STATION SEASONAL MEANS 
+# ===============================
+
+# seasonal_mean(stationnames, path_to_data, filename, daterange, id_name)
+
+path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+
+df_prec = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_Stacking", 
+                        daterange=from1958to2020 , id_name="obs")
+
+df_temp = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_Stacking", 
+                        daterange=from1958to2020 , id_name="obs")
 
 
-path_data_precipitation = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2/final_cache_Precipitation"
-path_data_temperature = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2/final_cache_Temperature"
+apply_style(fontsize=20, style=None, linewidth=2)
+
+fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20, 15))
+
+heatmaps(data=df_prec, cmap="Blues", label="Precipitation [mm/month]", title= "[A]", 
+         ax=ax1, cbar=True)
+
+heatmaps(data=df_temp, cmap="RdBu_r", label="Temperature [°C]", title= "[B]", 
+         ax=ax2, cbar=True, vmax=20, vmin=-5, center=0)
+
+plt.tight_layout()
+
+plt.savefig(os.path.join(path_to_save, "Fig1.svg"), bbox_inches="tight", dpi=300)
+
+
+# heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=None, ax=None,
+            # cbar=True, cbar_ax=None)
 
 #experiment 3
 
-regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging", "Stacking", "Voting"]
+# regressors = ["LassoLarsCV", "ARD", "MLPRegressor", "RandomForest", "XGBoost", "Bagging", "Stacking", "Voting"]
 
 
-font = {'weight' : 'semibold',
-    'size'   : 18}
+# font = {'weight' : 'semibold',
+#     'size'   : 18}
 
-mpl.rc('font', **font)
-
-
-fig, ax = plt.subplots(1,1, figsize=(20,15))
-
-boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
-            varname="test_r2", filename="validation_score_", xlabel="Estimators",
-            ylabel="Validattion r²")
-
-plt.tight_layout()
-plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-plt.savefig("inter_estimators_r2.png", bbox_inches="tight")
+# mpl.rc('font', **font)
 
 
+# fig, ax = plt.subplots(1,1, figsize=(20,15))
 
-fig, ax = plt.subplots(1,1, figsize=(20,15))
+# boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
+#             varname="test_r2", filename="validation_score_", xlabel="Estimators",
+#             ylabel="Validattion r²")
 
-boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
-            varname="test_rmse", filename="validation_score_", xlabel="Estimators",
-            ylabel="Validattion RMSE")
+# plt.tight_layout()
+# plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+# plt.savefig("inter_estimators_r2.png", bbox_inches="tight")
 
-plt.tight_layout()
-plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-plt.savefig("inter_estimators_rmse.png", bbox_inches="tight")
+
+
+# fig, ax = plt.subplots(1,1, figsize=(20,15))
+
+# boxplot(regressors, stationnames_prec, path_data_precipitation, ax=ax,  
+#             varname="test_rmse", filename="validation_score_", xlabel="Estimators",
+#             ylabel="Validattion RMSE")
+
+# plt.tight_layout()
+# plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+# plt.savefig("inter_estimators_rmse.png", bbox_inches="tight")
 
 #experiment 2
 

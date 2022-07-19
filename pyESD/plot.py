@@ -133,7 +133,7 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
 
 
 def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=None, ax=None,
-             cbar=True, cbar_ax=None):
+             cbar=True, cbar_ax=None, ):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, figsize=(20,15))
@@ -143,21 +143,23 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
         
         if cbar == False:
             sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
-                        square=True, cbar=cbar, linewidth=0.3)
+                        square=True, cbar=cbar, linewidth=0.05, linecolor="black")
         else:
             sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
                         square=True, cbar=cbar, cbar_kws={"label":label, 
-                                                          "shrink":.50,}, cbar_ax=cbar_ax,
-                        linewidth=0.3)
+                                                          "shrink":.50,},
+                        linewidth=0.05, linecolor="black")
     else:
         if cbar == False:
-            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.3)
+            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.05,
+                        linecolor="black")
         else:
             sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
-                        cbar_kws={"label":label,"shrink":.50,}, cbar_ax=cbar_ax,
-                        linewidth=0.3)
+                        cbar_kws={"label":label,"shrink":.50,},
+                        linewidth=0.05, linecolor="black")
         
-    ax.set_title(title)
+    if title is not None:
+        ax.set_title(title)
     
     
     

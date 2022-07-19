@@ -154,8 +154,7 @@ def boxplot_data(regressors, stationnames,  path_to_data, filename="validation_s
 
 
 def resample_seasonally(data, daterange):
-    df = data.resample("Q-NOV").mean()
-    df = df[daterange]
+    df = data[daterange].resample("Q-NOV").mean()
     winter = df[df.index.quarter == 1].mean()
     spring = df[df.index.quarter == 2].mean()
     summer = df[df.index.quarter == 3].mean()
@@ -189,16 +188,19 @@ def resample_monthly(data, daterange):
 
 def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name):
 
+    columns = ["DJF", "MAM", "JJA", "SON", "Annum"]
     
-    df_stations = pd.DataFrame(index=stationnames, columns=["DJF", "MAM", "JJA", "SON"])
+    df_stations = pd.DataFrame(index=stationnames, columns=columns)
     
     for i,stationname in enumerate(stationnames):
         df = load_csv(stationname, filename, path_to_data)
         obs = df[id_name]
         winter, spring, summer, autumn = resample_seasonally(obs, daterange)
-        obs_mean = obs.mean()
+        
+        obs_mean = obs[daterange].mean()
+        
         means = [ winter, spring, summer, autumn, obs_mean]
-        columns=["Mean", "DJF", "MAM", "JJA", "SON"]
+        
         for j,season in enumerate(columns):
             df_stations.loc[stationname][season] = means[j]
     
