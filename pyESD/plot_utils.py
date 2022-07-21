@@ -18,13 +18,22 @@ try:
 except:
     from .ESD_utils import load_all_stations, load_csv, load_pickle
 
+# A4 paper size: 210 mm X 297 mm
+
+cm = 0.3937   # 1 cm in inch for plot size
+pt = 1/72.27  # pt in inch from latex geometry package
+textwidth = 345*pt
+big_width = textwidth + 2*3*cm
+
+
+
 # colors 
 
 orange = 'orangered'
 lightblue = 'teal'
 brown = 'sienna'
-red = '#a41a36'
-blue = '#006c9e'
+red = 'red'
+blue = 'blue'
 green = '#55a868'
 purple = '#8172b2'
 lightbrown = '#ccb974'
@@ -41,9 +50,9 @@ RdBu_r = plt.cm.RdBu_r
 RdBu = plt.cm.RdBu
 
 selector_method_colors = {
-    "Recursive": green,
-    "TreeBased": orange,
-    "Sequential": blue,
+    "Recursive": orange,
+    "TreeBased": black,
+    "Sequential": grey,
     }
 
 
@@ -230,6 +239,47 @@ def monthly_mean(stationnames, path_to_data, filename, daterange, id_name):
     
     return df_stations
         
+    
+def prediction_example_data(station_num, stationnames, path_to_data, filename,
+                            obs_train_name="obs 1958-2010", 
+                            obs_test_name="obs 2011-2020", 
+                            val_predict_name="ERA5 1958-2010", 
+                            test_predict_name="ERA5 2011-2020",
+                            method = "Stacking"
+                            ):
+    
+    stationname = stationnames[station_num]
+    print("extracting information for the station: ", stationname)
+    df = load_csv(stationname, filename, path_to_data)
+    
+    obs_train = df[obs_train_name].dropna()
+    obs_test = df[obs_test_name].dropna()
+    ypred_validation = df[val_predict_name].dropna()
+    ypred_test = df[test_predict_name].dropna()
+    obs_full = df["obs anomalies"].dropna()
+    
+    
+    
+    validation_score_filename = "validation_score_" + method
+    test_score_filename = "test_score_" + method
+    
+    
+    #load scores
+    validation_score = load_pickle(stationname, varname=validation_score_filename ,
+                                   path=path_to_data)
+    test_score = load_pickle(stationname, varname=test_score_filename,
+                             path=path_to_data)
+    
+    station_info = {"obs_train": obs_train,
+                    "obs_test": obs_test,
+                    "ypred_train": ypred_validation,
+                    "ypred_test": ypred_test,
+                    "train_score": validation_score, 
+                    "test_score": test_score,
+                    "obs": obs_full}
+    
+    return station_info
+    
     
     
     

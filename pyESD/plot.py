@@ -12,6 +12,8 @@ import seaborn as sns
 import os 
 import matplotlib as mpl
 import seaborn as sns 
+from matplotlib.dates import YearLocator
+import matplotlib.dates as mdates 
 
 try:  
     from plot_utils import *
@@ -67,7 +69,7 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
             varname="test_r2", varname_std="test_r2_std", filename="validation_score_", legend=True,
-            fig_path=None, fig_name=None, show_error=False):
+            fig_path=None, fig_name=None, show_error=False, width=0.5):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))
@@ -80,16 +82,29 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     
     if show_error == True:
         
-        df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
+        df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4,
+                width=width)
     else:
         
-        df.plot(kind="bar", rot=0, ax=ax, legend = legend, fontsize=20, capsize=4)
+        df.plot(kind="bar", rot=0, ax=ax, legend = legend, fontsize=20, width=width)
         
         
         
-    if xlabel is not None:
+    if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+    if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_xticklabels([])
+        
+        
         
     if legend ==True:    
         ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True, fontsize=20)
@@ -102,7 +117,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
 
 def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
             varname="test_r2", filename="validation_score_",
-            fig_path=None, fig_name=None):
+            fig_path=None, fig_name=None, colors=None, patch_artist=False):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
@@ -112,18 +127,35 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
                      varname=varname)
     
     color = { "boxes": black,
-              "whiskers": green,
-              "medians": orange,
+              "whiskers": black,
+              "medians": red,
               "caps": black,
                }
     
     
-    scores.plot(kind= "box", rot=0, ax=ax, fontsize=20, color= color, sym="r+", grid=False,
-                )
+    boxplot = scores.plot(kind= "box", rot=45, ax=ax, fontsize=20, color= color, sym="+b", grid=False,
+                widths=0.9, notch=False, patch_artist=patch_artist, return_type="dict")
+    
+    
+    if colors is not None:
+        
+        for patch, color in zip(boxplot["boxes"], colors):
+            patch.set_facecolor(color)
+            
+            
+    if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
     
     if xlabel is not None:
-        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_xticklabels([])
         
     plt.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
@@ -143,24 +175,162 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
         
         if cbar == False:
             sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
-                        square=True, cbar=cbar, linewidth=0.05, linecolor="black")
+                        square=True, cbar=cbar, linewidth=0.3, linecolor="black")
         else:
             sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
                         square=True, cbar=cbar, cbar_kws={"label":label, 
                                                           "shrink":.50,},
-                        linewidth=0.05, linecolor="black")
+                        linewidth=0.3, linecolor="black")
     else:
         if cbar == False:
-            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.05,
+            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.3,
                         linecolor="black")
         else:
             sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
                         cbar_kws={"label":label,"shrink":.50,},
-                        linewidth=0.05, linecolor="black")
+                        linewidth=0.3, linecolor="black")
         
     if title is not None:
         ax.set_title(title)
+        
+        
+        
+def scatterplot(station_num, stationnames, path_to_data, filename, ax=None, 
+                obs_train_name="obs 1958-2010", 
+                obs_test_name="obs 2011-2020", 
+                val_predict_name="ERA5 1958-2010", 
+                test_predict_name="ERA5 2011-2020",
+                method = "Stacking", ylabel=None, xlabel=None,
+                fig_path=None, fig_name=None,
+                ):
     
+    if ax is None:
+        fig,ax = plt.subplots(1,1, figsize=(20,15))
+        plt.subplots_adjust(left=0.02, right=1-0.02, top=0.94, bottom=0.45, hspace=0.25)
+        
+    station_info = prediction_example_data(station_num, stationnames, path_to_data, filename,
+                                           obs_test_name=obs_test_name, obs_train_name=obs_train_name,
+                                           val_predict_name=val_predict_name, test_predict_name=test_predict_name,
+                                           method=method)
+    
+    obs_train = station_info["obs_train"]
+    obs_test = station_info["obs_test"]
+    ypred_train = station_info["ypred_train"]
+    ypred_test = station_info["ypred_test"]
+    obs  = station_info["obs"]
+    
+    from scipy import stats
+    
+    regression_stats  = stats.linregress(obs_test, ypred_test)
+    
+    regression_slope = regression_stats.slope * obs 
+    
+    r2 = regression_stats.rvalue 
+    
+    ax.scatter(obs_train, ypred_train, alpha=0.3, c=black, s=100, label=val_predict_name)
+    
+    ax.scatter(obs_test, ypred_test, alpha=0.3, c=red, s=100, label=test_predict_name)
+    
+    ax.plot(obs, regression_slope, color=skyblue, label="R² = {:.2f}".format(r2))
+    
+    ax.legend(loc= "upper left", fontsize=20)
+    
+    # Plot design 
+    
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.get_xaxis().tick_bottom()
+    ax.get_yaxis().tick_left()
+    ax.spines["left"].set_position(("outward", 10))
+    ax.spines["bottom"].set_position(("outward", 10))
+    
+    
+    
+    if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+    if xlabel is not None:
+        ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_xticklabels([])
+        
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+    
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
+        
+        
+        
+
+def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=None,
+                obs_train_name="obs 1958-2010", 
+                obs_test_name="obs 2011-2020", 
+                val_predict_name="ERA5 1958-2010", 
+                test_predict_name="ERA5 2011-2020",
+                method = "Stacking", ylabel=None, xlabel=None,
+                fig_path=None, fig_name=None,
+                ):
+    
+    
+    
+    if ax is None:
+       fig, axes = plt.subplots(1, 1, figsize= (20, 15), sharex=True)
+    
+    plt.subplots_adjust(left=0.12, right=1-0.01, top=0.98, bottom=0.06, hspace=0.01)
+        
+    station_info = prediction_example_data(station_num, stationnames, path_to_data, filename,
+                                           obs_test_name=obs_test_name, obs_train_name=obs_train_name,
+                                           val_predict_name=val_predict_name, test_predict_name=test_predict_name,
+                                           method=method)
+    
+
+    ypred_train = station_info["ypred_train"].rolling(6, min_periods=1, win_type="hann",
+                                                  center=True).mean()
+    ypred_test = station_info["ypred_test"].rolling(6, min_periods=1, win_type="hann",
+                                                  center=True).mean()
+    obs  = station_info["obs"].rolling(6, min_periods=1, win_type="hann",
+                                                  center=True).mean()
+    
+
+    
+    ax.plot(obs, linestyle="-", color=green, label="Obs")
+    ax.plot(ypred_test, linestyle="--", color=red, label=test_predict_name)
+    ax.plot(ypred_train, linestyle="-.", color= blue, label = val_predict_name)
+    
+    
+    ax.xaxis.set_major_locator(YearLocator(10))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+    ax.axhline(y=0, linestyle="--", color=grey, linewidth=2)
+    ax.legend(bbox_to_anchor=(0.2, 1.02, 1., 0.102), loc=3, ncol=3, borderaxespad=0., frameon = True, 
+              fontsize=20)
+    
+    
+    if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+    if xlabel is not None:
+        ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_xticklabels([])
+    
+        
+    plt.tight_layout()
+   
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
     
     
     
