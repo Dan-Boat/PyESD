@@ -165,7 +165,7 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
 
 
 def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=None, ax=None,
-             cbar=True, cbar_ax=None, ):
+             cbar=True, cbar_ax=None, xlabel=None):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, figsize=(20,15))
@@ -177,21 +177,42 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
             sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
                         square=True, cbar=cbar, linewidth=0.3, linecolor="black")
         else:
-            sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
-                        square=True, cbar=cbar, cbar_kws={"label":label, 
-                                                          "shrink":.50,},
-                        linewidth=0.3, linecolor="black")
+            
+            if cbar_ax is not None:
+                sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
+                            square=True, cbar=cbar, cbar_kws={"label":label, 
+                                                              "shrink":.50,},
+                            linewidth=0.3, linecolor="black", cbar_ax=cbar_ax)
+            else:
+                sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
+                            square=True, cbar=cbar, cbar_kws={"label":label, 
+                                                              "shrink":.50,},
+                            linewidth=0.3, linecolor="black")
     else:
         if cbar == False:
             sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar, linewidth=0.3,
                         linecolor="black")
         else:
-            sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
-                        cbar_kws={"label":label,"shrink":.50,},
-                        linewidth=0.3, linecolor="black")
+            
+            if cbar_ax is not None:
+                sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
+                            cbar_kws={"label":label,"shrink":.50,},
+                            linewidth=0.3, linecolor="black", cbar_ax=cbar_ax)
+            else:
+                sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
+                            cbar_kws={"label":label,"shrink":.50,},
+                            linewidth=0.3, linecolor="black")
         
     if title is not None:
-        ax.set_title(title)
+        ax.set_title(title, fontsize=20, fontweight="bold", loc="left")
+    
+    if xlabel is not None:
+        ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        
+    else:
+        ax.set_xticklabels([])
+        
+        
         
         
         
@@ -281,7 +302,7 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
     
     
     if ax is None:
-       fig, axes = plt.subplots(1, 1, figsize= (20, 15), sharex=True)
+       fig, ax = plt.subplots(1, 1, figsize= (20, 15), sharex=True)
     
     plt.subplots_adjust(left=0.12, right=1-0.01, top=0.98, bottom=0.06, hspace=0.01)
         
@@ -301,14 +322,14 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
 
     
     ax.plot(obs, linestyle="-", color=green, label="Obs")
-    ax.plot(ypred_test, linestyle="--", color=red, label=test_predict_name)
     ax.plot(ypred_train, linestyle="-.", color= blue, label = val_predict_name)
+    ax.plot(ypred_test, linestyle="--", color=red, label=test_predict_name)
     
     
     ax.xaxis.set_major_locator(YearLocator(10))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
     ax.axhline(y=0, linestyle="--", color=grey, linewidth=2)
-    ax.legend(bbox_to_anchor=(0.2, 1.02, 1., 0.102), loc=3, ncol=3, borderaxespad=0., frameon = True, 
+    ax.legend(bbox_to_anchor=(0.01, 1.02, 1., 0.102), loc=3, ncol=3, borderaxespad=0., frameon = True, 
               fontsize=20)
     
     
@@ -333,6 +354,51 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
         plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
     
     
+def plot_time_series(stationnames, path_to_data, filename, id_name,
+                        daterange, color, label, ymax=None, ymin=None, ax=None, ylabel=None, xlabel=None,
+                        fig_path=None, fig_name=None, method="Stacking", window=12):
+    
+    if ax is None:
+       fig, ax = plt.subplots(1, 1, figsize= (20, 15), sharex=True)
+       
+    df = extract_time_series(stationnames, path_to_data, filename, id_name,
+                             method, daterange,)
     
     
+    df = df.rolling(window, min_periods=1, win_type="hann", center=True).mean()
+    
+    ax.plot(df["mean"], "--", color=color, label=label)
+    
+    ax.fill_between(df.index, df["mean"] - df["std"], df["mean"] + df["std"], color=color, 
+                    alpha=0.2,)
+    
+    ax.xaxis.set_major_locator(YearLocator(10))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+    ax.axhline(y=0, linestyle="--", color=grey, linewidth=2)
+    
+    ax.legend(frameon=True, fontsize=12, loc="lower left")
+    if ymax is not None:
+        
+        ax.set_ylim([ymin, ymax])
+        
+        
+    if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+    # if xlabel is not None:
+    #     ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+    #     ax.grid(True)
+    # else:
+    #     ax.grid(True)
+    #     ax.set_xticklabels([])
+    
+        
+    plt.tight_layout()
+   
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
     

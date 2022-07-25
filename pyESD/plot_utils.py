@@ -48,6 +48,8 @@ grey = "grey"
 
 RdBu_r = plt.cm.RdBu_r
 RdBu = plt.cm.RdBu
+BrBG = plt.cm.BrBG
+seismic = plt.cm.seismic
 
 selector_method_colors = {
     "Recursive": orange,
@@ -108,9 +110,11 @@ def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname
     return df, df_std
     
 
-def correlation_data(stationnames, path_to_data, filename, predictors):
+def correlation_data(stationnames, path_to_data, filename, predictors, method):
     
     df = pd.DataFrame(index=stationnames, columns=predictors)
+    
+    filename = filename + method
     
     for i,idx in enumerate(stationnames):
         
@@ -122,7 +126,8 @@ def correlation_data(stationnames, path_to_data, filename, predictors):
     
     return df 
 
-def count_predictors(methods, stationnames, path_to_data, filename, predictors):
+def count_predictors(methods, stationnames, path_to_data, filename, predictors,
+                     ):
     
     df_count =  pd.DataFrame(index=methods, columns=predictors)
     
@@ -195,13 +200,17 @@ def resample_monthly(data, daterange):
     return month_means
 
 
-def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name):
+def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
+                  method):
 
     columns = ["DJF", "MAM", "JJA", "SON", "Annum"]
     
     df_stations = pd.DataFrame(index=stationnames, columns=columns)
     
+    filename = filename + method
+    
     for i,stationname in enumerate(stationnames):
+        
         df = load_csv(stationname, filename, path_to_data)
         obs = df[id_name]
         winter, spring, summer, autumn = resample_seasonally(obs, daterange)
@@ -219,13 +228,16 @@ def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name):
     
     return df_stations
              
-def monthly_mean(stationnames, path_to_data, filename, daterange, id_name):
+def monthly_mean(stationnames, path_to_data, filename, daterange, id_name,
+                 method):
     
     import calendar	
     month_names = [calendar.month_abbr[im+1] for im in np.arange(12)]
     df_stations = pd.DataFrame(index=stationnames, columns=month_names)
+    filename = filename + method
     
     for i,stationname in enumerate(stationnames):
+        
         df = load_csv(stationname, filename, path_to_data)
         obs = df[id_name]
         month_means = resample_monthly(obs, daterange)
@@ -250,12 +262,14 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
     
     stationname = stationnames[station_num]
     print("extracting information for the station: ", stationname)
+    
+    filename = filename + method
     df = load_csv(stationname, filename, path_to_data)
     
     obs_train = df[obs_train_name].dropna()
     obs_test = df[obs_test_name].dropna()
-    ypred_validation = df[val_predict_name].dropna()
-    ypred_test = df[test_predict_name].dropna()
+    ypred_validation = df[val_predict_name][~np.isnan(df[obs_train_name])]
+    ypred_test = df[test_predict_name][~np.isnan(df[obs_test_name])]
     obs_full = df["obs anomalies"].dropna()
     
     
@@ -280,7 +294,33 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
     
     return station_info
     
+
     
+def extract_time_series(stationnames, path_to_data, filename, id_name, method,
+                        daterange):
+    
+    df = pd.DataFrame(columns=stationnames)
+    
+    filename = filename + method
+    
+    for i,stationname in enumerate(stationnames):
+        
+        stn_data = load_csv(stationname, filename, path_to_data)
+        
+        pred_data = stn_data[id_name][daterange].dropna()
+        
+        df[stationname] = pred_data
+        
+    # calculation of statistics 
+    
+    df["mean"] = df.mean(axis=1)
+    df["std"] = df.std(axis=1)
+    df["max"] = df.max(axis=1)
+    df["min"] = df.min(axis=1)
+    
+    return df
+        
+        
     
     
     
