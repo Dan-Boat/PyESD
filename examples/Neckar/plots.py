@@ -271,60 +271,64 @@ def plot_seasonal_climatologies():
     plt.savefig(os.path.join(path_to_save, "Fig6.svg"), bbox_inches="tight", dpi=300)
 
 
+# PLOTTING FUTURE TIMESERIES 
+# ==========================
 
 
-# extracting time series for all stations 
-path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
-path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+def plot_ensemble_timeseries():
 
-apply_style(fontsize=20, style=None, linewidth=2)
-fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
-                                   sharex=True, sharey=True)
-plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
-
-
-plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                 id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
-                 color=black, label="RCP 2.6", ymax=30, ymin=-20, 
-                 ylabel= "Precipitation anomalies [mm/month]", ax=ax1)
-
-plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                 id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
-                 color=red, label="RCP 4.5", ymax=30, ymin=-20,
-                 ylabel= "Precipitation anomalies [mm/month]", ax=ax2)
-
-plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                 id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
-                 color=blue, label="RCP 8.5", ymax=30, ymin=-20,
-                 ylabel= "Precipitation anomalies [mm/month]", ax=ax3)
-
-
-plt.tight_layout(h_pad=0.02)
-plt.savefig(os.path.join(path_to_save, "Fig7.svg"), bbox_inches="tight", dpi=300)
-
-
-
-fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
-                                        sharex=True, sharey=True)
-plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
-
-plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                 id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
-                 color=black, label="RCP 2.6", ymax=5, ymin=-5, 
-                 ylabel= "Temperature anomalies [°C]", ax=ax1)
-
-plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                 id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
-                 color=red, label="RCP 4.5", ymax=5, ymin=-5,
-                 ylabel= "Temperature anomalies [°C]", ax=ax2)
-
-plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                 id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
-                 color=blue, label="RCP 8.5", ymax=5, ymin=-5,
-                 ylabel= "Temperature anomalies [°C]", ax=ax3)
-
-
-plt.tight_layout(h_pad=0.03)
-plt.savefig(os.path.join(path_to_save, "Fig8.svg"), bbox_inches="tight", dpi=300)
-
-plt.show()
+    # extracting time series for all stations 
+    path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+    path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+    
+    apply_style(fontsize=20, style=None, linewidth=2)
+    fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
+                                       sharex=True, sharey=True)
+    plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
+    
+    
+    plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     color=black, label="RCP 2.6", ymax=30, ymin=-20, 
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax1)
+    
+    plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     color=red, label="RCP 4.5", ymax=30, ymin=-20,
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax2)
+    
+    plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     color=blue, label="RCP 8.5", ymax=30, ymin=-20,
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax3)
+    
+    
+    plt.tight_layout(h_pad=0.02)
+    plt.savefig(os.path.join(path_to_save, "Fig7.svg"), bbox_inches="tight", dpi=300)
+    
+    
+    
+    fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
+                                            sharex=True, sharey=True)
+    plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
+    
+    plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     color=black, label="RCP 2.6", ymax=5, ymin=-5, 
+                     ylabel= "Temperature anomalies [°C]", ax=ax1)
+    
+    plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     color=red, label="RCP 4.5", ymax=5, ymin=-5,
+                     ylabel= "Temperature anomalies [°C]", ax=ax2)
+    
+    plot_time_series(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     color=blue, label="RCP 8.5", ymax=5, ymin=-5,
+                     ylabel= "Temperature anomalies [°C]", ax=ax3)
+    
+    
+    plt.tight_layout(h_pad=0.03)
+    plt.savefig(os.path.join(path_to_save, "Fig8.svg"), bbox_inches="tight", dpi=300)
+    
+    plt.show()
