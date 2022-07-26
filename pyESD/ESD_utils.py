@@ -13,7 +13,6 @@ import numpy as np
 import pickle 
 import os 
 from collections import OrderedDict 
-
 import matplotlib.pyplot as plt
 
 
@@ -24,20 +23,32 @@ class Dataset():
         self.variables = variables 
         self.data = {}
         
-    def get(self, varname, domain="NH"):
+        
+    def get(self, varname, domain="NH", is_Dataset=False):
         
         try:
             data=self.data[varname]
         
         except KeyError:
             
-            self.data[varname] = xr.open_dataarray(self.variables[varname])
-            
-            if self.data[varname].time[0].dt.is_month_start == False:
+            if is_Dataset == True:
+                self.data[varname] = xr.open_dataset(self.variables[varname])  
                 
-                
-                #convert date to month start
+                #if self.data[varname].time[0].dt.is_month_start == False:
+                    
+                self.data = self.data[varname]
+                    
+                    #convert date to month start
                 self.data["time"] = self.data.time.values.astype("datetime64[M]")
+                
+            else:   
+                self.data[varname] = xr.open_dataarray(self.variables[varname])
+            
+            
+                if self.data[varname].time[0].dt.is_month_start == False:
+            
+                    #convert date to month start
+                    self.data["time"] = self.data.time.values.astype("datetime64[M]")
                 
             data = self.data[varname]
             

@@ -110,7 +110,8 @@ def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs=60, glob_
             
             
             
-def add_info_to_data(path_to_info, path_to_data, path_to_store, glob_name, varname):
+def add_info_to_data(path_to_info, path_to_data, path_to_store, glob_name="data*", 
+                     varname="Precipitation"):
     """
     This function locate the data info in data_to_info by using the station code and then append it to the start of the data 
     This function also stores a summary info file (station names and station loc) that can be used to interate all the stations when applying the downscaling package

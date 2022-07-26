@@ -410,9 +410,11 @@ class EAWR(Predictor):
         pass
     
 def _get_month(npdatetime64):
- """
- Returns the month for a given npdatetime64 object, 1 for January, 2 for
- February, ...
- """
- month =  npdatetime64.astype('datetime64[M]').astype(int) % 12 + 1
- return month
+    
+     """
+     Returns the month for a given npdatetime64 object, 1 for January, 2 for
+     February, ...
+     """
+     month =  npdatetime64.astype('datetime64[M]').astype(int) % 12 + 1
+     
+     return month

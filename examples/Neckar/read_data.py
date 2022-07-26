@@ -21,12 +21,28 @@ from pyESD.WeatherstationPreprocessing import read_weatherstationnames
 radius = 200 # km
 
 
-# paths 
+# DEFINING PATHS TO DATA
+# ======================
+
+
+            
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
-amip_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/AMIP"
-cmip5_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP26"
-cmip5_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP45"
-cmip5_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/RCP85"
+amip_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/AMIP"
+cmip5_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP26"
+cmip5_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP45"
+cmip5_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP85"
+
+cordex_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP26"
+cordex_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP45"
+cordex_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP85"
+
+HadGEM2_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP26" 
+HadGEM2_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP45" 
+HadGEM2_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP85" 
+
+CESM_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP26"
+CESM_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP45"
+CESM_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP85"
 
 
 station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Temperature/cdc_download_2022-03-17_13-38/processed"
@@ -211,6 +227,31 @@ CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
     'v850':os.path.join(cmip5_85_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_85_datadir, 'v1000_monthly.nc'),
     })
+
+
+CORDEX_RCP26 = Dataset("CORDEX_RCP26", {
+    "t2m": os.path.join(cordex_26_datadir, "t2m_monthly.nc"), 
+    "tp": os.path.join(cordex_26_datadir, "tp_monthly.nc")})
+
+CORDEX_RCP45 = Dataset("CORDEX_RCP45", {
+    "t2m": os.path.join(cordex_45_datadir, "t2m_monthly.nc"), 
+    "tp": os.path.join(cordex_45_datadir, "tp_monthly.nc")})
+
+CORDEX_RCP85 = Dataset("CORDEX_RCP85", {
+    "t2m": os.path.join(cordex_85_datadir, "t2m_monthly.nc"), 
+    "tp": os.path.join(cordex_85_datadir, "tp_monthly.nc")})
+
+CESM_RCP26 = Dataset("CESM_RCP26", {
+    "t2m":os.path.join(CESM_26_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(CESM_26_datadir, "tp_monthly.nc")})
+
+CESM_RCP45 = Dataset("CESM_RCP45", {
+    "t2m":os.path.join(CESM_45_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(CESM_45_datadir, "tp_monthly.nc")})
+
+CESM_RCP85 = Dataset("CESM_RCP85", {
+    "t2m":os.path.join(CESM_85_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(CESM_85_datadir, "tp_monthly.nc")})
 
 
 

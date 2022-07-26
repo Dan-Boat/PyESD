@@ -70,6 +70,9 @@ def extract_DWDdata_with_more_yrs(path_to_data, path_to_store, min_yrs, glob_nam
             print("saving", csv.name)
             
             df_to_store.to_csv(os.path.join(path_to_store, csv.name), index=True)
+            
+            
+            
 # defining paths to data
 path_to_data = "/home/dboateng/Datasets/Station/Rhine/cdc_download_2021-10-02_11-16_Rhine/data"
 path_to_store = "/home/dboateng/Datasets/Station/Rhine/cdc_download_2021-10-02_11-16_Rhine/considered"

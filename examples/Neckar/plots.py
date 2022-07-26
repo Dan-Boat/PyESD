@@ -30,8 +30,8 @@ from pyESD.plot_utils import apply_style, correlation_data, count_predictors, bo
 from pyESD.plot_utils import *
 
 from predictor_settings import *
-from read_data import station_prec_datadir, station_temp_datadir
-from read_data import stationnames_prec, stationnames_temp
+from read_data import *
+from read_data import *
 
 # DIRECTORY SPECIFICATION
 # =======================
@@ -330,5 +330,12 @@ def plot_ensemble_timeseries():
     
     plt.tight_layout(h_pad=0.03)
     plt.savefig(os.path.join(path_to_save, "Fig8.svg"), bbox_inches="tight", dpi=300)
-    
-    plt.show()
+
+
+data = CESM_RCP26.get("tp", is_Dataset=True)
+
+data = data.sortby("lon")
+df = data.sel(lat=48.757, lon=9.4514, method="nearest")
+df = df.to_series()
+df = df.rolling(12, min_periods=1, win_type="hann", center=True).mean()
+df.plot()
