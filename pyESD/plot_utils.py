@@ -58,6 +58,14 @@ selector_method_colors = {
     }
 
 
+Models_colors = {
+    "ESD" : black,
+    "MPIESM": lightbrown,
+    "CESM5": purple,
+    "HadGEM2": red,
+    "CORDEX": gold}
+
+
 
 def apply_style(fontsize=20, style=None, linewidth=2):
     """
@@ -321,6 +329,53 @@ def extract_time_series(stationnames, path_to_data, filename, id_name, method,
     return df
         
         
+def extract_comparison_data_means(stationnames, path_to_data,
+                                  filename, id_name, method, stationloc_dir,
+                                  daterange, datasets, variable, dataset_varname,
+                                  ):
     
+    models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
+    
+    df = pd.DataFrame(index=stationnames, columns=models_col_names)
+    
+    df_stn_loc = pd.read_csv(stationloc_dir, index_col=False, 
+                             usecols=["Latitude", "Longitude"])
+    
+    filename = filename + method
+    for i,stationname in enumerate(stationnames):
+        stn_data = load_csv(stationname, filename, path_to_data)
+        
+        df["ESD"].loc[stationname] = stn_data[id_name][daterange].dropna().mean()
+        
+        lon = df_stn_loc.iloc[i]["Longitude"]
+        lat = df_stn_loc.iloc[i]["Latitude"]
+        
+        for j in range(len(datasets)):
+            
+            data = datasets[j].get(dataset_varname, is_Dataset=True)
+            if hasattr(data, "rlat"):
+                df_proj = data.sel(rlat=lat, rlon=lon, method= "nearest").to_series()
+            
+            else:
+                data = data.sortby("lon")
+                df_proj = data.sel(lat=lat, lon=lon, method= "nearest").to_series()
+            
+            df_proj_mean = df_proj[daterange].mean()
+            
+            if variable == "Temperature":
+                df[models_col_names[j+1]].loc[stationname] = df_proj_mean - 273.15
+            elif variable == "Precipitation":
+                df[models_col_names[j+1]].loc[stationname] = df_proj_mean *60*60*24*30
+    
+    
+    df.reset_index(drop=True, inplace=True)
+    df.index +=1
+    df = df.astype(float)
+    
+    return df
+            
+        
+        
+        
     
     

@@ -401,4 +401,49 @@ def plot_time_series(stationnames, path_to_data, filename, id_name,
    
     if fig_path is not None:
         plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
+
     
+
+def plot_projection_comparison(stationnames, path_to_data,
+                                  filename, id_name, method, stationloc_dir,
+                                  daterange, datasets, variable, dataset_varname,
+                                  ax=None, xlabel=None, ylabel=None, legend=True,
+                                  figpath=None, figname=None, width=0.5):
+    
+   df = extract_comparison_data_means(stationnames, path_to_data, filename, id_name, 
+                                      method, stationloc_dir, daterange, datasets, 
+                                      variable, dataset_varname) 
+   
+   models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
+   
+   
+   if ax is None:
+        fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))  
+        
+   colors = [Models_colors[c] for c in models_col_names] 
+   mpl.rcParams["axes.prop_cycle"] = cycle("color", colors)
+   
+   
+   df.plot(kind="bar", rot=0, ax=ax, legend=legend, fontsize=20, width=width)
+   
+   
+   if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+   else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+   if xlabel is not None:
+        ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+   else:
+        ax.grid(True)
+        ax.set_xticklabels([])
+        
+        
+        
+   if legend ==True:    
+        ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True, fontsize=20)
+   plt.tight_layout()
+   plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)

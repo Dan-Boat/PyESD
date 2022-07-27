@@ -25,8 +25,8 @@ import seaborn as sns
 
 
 from pyESD.ESD_utils import load_all_stations, load_pickle, load_csv
-from pyESD.plot import barplot, correlation_heatmap, boxplot, heatmaps, scatterplot, lineplot, plot_time_series
-from pyESD.plot_utils import apply_style, correlation_data, count_predictors, boxplot_data, seasonal_mean
+from pyESD.plot import *
+from pyESD.plot_utils import *
 from pyESD.plot_utils import *
 
 from predictor_settings import *
@@ -335,25 +335,33 @@ def plot_ensemble_timeseries():
 
 
 path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
-stn_info = pd.read_csv(os.path.join(station_temp_datadir , "stationloc.csv"), 
-                       index_col=False,usecols=["Latitude", "Longitude"])
+path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
 
-df_26 = pd.DataFrame(index=stationnames_prec, columns= ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"])
 
-stationname = stationnames_prec[0]
+fig, ((ax, ax2),(ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20, 15),
+                                           sharex=True, sharey=True)
 
-df_data = load_csv(stationname, "predictions_Stacking", path_to_data_prec)
 
-df_26["ESD"].loc[stationname] = df_data["CMIP5 RCP2.6"][from2040to2060].mean()
 
-data_hadGEM2 = HadGEM2_RCP26.get("tp", is_Dataset=True)
-data_hadGEM2 = data_hadGEM2.sortby("lon")
+stationloc_dir = os.path.join(station_prec_datadir , "stationloc.csv")
+datasets = [CMIP5_RCP26_R1, CESM_RCP26, HadGEM2_RCP26, CORDEX_RCP26]
 
-lon = stn_info.iloc[0]["Longitude"]
-lat = stn_info.iloc[0]["Latitude"]
+df = extract_comparison_data_means(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
+                                   filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                   stationloc_dir=stationloc_dir, daterange=from2040to2060, 
+                                   datasets=datasets, variable="Precipitation", 
+                                   dataset_varname="tp")
 
-data_hadGEM2 = data_hadGEM2.sel(lat=lat, lon=lon, method= "nearest").to_series()
-df = data.sel(lat=48.757, lon=9.4514, method="nearest")
-df = df.to_series()
-df = df.rolling(12, min_periods=1, win_type="hann", center=True).mean()
-df.plot()
+
+
+
+
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20,15))
+
+ax.plot(df["ESD"], marker="o", markerfacecolor=black, markersize= 20, linestyle="")
+ax.plot(df["MPIESM"], marker="s", markerfacecolor=gold, markersize= 20, linestyle="")
+ax.plot(df["CESM5"], marker="p", markerfacecolor=tomato, markersize= 20, linestyle="")
+ax.plot(df["HadGEM2"], marker="D", markerfacecolor=lightbrown, markersize= 20, linestyle="")
+ax.plot(df["CORDEX"], marker="H", markerfacecolor=purple, markersize= 20, linestyle="")
+
+plt.show()
