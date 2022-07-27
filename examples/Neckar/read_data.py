@@ -253,6 +253,18 @@ CESM_RCP85 = Dataset("CESM_RCP85", {
     "t2m":os.path.join(CESM_85_datadir, "t2m_monthly.nc"),
     "tp": os.path.join(CESM_85_datadir, "tp_monthly.nc")})
 
+HadGEM2_RCP26 = Dataset("HadGEM2_RCP26",{
+    "t2m": os.path.join(HadGEM2_26_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(HadGEM2_26_datadir, "tp_monthly.nc")})
+
+HadGEM2_RCP45 = Dataset("HadGEM2_RCP45",{
+    "t2m": os.path.join(HadGEM2_45_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(HadGEM2_45_datadir, "tp_monthly.nc")})
+
+HadGEM2_RCP85 = Dataset("HadGEM2_RCP85",{
+    "t2m": os.path.join(HadGEM2_85_datadir, "t2m_monthly.nc"),
+    "tp": os.path.join(HadGEM2_85_datadir, "tp_monthly.nc")})
+
 
 
 namedict_prec = read_weatherstationnames(station_prec_datadir)

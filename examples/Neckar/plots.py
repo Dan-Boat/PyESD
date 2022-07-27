@@ -332,9 +332,27 @@ def plot_ensemble_timeseries():
     plt.savefig(os.path.join(path_to_save, "Fig8.svg"), bbox_inches="tight", dpi=300)
 
 
-data = CESM_RCP26.get("tp", is_Dataset=True)
 
-data = data.sortby("lon")
+
+path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+stn_info = pd.read_csv(os.path.join(station_temp_datadir , "stationloc.csv"), 
+                       index_col=False,usecols=["Latitude", "Longitude"])
+
+df_26 = pd.DataFrame(index=stationnames_prec, columns= ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"])
+
+stationname = stationnames_prec[0]
+
+df_data = load_csv(stationname, "predictions_Stacking", path_to_data_prec)
+
+df_26["ESD"].loc[stationname] = df_data["CMIP5 RCP2.6"][from2040to2060].mean()
+
+data_hadGEM2 = HadGEM2_RCP26.get("tp", is_Dataset=True)
+data_hadGEM2 = data_hadGEM2.sortby("lon")
+
+lon = stn_info.iloc[0]["Longitude"]
+lat = stn_info.iloc[0]["Latitude"]
+
+data_hadGEM2 = data_hadGEM2.sel(lat=lat, lon=lon, method= "nearest").to_series()
 df = data.sel(lat=48.757, lon=9.4514, method="nearest")
 df = df.to_series()
 df = df.rolling(12, min_periods=1, win_type="hann", center=True).mean()
