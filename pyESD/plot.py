@@ -14,6 +14,8 @@ import matplotlib as mpl
 import seaborn as sns 
 from matplotlib.dates import YearLocator
 import matplotlib.dates as mdates 
+from cycler import cycler
+
 
 try:  
     from plot_utils import *
@@ -408,7 +410,7 @@ def plot_projection_comparison(stationnames, path_to_data,
                                   filename, id_name, method, stationloc_dir,
                                   daterange, datasets, variable, dataset_varname,
                                   ax=None, xlabel=None, ylabel=None, legend=True,
-                                  figpath=None, figname=None, width=0.5):
+                                  figpath=None, figname=None, width=0.5, title=None):
     
    df = extract_comparison_data_means(stationnames, path_to_data, filename, id_name, 
                                       method, stationloc_dir, daterange, datasets, 
@@ -421,7 +423,7 @@ def plot_projection_comparison(stationnames, path_to_data,
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))  
         
    colors = [Models_colors[c] for c in models_col_names] 
-   mpl.rcParams["axes.prop_cycle"] = cycle("color", colors)
+   mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
    
    
    df.plot(kind="bar", rot=0, ax=ax, legend=legend, fontsize=20, width=width)
@@ -440,6 +442,9 @@ def plot_projection_comparison(stationnames, path_to_data,
    else:
         ax.grid(True)
         ax.set_xticklabels([])
+        
+   if title is not None:
+       ax.set_title(title, fontsize=20, fontweight="bold", loc="left") 
         
         
         

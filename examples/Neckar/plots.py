@@ -332,36 +332,98 @@ def plot_ensemble_timeseries():
     plt.savefig(os.path.join(path_to_save, "Fig8.svg"), bbox_inches="tight", dpi=300)
 
 
+def plot_different_projections(variable= "Precipitation"):
+    
+    stationloc_dir_prec = os.path.join(station_prec_datadir , "stationloc.csv")
+    stationloc_dir_temp = os.path.join(station_temp_datadir , "stationloc.csv")
+    
+    path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+    path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+    
+    datasets_26 = [CMIP5_RCP26_R1, CESM_RCP26, HadGEM2_RCP26, CORDEX_RCP26]
+    datasets_85 = [CMIP5_RCP85_R1, CESM_RCP85, HadGEM2_RCP85, CORDEX_RCP85]
+    
+    
+    apply_style(fontsize=20, style=None, linewidth=2)
+    
+    if variable == "Precipitation":
+        fig, ((ax1, ax2),(ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20, 15),
+                                                    sharex=True, sharey=True)
+        
+        
+        
+        plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
+                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_prec, daterange=from2040to2060, 
+                                            datasets=datasets_26, variable="Precipitation", 
+                                            dataset_varname="tp", ax=ax1, legend=False, xlabel= "Precipitation stations",
+                                            ylabel="Precipitation [mm/month]",width=0.7, title="RCP 2.6 [2040-2060]")
+        
+        plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
+                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_prec, daterange=from2080to2100, 
+                                            datasets=datasets_26, variable="Precipitation", 
+                                            dataset_varname="tp", ax=ax2, legend=True, xlabel= "Precipitation stations",
+                                            ylabel="Precipitation [mm/month]", width=0.7, title="RCP 2.6 [2080-2100]")
+        
+        plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
+                                            filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_prec, daterange=from2040to2060, 
+                                            datasets=datasets_85, variable="Precipitation", 
+                                            dataset_varname="tp", ax=ax3, legend=False, xlabel= "Precipitation stations",
+                                            ylabel="Precipitation [mm/month]",width=0.7, title="RCP 8.5 [2040-2060]")
+        
+        plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
+                                            filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_prec, daterange=from2080to2100, 
+                                            datasets=datasets_85, variable="Precipitation", 
+                                            dataset_varname="tp", ax=ax4, legend=False, xlabel= "Precipitation stations",
+                                            ylabel="Precipitation [mm/month]", width=0.7, title="RCP 8.5 [2080-2100]")
+        
+        
+        plt.tight_layout(h_pad=0.03)
+        plt.savefig(os.path.join(path_to_save, "Fig9.svg"), bbox_inches="tight", dpi=300)
+        
+    
+    elif variable == "Temperature":    
+        fig, ((ax1, ax2),(ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20, 15),
+                                                   sharex=True, sharey=True)
+        
+        
+        
+        plot_projection_comparison(stationnames=stationnames_temp, path_to_data=path_to_data_temp, 
+                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_temp, daterange=from2040to2060, 
+                                            datasets=datasets_26, variable="Temperature", 
+                                            dataset_varname="t2m", ax=ax1, legend=False, xlabel= "Temperature stations",
+                                            ylabel="Temperature [°C]",width=0.7, title="RCP 2.6 [2040-2060]")
+        
+        plot_projection_comparison(stationnames=stationnames_temp, path_to_data=path_to_data_temp, 
+                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            stationloc_dir=stationloc_dir_temp, daterange=from2080to2100, 
+                                            datasets=datasets_26, variable="Temperature", 
+                                            dataset_varname="t2m", ax=ax2, legend=True, xlabel= "Temperature stations",
+                                            ylabel="Temperature [°C]", width=0.7, title="RCP 2.6 [2080-2100]")
+        
+        plot_projection_comparison(stationnames=stationnames_temp, path_to_data=path_to_data_temp, 
+                                           filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                           stationloc_dir=stationloc_dir_temp, daterange=from2040to2060, 
+                                           datasets=datasets_85, variable="Temperature", 
+                                           dataset_varname="t2m", ax=ax3, legend=False, xlabel= "Temperature stations",
+                                           ylabel="Temperature [°C]",width=0.7, title="RCP 8.5 [2040-2060]")
+        
+        plot_projection_comparison(stationnames=stationnames_temp, path_to_data=path_to_data_temp, 
+                                           filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                           stationloc_dir=stationloc_dir_temp, daterange=from2080to2100, 
+                                           datasets=datasets_85, variable="Temperature", 
+                                           dataset_varname="t2m", ax=ax4, legend=False, xlabel= "Temperature stations",
+                                           ylabel="Temperature [°C]", width=0.7, title="RCP 8.5 [2080-2100]")
+        
+        
+        plt.tight_layout(h_pad=0.03)
+        plt.savefig(os.path.join(path_to_save, "Fig10.svg"), bbox_inches="tight", dpi=300)
 
 
-path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
-path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
 
-
-fig, ((ax, ax2),(ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20, 15),
-                                           sharex=True, sharey=True)
-
-
-
-stationloc_dir = os.path.join(station_prec_datadir , "stationloc.csv")
-datasets = [CMIP5_RCP26_R1, CESM_RCP26, HadGEM2_RCP26, CORDEX_RCP26]
-
-df = extract_comparison_data_means(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
-                                   filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
-                                   stationloc_dir=stationloc_dir, daterange=from2040to2060, 
-                                   datasets=datasets, variable="Precipitation", 
-                                   dataset_varname="tp")
-
-
-
-
-
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20,15))
-
-ax.plot(df["ESD"], marker="o", markerfacecolor=black, markersize= 20, linestyle="")
-ax.plot(df["MPIESM"], marker="s", markerfacecolor=gold, markersize= 20, linestyle="")
-ax.plot(df["CESM5"], marker="p", markerfacecolor=tomato, markersize= 20, linestyle="")
-ax.plot(df["HadGEM2"], marker="D", markerfacecolor=lightbrown, markersize= 20, linestyle="")
-ax.plot(df["CORDEX"], marker="H", markerfacecolor=purple, markersize= 20, linestyle="")
-
-plt.show()
+if __name__ == "__main__":
+    plot_different_projections(variable="Precipitation")
