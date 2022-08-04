@@ -29,6 +29,8 @@ big_width = textwidth + 2*3*cm
 
 # colors 
 
+indianred = "#ec7063"
+seablue = "#5dade2"
 orange = 'orangered'
 lightblue = 'teal'
 brown = 'sienna'
@@ -189,18 +191,18 @@ def resample_monthly(data, daterange):
     df = data.resample("MS").mean()
     df = df[daterange]
     
-    Jan = df[df.index.quarter == 1].mean()
-    Feb = df[df.index.quarter == 2].mean()
-    Mar = df[df.index.quarter == 3].mean()
-    Apr = df[df.index.quarter == 4].mean()
-    May = df[df.index.quarter == 5].mean()
-    Jun = df[df.index.quarter == 6].mean()
-    Jul = df[df.index.quarter == 7].mean()
-    Aug = df[df.index.quarter == 8].mean()
-    Sep = df[df.index.quarter == 9].mean()
-    Oct = df[df.index.quarter == 10].mean()
-    Nov = df[df.index.quarter == 11].mean()
-    Dec = df[df.index.quarter == 12].mean()
+    Jan = df[df.index.month == 1].mean()
+    Feb = df[df.index.month == 2].mean()
+    Mar = df[df.index.month == 3].mean()
+    Apr = df[df.index.month == 4].mean()
+    May = df[df.index.month == 5].mean()
+    Jun = df[df.index.month == 6].mean()
+    Jul = df[df.index.month == 7].mean()
+    Aug = df[df.index.month == 8].mean()
+    Sep = df[df.index.month == 9].mean()
+    Oct = df[df.index.month == 10].mean()
+    Nov = df[df.index.month == 11].mean()
+    Dec = df[df.index.month == 12].mean()
     
     
     month_means = [Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec]

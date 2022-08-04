@@ -423,7 +423,41 @@ def plot_different_projections(variable= "Precipitation"):
         plt.tight_layout(h_pad=0.03)
         plt.savefig(os.path.join(path_to_save, "Fig10.svg"), bbox_inches="tight", dpi=300)
 
+def estimate_mean_std(df):
+    means = df.mean(axis=1)
+    stds = df.std(axis=1)
+    
+    return means, stds 
 
 
-if __name__ == "__main__":
-    plot_different_projections(variable="Precipitation")
+path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+
+df_prec = monthly_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                        daterange=from1958to2020 , id_name="obs", method= "Stacking")
+
+df = pd.DataFrame(columns=["mean", "std"])
+mean = df_prec.mean(axis= 1)
+std = df_prec.std(axis= 1)
+
+apply_style(fontsize=20, style=None, linewidth=2)
+
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 15))
+
+plot = mean.plot(kind="bar", yerr=std, rot=0, ax=ax, fontsize=20, capsize=4,
+        width=0.8, color=lightbrown, edgecolor=black, 
+        error_kw=dict(ecolor='black',elinewidth=0.5, lolims=True))
+
+for ch in plot.get_children():
+    if str(ch).startswith("Line2D"):
+        ch.set_marker("_")
+        ch.set_markersize(10)
+        break
+plt.show()
+
+print(df_prec)
+#if __name__ == "__main__":
+    #plot_different_projections(variable="Precipitation")
+
+
+

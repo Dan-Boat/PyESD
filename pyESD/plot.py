@@ -23,6 +23,32 @@ try:
 except:
     from .plot_utils import *
 
+def plot_monthly_mean(means, stds, color, ylabel=None, ax=None, 
+                      fig_path=None, fig_name=None,):
+    
+    if ax is None:
+        fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
+
+    plot = means.plot(kind="bar", yerr=stds, rot=0, ax=ax, fontsize=20, capsize=4,
+            width=0.8, color=color, edgecolor=black, 
+            error_kw=dict(ecolor='black',elinewidth=0.5, lolims=True))
+
+    for ch in plot.get_children():
+        if str(ch).startswith("Line2D"):
+            ch.set_marker("_")
+            ch.set_markersize(10)
+            break
+    
+    if ylabel is not None:
+        ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
+        ax.grid(True)
+    else:
+        ax.grid(True)
+        ax.set_yticklabels([])
+    
+    plt.tight_layout()
+    if fig_path is not None:
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
 
 def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cbar_ax=None, 
                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=None, fig_name=None,
