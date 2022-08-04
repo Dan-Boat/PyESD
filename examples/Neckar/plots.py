@@ -55,26 +55,56 @@ def plot_stations():
     path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
     path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
     
-    df_prec = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+    df_prec_sm = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
                             daterange=from1958to2020 , id_name="obs", method= "Stacking")
     
-    df_temp = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+    df_temp_sm = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
                             daterange=from1958to2020 , id_name="obs", method= "Stacking")
+    
+    
+    
+    df_prec = monthly_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from1958to2020 , id_name="obs", method= "Stacking")
+    df_temp = monthly_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from1958to2020 , id_name="obs", method= "Stacking")
+    
+    means_prec, stds_prec = estimate_mean_std(df_prec)
+    means_temp, stds_temp = estimate_mean_std(df_temp)
+    
+    
+    
     
     
     apply_style(fontsize=20, style=None, linewidth=2)
     
     fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20, 15))
     
-    heatmaps(data=df_prec, cmap="Blues", label="Precipitation [mm/month]", title= None, 
-             ax=ax1, cbar=True)
+    heatmaps(data=df_prec_sm, cmap="Blues", label="Precipitation [mm/month]", title= None, 
+             ax=ax1, cbar=True, xlabel="Precipitation stations")
     
-    heatmaps(data=df_temp, cmap="RdBu_r", label="Temperature [°C]", title= None, 
-             ax=ax2, cbar=True, vmax=20, vmin=-5, center=0)
+    plot_monthly_mean(means=means_prec, stds=stds_prec, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax2)
     
     plt.tight_layout()
     
-    plt.savefig(os.path.join(path_to_save, "Fig1.svg"), bbox_inches="tight", dpi=300)
+    plt.savefig(os.path.join(path_to_save, "Fig1a.svg"), bbox_inches="tight", dpi=300)
+    
+    
+    
+    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20,15), sharey=False)
+    
+    heatmaps(data=df_temp_sm, cmap="RdBu_r", label="Temperature [°C]", title= None, 
+             ax=ax1, cbar=True, vmax=20, vmin=-5, center=0, xlabel="Temperature stations")
+
+    plot_monthly_mean(means=means_temp, stds=stds_temp, color=indianred, ylabel="Temperature [°C]", 
+                      ax=ax2)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(path_to_save, "Fig1b.svg"), bbox_inches="tight", dpi=300)
+    
+    
+    
+    
 
 # PLOTTING METRICS FOR PREDICTOR SELECTOR
 # =======================================
@@ -155,6 +185,11 @@ def plot_estimators_metrics():
 def plot_prediction_example(station_num_prec, station_num_temp):
     path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
     path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+    
+    
+    print("----plotting for the station:", stationnames_prec[station_num_prec], "for prec and ",
+          stationnames_temp[station_num_temp], "for temp----")
+    
     
     apply_style(fontsize=20, style=None, linewidth=2)
     
@@ -238,7 +273,7 @@ def plot_seasonal_climatologies():
                             daterange=from2040to2060 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking")
     
     
-    df_temp_85_from2040to2060 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_g", 
+    df_temp_85_from2040to2060 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
                             daterange=from2040to2060 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking")
     
     
@@ -429,35 +464,46 @@ def estimate_mean_std(df):
     
     return means, stds 
 
+def plot_stations_monthly_mean():
+    
+    
+    path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
+    path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
+    
+    df_prec = monthly_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from1958to2020 , id_name="obs", method= "Stacking")
+    df_temp = monthly_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from1958to2020 , id_name="obs", method= "Stacking")
+    
+    means_prec, stds_prec = estimate_mean_std(df_prec)
+    means_temp, stds_temp = estimate_mean_std(df_temp)
+    
+    apply_style(fontsize=20, style=None, linewidth=2)
+    
+    fig, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, figsize=(20,15), sharey=False)
+    
+    plot_monthly_mean(means=means_prec, stds=stds_prec, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax1)
+    
+    plot_monthly_mean(means=means_temp, stds=stds_temp, color=indianred, ylabel="Temperature [°C]", 
+                      ax=ax2)
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(path_to_save, "Fig11.svg"), bbox_inches="tight", dpi=300)
 
-path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
-path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
 
-df_prec = monthly_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                        daterange=from1958to2020 , id_name="obs", method= "Stacking")
 
-df = pd.DataFrame(columns=["mean", "std"])
-mean = df_prec.mean(axis= 1)
-std = df_prec.std(axis= 1)
-
-apply_style(fontsize=20, style=None, linewidth=2)
-
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 15))
-
-plot = mean.plot(kind="bar", yerr=std, rot=0, ax=ax, fontsize=20, capsize=4,
-        width=0.8, color=lightbrown, edgecolor=black, 
-        error_kw=dict(ecolor='black',elinewidth=0.5, lolims=True))
-
-for ch in plot.get_children():
-    if str(ch).startswith("Line2D"):
-        ch.set_marker("_")
-        ch.set_markersize(10)
-        break
-plt.show()
-
-print(df_prec)
-#if __name__ == "__main__":
-    #plot_different_projections(variable="Precipitation")
+if __name__ == "__main__":
+    # plot_stations()
+    # plot_stations_monthly_mean()
+    # plot_predictor_selector_metrics()
+    # plot_estimators_metrics()
+    plot_prediction_example(station_num_prec=15, station_num_temp=7)
+    # plot_seasonal_climatologies()
+    # plot_ensemble_timeseries()
+    # plot_different_projections(variable="Precipitation")
+    #plot_different_projections(variable="Temperature")
+    print("--plotting complete --")
 
 
 

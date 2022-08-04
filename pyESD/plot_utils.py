@@ -28,7 +28,7 @@ big_width = textwidth + 2*3*cm
 
 
 # colors 
-
+gridline_color = "#d5dbdb"
 indianred = "#ec7063"
 seablue = "#5dade2"
 orange = 'orangered'
@@ -48,24 +48,38 @@ magenta = "magenta"
 black = "black"
 grey = "grey"
 
+#specific colors
+
+recursive_color = "#D35400"
+treebased_color = "#1abc9c"
+sequential_color = "#1C2833"
+
+esd_color = "#212F3D"
+mpi_color = "#52BE80"
+cesm_color = "#CB4335"
+had_color = "#D4AC0D"
+cordex_color = "#8E44AD"
+
+
 RdBu_r = plt.cm.RdBu_r
 RdBu = plt.cm.RdBu
 BrBG = plt.cm.BrBG
 seismic = plt.cm.seismic
 
 selector_method_colors = {
-    "Recursive": orange,
-    "TreeBased": black,
-    "Sequential": grey,
+    
+    "Recursive": recursive_color,
+    "TreeBased": treebased_color,
+    "Sequential": sequential_color,
     }
 
 
 Models_colors = {
-    "ESD" : black,
-    "MPIESM": lightbrown,
-    "CESM5": purple,
-    "HadGEM2": red,
-    "CORDEX": gold}
+    "ESD" : esd_color,
+    "MPIESM": mpi_color,
+    "CESM5": cesm_color,
+    "HadGEM2": had_color,
+    "CORDEX": cordex_color}
 
 
 

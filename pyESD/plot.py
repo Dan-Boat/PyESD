@@ -41,9 +41,9 @@ def plot_monthly_mean(means, stds, color, ylabel=None, ax=None,
     
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     plt.tight_layout()
@@ -111,25 +111,25 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
     if show_error == True:
         
         df.plot(kind="bar", yerr=df_std, rot=0, ax=ax, legend = legend, fontsize=20, capsize=4,
-                width=width)
+                width=width, edgecolor=black)
     else:
         
-        df.plot(kind="bar", rot=0, ax=ax, legend = legend, fontsize=20, width=width)
+        df.plot(kind="bar", rot=0, ax=ax, legend = legend, fontsize=20, width=width, edgecolor=black)
         
         
         
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_xticklabels([])
         
         
@@ -173,16 +173,16 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
             
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_xticklabels([])
         
     plt.tight_layout()
@@ -272,7 +272,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     regression_stats  = stats.linregress(obs_test, ypred_test)
     
-    regression_slope = regression_stats.slope * obs 
+    regression_slope = regression_stats.slope * obs + regression_stats.intercept
     
     r2 = regression_stats.rvalue 
     
@@ -297,16 +297,16 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_xticklabels([])
         
     plt.tight_layout()
@@ -363,16 +363,16 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
     
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_xticklabels([])
     
         
@@ -412,9 +412,9 @@ def plot_time_series(stationnames, path_to_data, filename, id_name,
         
     if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
     else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
     # if xlabel is not None:
@@ -457,16 +457,16 @@ def plot_projection_comparison(stationnames, path_to_data,
    
    if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
    else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
    if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
    else:
-        ax.grid(True)
+        ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_xticklabels([])
         
    if title is not None:
