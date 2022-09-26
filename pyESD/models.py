@@ -177,11 +177,11 @@ class Regressors(MetaAttributes):
             if self.hyper_method == "BayesSearchCV":
                 param_grid =  {"C":Real(0.1, 10, prior="uniform"),
                                "gamma": Real(0.1,10, prior="uniform"),
-                             "kernel":Categorical(["linear"]), 
+                             "kernel":Categorical(["linear", "poly", "rbf", "sigmoid"]), 
                              }
             else:
                 param_grid = {"C":[0.1, 1, 10], "gamma":[0.1,1, 10], 
-                             "kernel":["linear"]}
+                             "kernel":["linear", "poly", "rbf", "sigmoid"]}
             
             self.hyper = HyperparameterOptimize(method=self.hyper_method, param_grid= param_grid, regressor=regressor)
         
