@@ -16,7 +16,7 @@ import numpy as np
 
 
 from pyESD.ESD_utils import Dataset
-from pyESD.WeatherstationPreprocessing import read_weatherstationnames
+from pyESD.Weatherstation import read_weatherstationnames
 
 radius = 200 # km
 
@@ -27,22 +27,22 @@ radius = 200 # km
 
             
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
-amip_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/AMIP"
-cmip5_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP26"
-cmip5_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP45"
-cmip5_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/MIPESM/RCP85"
+amip_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/AMIP"
+cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
+cmip5_45_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP45"
+cmip5_85_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP85"
 
-cordex_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP26"
-cordex_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP45"
-cordex_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CORDEX/RCP85"
+cordex_26_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP26"
+cordex_45_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP45"
+cordex_85_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP85"
 
-HadGEM2_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP26" 
-HadGEM2_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP45" 
-HadGEM2_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP85" 
+HadGEM2_26_datadir = "D:/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP26" 
+HadGEM2_45_datadir = "D:/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP45" 
+HadGEM2_85_datadir = "D:/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP85" 
 
-CESM_26_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP26"
-CESM_45_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP45"
-CESM_85_datadir = "C:/Users/dboateng/Desktop/Datasets/CMIP5/Monthly/CESM/RCP85"
+CESM_26_datadir = "D:/Datasets/CMIP5/Monthly/CESM/RCP26"
+CESM_45_datadir = "D:/Datasets/CMIP5/Monthly/CESM/RCP45"
+CESM_85_datadir = "D:/Datasets/CMIP5/Monthly/CESM/RCP85"
 
 
 station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Neckar_Enz/Temperature/cdc_download_2022-03-17_13-38/processed"

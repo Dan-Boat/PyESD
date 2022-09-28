@@ -24,14 +24,14 @@ except:
     from .plot_utils import *
 
 def plot_monthly_mean(means, stds, color, ylabel=None, ax=None, 
-                      fig_path=None, fig_name=None,):
+                      fig_path=None, fig_name=None, lolims=False):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
 
     plot = means.plot(kind="bar", yerr=stds, rot=0, ax=ax, fontsize=20, capsize=4,
             width=0.8, color=color, edgecolor=black, 
-            error_kw=dict(ecolor='black',elinewidth=0.5, lolims=True))
+            error_kw=dict(ecolor='black',elinewidth=0.5, lolims=lolims))
 
     for ch in plot.get_children():
         if str(ch).startswith("Line2D"):

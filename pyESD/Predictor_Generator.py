@@ -25,7 +25,7 @@ except:
 class RegionalAverage(Predictor):
     
     def __init__(self, name, lat, lon, standardizer_constructor=None, 
-                 radius=250*1e3, **kwargs):
+                 radius=250, **kwargs):
         
         self.lon = lon
         self.lat = lat

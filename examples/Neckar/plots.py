@@ -93,8 +93,8 @@ def plot_stations():
     
     fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20,15), sharey=False)
     
-    heatmaps(data=df_temp_sm, cmap="RdBu_r", label="Temperature [°C]", title= None, 
-             ax=ax1, cbar=True, vmax=20, vmin=-5, center=0, xlabel="Temperature stations")
+    heatmaps(data=df_temp_sm, cmap="seismic", label="Temperature [°C]", title= None, 
+             ax=ax1, cbar=True, vmax=20, center=0, vmin=-5, xlabel="Temperature stations")
 
     plot_monthly_mean(means=means_temp, stds=stds_temp, color=indianred, ylabel="Temperature [°C]", 
                       ax=ax2)
@@ -494,16 +494,16 @@ def plot_stations_monthly_mean():
 
 
 if __name__ == "__main__":
-    # plot_stations()
-    # plot_stations_monthly_mean()
+    plot_stations()
+    plot_stations_monthly_mean()
     # plot_predictor_selector_metrics()
     # plot_estimators_metrics()
-    plot_prediction_example(station_num_prec=15, station_num_temp=7)
+    #plot_prediction_example(station_num_prec=6, station_num_temp=0)
     # plot_seasonal_climatologies()
     # plot_ensemble_timeseries()
     # plot_different_projections(variable="Precipitation")
     #plot_different_projections(variable="Temperature")
-    print("--plotting complete --")
+    #print("--plotting complete --")
 
 
 

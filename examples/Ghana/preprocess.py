@@ -11,11 +11,11 @@ from pathlib import Path as p
 
 
 data_path = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Stacked_Data/"
-path_to_store = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/preprocessed"
+path_to_store = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/preprocessed"
 filename = "ABE.csv"
 storename = "Abetifi"
-varname  = "Precipitation"
-use_colums = ["Time","Rain"]
+varname  = "Temperature"
+use_colums = ["Time","Tmean"]
 
 daterange = pd.date_range(start="1961-01-01", end="2013-12-01", freq="MS")
 
@@ -45,7 +45,7 @@ for csv in p(data_path).glob(glob_name):
     df = df.loc[daterange[0]:daterange[-1]]
     
     
-    df_to_store[varname][df.index] = df["Rain"][df.index] 
+    df_to_store[varname][df.index] = df["Tmean"][df.index] 
     
     if varname == "Precipitation":
         df_to_store = df_to_store.replace(np.nan, -9999)

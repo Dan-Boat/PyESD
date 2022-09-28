@@ -10,13 +10,13 @@ import numpy as np
 import os 
 from pathlib import Path as p
 
-path_to_data = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/preprocessed"
-path_to_datainfo = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/stationnames.csv"
-path_to_processed = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/processed"
+path_to_data = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/preprocessed"
+path_to_datainfo = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/stationnames.csv"
+path_to_processed = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/processed"
 
 
 filename = "ABE.csv"
-varname  = "Precipitation"
+varname  = "Temperature"
 glob_name = "*.csv"
 
 
