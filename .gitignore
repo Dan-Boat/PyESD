@@ -11,4 +11,6 @@
 /examples/Neckar/plots
 *.pickel
 modules.txt
+*.predictors_500
+*.predictors_200
 
