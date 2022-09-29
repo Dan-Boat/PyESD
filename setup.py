@@ -14,11 +14,11 @@ README = (HERE / "README.md").read_text()
 
 setup(
       name = "pyESD",
-      version = "0.1.0",
+      version = "0.0.1",
       description= "Python package for Empirical Statistical Downscaling",
       long_description = README,
-      long_description_content_type = "test/markdown",
-      keywords = "pyESD climate downscaling",
+      long_description_content_type = "text/markdown",
+      keywords = "climate downscaling", "statistical downscaling", "scikit-learn", "xarray", 
       url="https://github.com/Dan-Boat/PyESD",
       author="Daniel Boateng",
       author_email= "dannboateng@gmail.com",
@@ -33,13 +33,10 @@ setup(
                         "sklearn",
                         "scipy",
                         "eofs",
-                        "tensorflow", 
-                        "keras",
-                        "Cartopy", 
                         ],
 
       classifiers = [
-        'Development Status :: 1 -',
+        'Development Status :: 1 - Planning',
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',  
         'Operating System :: POSIX :: Linux',        
