@@ -116,7 +116,8 @@ class StationOperator():
     def fit(self, variable, daterange , predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False, 
-            fit_predictand=True, **predictor_kwargs):
+            fit_predictand=True, impute=False, impute_method=None, 
+            impute_order=None,**predictor_kwargs):
         
         
         
@@ -127,6 +128,8 @@ class StationOperator():
                 selector_direction= selector_direction,
                 cal_relative_importance = cal_relative_importance, 
                 fit_predictand = fit_predictand,
+                impute=impute, impute_method=impute_method, 
+                impute_order= impute_order,
                 **predictor_kwargs)
     
     

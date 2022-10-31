@@ -11,7 +11,7 @@ import pandas as pd
 import numpy as np 
 from collections import OrderedDict
 
-from pyESD.WeatherstationPreprocessing import read_station_csv
+from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
 
@@ -43,9 +43,9 @@ Experiment 3: Feature selection: Recurssive, model: Stacking regression (with 6 
 """
 
 def run_experiment3(variable, cachedir, 
-                    stationnames, station_datadir, 
-                    ensemble_method, final_estimator,
-                    base_estimators):
+                    stationnames, station_datadir, method, 
+                    final_estimator=None,
+                    base_estimators=None, ensemble_learning=False):
 
     num_of_stations = len(stationnames)
     
@@ -70,7 +70,7 @@ def run_experiment3(variable, cachedir,
         SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                         scaling=False))
         #setting model
-        SO.set_model(variable, method=ensemble_method, ensemble_learning=True, 
+        SO.set_model(variable, method=method, ensemble_learning=ensemble_learning, 
                       estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
                       predictor_dataset=ERA5Data)
         
@@ -197,6 +197,9 @@ if __name__ == "__main__":
     station_datadir = [station_temp_datadir, station_prec_datadir]
     
     
+    # experiment with LassoLarsCV (then later use it as  the final estimator for the stacking)
+    
+    method = "LassoLarsCV"
     
     ensemble_method = "Stacking"
  
@@ -210,7 +213,7 @@ if __name__ == "__main__":
         print("---------- running for variable: ", idx, "-------")
         run_experiment3(idx, cachedir[i], 
                         stationnames[i], station_datadir[i],
-                        ensemble_method, final_estimator, base_estimators)
+                        method)
         
         
         

@@ -134,11 +134,10 @@ def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname
     return df, df_std
     
 
-def correlation_data(stationnames, path_to_data, filename, predictors, method):
+def correlation_data(stationnames, path_to_data, filename, predictors):
     
     df = pd.DataFrame(index=stationnames, columns=predictors)
     
-    filename = filename + method
     
     for i,idx in enumerate(stationnames):
         

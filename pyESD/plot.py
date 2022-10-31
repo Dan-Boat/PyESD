@@ -397,6 +397,9 @@ def plot_time_series(stationnames, path_to_data, filename, id_name,
     
     ax.plot(df["mean"], "--", color=color, label=label)
     
+    
+    #try with max and min to notice the difference with 5 years window
+    
     ax.fill_between(df.index, df["mean"] - df["std"], df["mean"] + df["std"], color=color, 
                     alpha=0.2,)
     

@@ -16,20 +16,24 @@ import numpy as np
 from pyESD.ESD_utils import Dataset
 from pyESD.Weatherstation import read_weatherstationnames
 
-radius = 500 #km
+radius = 200 #km
 
 # DEFINING PATHS TO DATA
 # ======================
             
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
 station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/processed"
+station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/processed"
 
 predictordir = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius)))
 cachedir_prec = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Precipitation'))
+cachedir_temp = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature'))
 
 namedict_prec = read_weatherstationnames(station_prec_datadir)
 stationnames_prec = list(namedict_prec.values())
 
+namedict_temp = read_weatherstationnames(station_temp_datadir)
+stationnames_temp = list(namedict_temp.values())
 
 ERA5Data = Dataset('ERA5', {
     't2m':os.path.join(era5_datadir, 't2m_monthly.nc'),
@@ -69,4 +73,9 @@ ERA5Data = Dataset('ERA5', {
     'v850':os.path.join(era5_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(era5_datadir, 'v1000_monthly.nc'),
     'sst':os.path.join(era5_datadir, 'sst_monthly.nc'),
-    'd2m':os.path.join(era5_datadir, 'd2m_monthly.nc'), })
+    'dtd250':os.path.join(era5_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(era5_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(era5_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(era5_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(era5_datadir, 'dtd1000_monthly.nc'),},
+    domain_name= "Africa")

@@ -54,7 +54,7 @@ def read_weatherstationnames(path_to_data):
     return namedict
 
 
-def read_station_csv(filename, varname):
+def read_station_csv(filename, varname, return_all=False):
     """
     
 
@@ -109,9 +109,15 @@ def read_station_csv(filename, varname):
         data = {varname:t}
     else:
         raise ValueError("The model does not recognize the variable name")
+
+    if return_all == False:
+
+        so = StationOperator(data, name, lat, lon, elev)
         
-    so = StationOperator(data, name, lat, lon, elev)
-    return so
+        return so
+    
+    else:
+        return data, lat, lon
     
     
     

@@ -18,13 +18,14 @@ import matplotlib.pyplot as plt
 
 
 class Dataset():
-    def __init__(self, name, variables):
+    def __init__(self, name, variables, domain_name):
         self.name = name 
         self.variables = variables 
         self.data = {}
+        self.domain_name = domain_name
         
         
-    def get(self, varname, domain="NH", is_Dataset=False):
+    def get(self, varname, select_domain= True, is_Dataset=False):
         
         try:
             data=self.data[varname]
@@ -54,10 +55,17 @@ class Dataset():
             
             
             
-        if domain == "NH":
+        if select_domain == True:
             
-            minlat, maxlat, minlon, maxlon = 10, 90, -90, 90
+            if self.domain_name == "NH":
+                
+                minlat, maxlat, minlon, maxlon = 10, 90, -90, 90
             
+            elif self.domain_name == "Africa":
+                
+                minlat, maxlat, minlon, maxlon = -35, 35, -90, 90
+                
+                
             if hasattr(data, "longitude"):
                 data = data.assign_coords({"longitude": (((data.longitude + 180) % 360) - 180)})
                 data = data.where((data.latitude >= minlat) & (data.latitude <= maxlat), drop=True)

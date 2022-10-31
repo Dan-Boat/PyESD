@@ -50,6 +50,10 @@ for csv in p(data_path).glob(glob_name):
     if varname == "Precipitation":
         df_to_store = df_to_store.replace(np.nan, -9999)
     
+    elif varname == "Temperature":
+        df_to_store = df_to_store.replace(np.nan, -8888)
+        
+    
     
     df_to_store.to_csv(os.path.join(path_to_store, csv.name), index=True)    
 

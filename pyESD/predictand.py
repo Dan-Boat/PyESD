@@ -174,7 +174,8 @@ class PredictandTimeseries():
     
     def fit(self, daterange, predictor_dataset, fit_predictors=True , predictor_selector=True, selector_method="Recursive",
             selector_regressor="Ridge", num_predictors=None, selector_direction=None, cal_relative_importance=False,
-            fit_predictand=True, **predictor_kwargs):
+            fit_predictand=True, impute=False, impute_method=None, impute_order=None, 
+            **predictor_kwargs):
         
         # checking attributes required before fitting
         
@@ -191,9 +192,21 @@ class PredictandTimeseries():
         
         # dropna values 
         
-        X = X.loc[~np.isnan(y)]
         
-        y = y.dropna()
+        if impute == False:
+            
+            X = X.loc[~np.isnan(y)]
+            
+            y = y.dropna()
+        else:
+            if impute_method is None:
+                raise ValueError("Enter the imputation method, i.e is either linear or spline ..")
+            
+            
+            else:
+                y = y.fillna(y.interpolate(method = impute_method, 
+                                           order= impute_order))
+            
         
         if predictor_selector ==True:
             
@@ -212,7 +225,13 @@ class PredictandTimeseries():
                     
             else:
                 raise ValueError("....selector method not recognized .....")
+            
                 
+            X = X.loc[~np.isnan(y)]  # because the imputation won't fill series of nan for more years (it just interpolate)
+            
+            y = y.dropna()
+            
+            
             self.selector.fit(X, y)
             self.selector.print_selected_features(X)
             

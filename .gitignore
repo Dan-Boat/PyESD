@@ -1,5 +1,10 @@
 /examples/Neckar/.predictors_200
-/examples/Ghana/.predictors_500
+/examples/Ghana/.predictors_200
+/examples/Ghana/correlation_data
+/examples/Ghana/final_cache_Precipitation
+/examples/Ghana/final_cache_Temperature
+/examples/Ghana/experiment_1
+/examples/Ghana/plots
 /examples/Neckar/final_cache_Precipitation
 /examples/Neckar/final_cache_Temperature
 /examples/Neckar/final_cache

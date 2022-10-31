@@ -27,86 +27,72 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
 
 
 
-    #num_of_stations = len(stationnames)
+    num_of_stations = len(stationnames)
     
     #num_of_stations = 1
     
-    #for i in range(num_of_stations):
+    for i in range(num_of_stations):
         
-    stationname = stationnames[1]
-    station_dir = os.path.join(station_datadir, stationname + ".csv")
-    SO = read_station_csv(filename=station_dir, varname=variable)
-    
-    
-    #setting predictors 
-    SO.set_predictors(variable, predictors, predictordir, radius,)
-    
-    #setting standardardizer
-    SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
-                                                                    scaling=False))
-    #setting model
-    
-    if estimator == "Stacking":
-        
-        SO.set_model(variable, method=estimator, ensemble_learning=True, 
-                 estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
-                 predictor_dataset=ERA5Data)
-    else:
+        stationname = stationnames[i]
+        station_dir = os.path.join(station_datadir, stationname + ".csv")
+        SO = read_station_csv(filename=station_dir, varname=variable)
         
         
-        SO.set_model(variable, method=estimator)
-    
-    #fitting model (with predictor selector optioin)
-    
-    selector_method = "Recursive"
-    
-    SO.fit(variable,  from1961to2010, ERA5Data, fit_predictors=True, predictor_selector=True, 
-            selector_method=selector_method , selector_regressor="ARD",
-            cal_relative_importance=False)
-    
-    score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2010, ERA5Data,)
-    
-    score_test = SO.evaluate(variable,  from2010to2013, ERA5Data,)
-    
-    print(score_test)
+        #setting predictors 
+        SO.set_predictors(variable, predictors, predictordir, radius,)
         
-        # ypred_train = SO.predict(variable, from1958to2010, ERA5Data)
+        #setting standardardizer
+        SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+                                                                        scaling=False))
+        #setting model
         
-        # ypred_test = SO.predict(variable, from2011to2020, ERA5Data)
+        if estimator == "Stacking":
+            
+            SO.set_model(variable, method=estimator, ensemble_learning=True, 
+                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2009,
+                     predictor_dataset=ERA5Data)
+        else:
+            
+            
+            SO.set_model(variable, method=estimator, daterange=from1961to2009, predictor_dataset=ERA5Data)
         
-        # y_obs_train = SO.get_var(variable, from1958to2010, anomalies=True)
+        #fitting model (with predictor selector optioin)
         
-        # y_obs_test = SO.get_var(variable, from2011to2020, anomalies=True)
+        selector_method = "Recursive"
         
-        # y_obs_full = SO.get_var(variable, from1958to2020, anomalies=True)
+        SO.fit(variable,  from1961to2009, ERA5Data, fit_predictors=True, predictor_selector=True, 
+                selector_method=selector_method , selector_regressor="ARD",
+                cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
         
+        score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2009, ERA5Data,)
         
-        # predictions = pd.DataFrame({
-        #     "obs_full": y_obs_full,
-        #     "obs_train" : y_obs_train,
-        #     "obs_test": y_obs_test,
-        #     "ERA5 1958-2010" : ypred_train,
-        #     "ERA5 2011-2020" : ypred_test})
+        ypred_train = SO.predict(variable, from1961to2009, ERA5Data)
+        
+        y_obs_train = SO.get_var(variable, from1961to2009, anomalies=True)
         
         
-        # #storing of results
+        predictions = pd.DataFrame({
+            "obs_train" : y_obs_train,
+            "ERA5 1961-2009" : ypred_train})
         
-        # store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
-        # store_csv(stationname, "validation_predictions_" + estimator, ypred_fit, cachedir)
-        # store_pickle(stationname, "test_score_" + estimator, score_test, cachedir)
-        # store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
+        
+        #storing of results
+        
+        store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
+        store_csv(stationname, "validation_predictions_" + estimator, ypred_fit, cachedir)
+        store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
 
 
 
 if __name__ == "__main__":
     
-    cachedir = [cachedir_prec]
+    cachedir = [cachedir_prec, cachedir_temp ]
        
-    variable = ["Precipitation"]
+    variable = ["Precipitation", "Temperature"]
        
-    stationnames = [stationnames_prec]
+    stationnames = [stationnames_prec, stationnames_temp]
        
-    station_datadir = [station_prec_datadir]
+    station_datadir = [station_prec_datadir,station_temp_datadir]
     
     final_estimator = "ExtraTree"
     
@@ -115,14 +101,12 @@ if __name__ == "__main__":
 
     estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
     
-    run_experiment2(variable[0], estimators[3], cachedir[0], stationnames[0], station_datadir[0], 
-                    base_estimators, final_estimator)
     
-    # for i,idx in enumerate(variable):
+    for i,idx in enumerate(variable):
         
-    #     for estimator in estimators:
+        for estimator in estimators:
             
-    #         print("--------- runing model for:", estimator, "-----------")
+            print("--------- runing model for:", estimator, "-----------")
         
-    #         run_experiment2(idx, estimator, cachedir[i], stationnames[i], station_datadir[i], 
-    #                         base_estimators, final_estimator)
+            run_experiment2(idx, estimator, cachedir[i], stationnames[i], station_datadir[i], 
+                            base_estimators, final_estimator)

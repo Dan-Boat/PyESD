@@ -39,8 +39,8 @@ from read_data import *
 
 path_exp1 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment1"
 path_exp2 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2"
-path_exp3 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment3"
-path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/plots"
+path_exp3 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment4"
+path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/plots/experiment4"
 
 
 prec_folder_name = "final_cache_Precipitation"
@@ -325,17 +325,21 @@ def plot_ensemble_timeseries():
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
                      color=black, label="RCP 2.6", ymax=30, ymin=-20, 
-                     ylabel= "Precipitation anomalies [mm/month]", ax=ax1)
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
+                     window=12)
+                     
     
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
                      color=red, label="RCP 4.5", ymax=30, ymin=-20,
-                     ylabel= "Precipitation anomalies [mm/month]", ax=ax2)
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
+                     )
     
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
                      color=blue, label="RCP 8.5", ymax=30, ymin=-20,
-                     ylabel= "Precipitation anomalies [mm/month]", ax=ax3)
+                     ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
+                     )
     
     
     plt.tight_layout(h_pad=0.02)
@@ -494,13 +498,13 @@ def plot_stations_monthly_mean():
 
 
 if __name__ == "__main__":
-    plot_stations()
-    plot_stations_monthly_mean()
+    #plot_stations()
+    #plot_stations_monthly_mean()
     # plot_predictor_selector_metrics()
     # plot_estimators_metrics()
-    #plot_prediction_example(station_num_prec=6, station_num_temp=0)
-    # plot_seasonal_climatologies()
-    # plot_ensemble_timeseries()
+    plot_prediction_example(station_num_prec=6, station_num_temp=0)
+    plot_seasonal_climatologies()
+    plot_ensemble_timeseries()
     # plot_different_projections(variable="Precipitation")
     #plot_different_projections(variable="Temperature")
     #print("--plotting complete --")
