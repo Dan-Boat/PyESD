@@ -16,6 +16,8 @@ import pandas as pd
 from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import StandardScaling, NoStandardizer
 from pyESD.ESD_utils import store_csv, store_pickle
+from pyESD.plot import correlation_heatmap
+from pyESD.plot_utils import apply_style, correlation_data
 
 # relative files import 
 from read_data import *
@@ -28,24 +30,36 @@ radius = 250  #km
 variable = "Precipitation"
 num_of_stations = len(stationnames_prec)
 
-# for i in range(num_of_stations):
+for i in range(num_of_stations):
     
-stationname = stationnames_prec[2]
-station_dir = os.path.join(station_prec_datadir, stationname + ".csv")
+    stationname = stationnames_prec[i]
+    station_dir = os.path.join(station_prec_datadir, stationname + ".csv")
+    
+    SO = read_station_csv(filename=station_dir, varname=variable)
+    
+    # set predictors 
+    SO.set_predictors(variable, predictors, predictordir, radius, 
+                      standardizer=StandardScaling(method="standardscaling"))
+    
+    # set standardizer 
+    SO.set_standardizer(variable, standardizer=StandardScaling(method="standardscaling"))
+    
+    corr = SO.predictor_correlation(variable, from1961to2012, ERA5Data, fit_predictor=True, 
+                             fit_predictand=True, method="pearson")
+    
+    #save values
+    
+    store_csv(stationname, varname="corrwith_predictors", var=corr, cachedir=corr_dir)
+      
+    
+# ploting of correlations
 
-SO = read_station_csv(filename=station_dir, varname=variable)
+df = correlation_data(stationnames_prec, corr_dir, "corrwith_predictors", predictors)
 
-# set predictors 
-SO.set_predictors(variable, predictors, predictordir, radius, 
-                  standardizer=StandardScaling(method="standardscaling"))
+apply_style(fontsize=22, style=None) 
 
-# set standardizer 
-SO.set_standardizer(variable, standardizer=StandardScaling(method="standardscaling"))
-
-corr = SO.predictor_correlation(variable, from1961to2012, ERA5Data, fit_predictor=True, 
-                         fit_predictand=True, method="pearson")
-
-#save values
-
-store_csv(stationname, varname="corrwith_predictors", var=corr, cachedir=corr_dir)
-  
+fig, ax = plt.subplots(1,1, figsize=(20,15))
+                        
+correlation_heatmap(data=df, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
+                        add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=corr_dir,
+                        xlabel="Predictors", ylabel="Stations", fig_name="correlation_prec.svg",)
