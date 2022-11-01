@@ -78,9 +78,11 @@ class PredictandTimeseries():
             self.data_st = self.standardizer.fit_transform(self.data)
             
     def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None,
-                  daterange=None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
+                  daterange=None, predictor_dataset=None, fit_predictors=True, 
+                  scoring=["r2", "neg_root_mean_squared_error"], **predictor_kwargs):
         
         self.cv = cv
+        self.scoring = scoring
         
         if ensemble_learning == True:
             if method not in ["Stacking", "Voting"]:
@@ -92,7 +94,7 @@ class PredictandTimeseries():
             
             regressors = []    
             for i in range(len(estimators)) :
-                regressor = Regressors(method=estimators[i], cv=self.cv)
+                regressor = Regressors(method=estimators[i], cv=self.cv, scoring=self.scoring)
                 
                 regressor.set_model()
                 
@@ -118,10 +120,11 @@ class PredictandTimeseries():
                 
             
             self.model = EnsembleRegressor(estimators=regressors, cv=self.cv, method=method, 
-                                           final_estimator_name=final_estimator_name)
+                                           final_estimator_name=final_estimator_name, 
+                                           scoring=self.scoring)
         else:
             
-            self.model = Regressors(method=method, cv=self.cv)
+            self.model = Regressors(method=method, cv=self.cv, scoring=self.scoring)
             self.model.set_model()
             
     

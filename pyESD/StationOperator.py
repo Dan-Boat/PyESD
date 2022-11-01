@@ -83,12 +83,13 @@ class StationOperator():
         
         
     def set_model(self, variable, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None, 
-                  daterange =None, predictor_dataset=None, fit_predictors=True, **predictor_kwargs):
+                  daterange =None, predictor_dataset=None, fit_predictors=True, 
+                  scoring=["r2", "neg_root_mean_squared_error"], **predictor_kwargs):
         
         
         self.variables[variable].set_model(method, ensemble_learning=ensemble_learning, estimators=estimators, cv=cv, final_estimator_name=final_estimator_name, 
                                            daterange =daterange , predictor_dataset=predictor_dataset, 
-                                           fit_predictors=fit_predictors, **predictor_kwargs)
+                                           fit_predictors=fit_predictors, scoring=scoring, **predictor_kwargs)
         
         
     
