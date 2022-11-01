@@ -118,10 +118,13 @@ class HyperparameterOptimize(MetaAttributes):
 
 class Regressors(MetaAttributes):
     
-    def __init__(self, method, cv=None, hyper_method=None):
+    def __init__(self, method, cv=None, hyper_method=None, scoring=None):
         self.method = method
         self.cv = cv
         self.hyper_method = hyper_method
+        self.scoring = scoring 
+        
+        
         if self.cv == None:
             
             print(".....Using monthly bootstrapper as default splitter....")
@@ -132,9 +135,10 @@ class Regressors(MetaAttributes):
         if hyper_method == None:
             self.hyper_method = "GridSearchCV"
             
-            
-            
         
+        if scoring == None:
+            self.scoring= ["r2", "neg_root_mean_squared_error"]
+            
         
     def set_model(self):
         
@@ -239,10 +243,10 @@ class Regressors(MetaAttributes):
         return self.estimator.score(X,y)
     
     def cross_val_score(self, X, y):
-        return cross_val_score(self.estimator, X, y, cv=self.cv)
+        return cross_val_score(self.estimator, X, y, cv=self.cv, scoring=self.scoring)
     
     def cross_validate(self, X, y):
-        return cross_validate(self.estimator, X, y, scoring=["r2", "neg_root_mean_squared_error"],
+        return cross_validate(self.estimator, X, y, scoring=self.scoring,
                                 n_jobs=2, verbose=0, cv=self.cv)
     
     def cross_val_predict(self, X, y):

@@ -134,7 +134,7 @@ def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname
     return df, df_std
     
 
-def correlation_data(stationnames, path_to_data, filename, predictors):
+def correlation_data(stationnames, path_to_data, filename, predictors, use_id=False):
     
     df = pd.DataFrame(index=stationnames, columns=predictors)
     
@@ -144,8 +144,10 @@ def correlation_data(stationnames, path_to_data, filename, predictors):
         df.iloc[i] = load_csv(idx, filename, path_to_data)
     
     df = df.astype(float)
-    df.reset_index(drop=True, inplace=True)
-    df.index += 1
+    
+    if use_id == True:
+        df.reset_index(drop=True, inplace=True)
+        df.index += 1
     
     return df 
 
