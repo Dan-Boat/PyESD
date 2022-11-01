@@ -19,13 +19,15 @@ except:
 class EnsembleRegressor():
     
     def __init__(self, estimators, final_estimator_name=None, cv=10, n_jobs=-1, passthrough=False, method="Stacking",
-                 ):
+                 scoring=None):
         self.estimators = estimators 
         self.final_estimator_name = final_estimator_name 
         self.cv = cv
         self.n_jobs = n_jobs
         self.passthrough = passthrough
         self.method = method
+        self.scoring = scoring
+        
         
         if self.final_estimator_name == None:
             regressor = Regressors(method="RandomForest", cv=10)
@@ -49,6 +51,12 @@ class EnsembleRegressor():
             
         else:
             raise ValueError("The ensembles are Stacking Generalization or Voting, check the name of the method")
+            
+        
+        if scoring == None:
+            self.scoring= ["r2", "neg_root_mean_squared_error"]
+            
+        
         
     def fit(self, X,y):
         return self.ensemble.fit(X,y)
@@ -76,10 +84,10 @@ class EnsembleRegressor():
         return y_avg
     
     def cross_val_score(self, X, y):
-        return cross_val_score(self.ensemble, X, y, cv=self.cv)
+        return cross_val_score(self.ensemble, X, y, cv=self.cv, scoring=self.scoring)
     
     def cross_validate(self, X, y):
-        return cross_validate(self.ensemble, X, y, scoring=["r2", "neg_root_mean_squared_error"],
+        return cross_validate(self.ensemble, X, y, scoring=self.scoring,
                                 n_jobs=2, verbose=0, cv=self.cv)
     
     def cross_val_predict(self, X, y):
