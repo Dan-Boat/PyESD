@@ -14,6 +14,7 @@ from collections import OrderedDict
 from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
+from pyESD.splitter import TimeSeriesSplit, MonthlyBooststrapper, KFold, LeaveOneOut
 
 #relative imports 
 from read_data import *
@@ -21,7 +22,7 @@ from settings import *
 
 
 def run_test(variable, regressor, selector_method, cachedir, stationnames,
-                    station_datadir):
+                    station_datadi, standardizer_method=None):
     
     num_of_stations = len(stationnames)
     
@@ -43,30 +44,43 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         SO.set_predictors(variable, predictors, predictordir, radius,)
         
         #setting standardardizer
-        SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
-                                                                        scaling=False))
+        
+        if standardizer_method is None:
+            SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+                                                                            scaling=False))
+            
+        else: 
+            
+            SO.set_standardizer(variable, standardizer= standardizer_method)
+            
         #setting model
-        SO.set_model(variable, method=regressor)
+        scoring = ["neg_root_mean_squared_error",
+                   "neg_mean_absolute_percentage_error", "neg_mean_absolute_error"]
         
-        #check predictor correlation
-        corr = SO.predictor_correlation(variable, from1961to2009, ERA5Data, fit_predictors=True, fit_predictand=True, 
-                                  method="pearson")
+        # SO.set_model(variable, method=regressor, cv=TimeSeriesSplit(n_splits=30,
+        #                                                             test_size=1, gap=12), 
+        #               scoring=scoring)
         
+        # SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), scoring=scoring)
+        
+        SO.set_model(variable, method=regressor, cv=LeaveOneOut(), scoring=scoring)
+        
+    
         #fitting model (with predictor selector optioin)
         
         if selector_method == "Recursive":
-            SO.fit(variable, from1961to2009, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
                     selector_method=selector_method , selector_regressor="ARD", 
                     cal_relative_importance=False)
             
         elif selector_method == "TreeBased":
         
-            SO.fit(variable, from1961to2009, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
                    selector_method=selector_method , selector_regressor="RandomForest",)
         
         elif selector_method == "Sequential":
         
-            SO.fit(variable, from1961to2009, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
                    selector_method=selector_method , selector_regressor="ARD", num_predictors=10, 
                    selector_direction="forward")
         else:
@@ -78,7 +92,7 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         
         # training estimate for the same model
         
-        score, ypred = SO.cross_validate_and_predict(variable, from1961to2009, ERA5Data)
+        score, ypred = SO.cross_validate_and_predict(variable, from1961to2012, ERA5Data)
         
         # storing results
         
@@ -89,31 +103,31 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         
         store_pickle(stationname, "validation_score_" + selector_method, score, cachedir)
         
-        store_csv(stationname, "corrwith_predictors_", corr, cachedir)
         
         
         
 if __name__ == "__main__":
     
-    
+        selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/predictor_selection"
+        
         regressor = "RandomForest"
         
-        cachedir = [cachedir_prec]#[cachedir_temp, cachedir_prec]
+        cachedir =selector_dir
         
-        variable = ["Precipitation"]#["Temperature", "Precipitation"]
+        variable = "Precipitation"
         
-        stationnames = [stationnames_prec]#[stationnames_temp, stationnames_prec]
+        stationnames = stationnames_prec
         
-        station_datadir = [station_prec_datadir]#[station_temp_datadir, station_prec_datadir]
+        station_datadir = station_prec_datadir
         
         
-        for i,idx in enumerate(variable):
+        
             
-            selector_methods = ["Recursive", "TreeBased", "Sequential"]
+        selector_methods = ["Recursive", "TreeBased", "Sequential"]
         
-            for selector_method in selector_methods:
-            
-                print("------ runing for model: ", selector_method, "----------")
-            
-                run_test(idx, regressor, selector_method, cachedir[i], stationnames[i], 
-                                station_datadir[i])
+        for selector_method in selector_methods:
+        
+            print("------ runing for model: ", selector_method, "----------")
+        
+            run_test(variable, regressor, selector_method, cachedir, stationnames, 
+                            station_datadir)
