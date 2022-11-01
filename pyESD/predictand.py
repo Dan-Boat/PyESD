@@ -325,11 +325,14 @@ class PredictandTimeseries():
             
             
         # write code to work for every scoring variable
+
         scores = {"test_r2": np.mean(val_score["test_r2"]),
                   "test_r2_std": np.std(val_score["test_r2"]),
                   "train_r2": fit_score,
                   "test_rmse": -np.mean(val_score["test_neg_root_mean_squared_error"]),
-                  "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]), 
+                  "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]),
+                  "test_mae_precent": -np.mean(val_score["test_neg_mean_absolute_percentage_error"]),
+                  "test_mae_precent_std": np.std(val_score["test_neg_mean_absolute_percentage_error"]),
                   }
         
         y_pred = pd.DataFrame({"obs": y,
