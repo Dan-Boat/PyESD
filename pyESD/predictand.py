@@ -299,7 +299,8 @@ class PredictandTimeseries():
         return yhat
     
     
-    def cross_validate_and_predict(self, daterange, predictor_dataset, fit_predictand=True, **predictor_kwargs):
+    def cross_validate_and_predict(self, daterange, predictor_dataset, fit_predictand=True, return_cv_scores=False, 
+                                   **predictor_kwargs):
         
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
@@ -351,7 +352,12 @@ class PredictandTimeseries():
         
         y_pred = pd.DataFrame({"obs": y,
                                "prediction" : y_pred})
-        return scores, y_pred
+        
+        if return_cv_scores == True:
+            return scores, y_pred, val_score
+        
+        else:
+            return scores, y_pred
     
     
     def evaluate(self, daterange, predictor_dataset, fit_predictand=True, **predictor_kwargs):
@@ -430,8 +436,8 @@ class PredictandTimeseries():
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
             
-        if not hasattr(self.selector, "feature_importance"):
-            raise TypeError("the feature selector must be treebased")
+        # if not hasattr(self.selector, "feature_importance"):
+        #     raise TypeError("the feature selector must be treebased")
             
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         
@@ -451,8 +457,8 @@ class PredictandTimeseries():
         if not hasattr(self, "selector"):
             raise ValueError("Predictor selection must be defined when fitting the model")
             
-        if not hasattr(self.selector.estimator, "feature_importances_"):
-            raise TypeError("the feature selector must be treebased")
+        # if not hasattr(self.selector.estimator, "feature_importances_"):
+        #     raise TypeError("the feature selector must be treebased")
             
         X = self._get_predictor_data(daterange, predictor_dataset, **predictor_kwargs)
         

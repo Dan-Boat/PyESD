@@ -24,6 +24,8 @@ from predictor_settings import *
 from read_data import *
 from read_data import *
 
+path_to_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/model_selection"
+path_to_plot = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/plots"
 
 def plot_stations():
     
@@ -38,7 +40,7 @@ def plot_stations():
     
     
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    apply_style(fontsize=22, style=None, linewidth=3)
     
     fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20, 15))
     
@@ -50,4 +52,6 @@ def plot_stations():
     
     plt.tight_layout()
     
-    plt.savefig(os.path.join(path_to_save, "Fig1a.svg"), bbox_inches="tight", dpi=300)
+    plt.savefig(os.path.join(path_to_save, "stations.svg"), bbox_inches="tight", dpi=300)
+    
+    plot_stations()

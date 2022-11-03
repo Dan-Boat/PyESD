@@ -28,9 +28,9 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
 
 
 
-    num_of_stations = len(stationnames)
+    #num_of_stations = len(stationnames)
     
-    #num_of_stations = 1
+    num_of_stations = 10
     
     for i in range(num_of_stations):
         
@@ -63,20 +63,28 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
             
             SO.set_model(variable, method=estimator, ensemble_learning=True, 
                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2012,
-                     predictor_dataset=ERA5Data, cv=KFold(n_splits=10), scoring=scoring)
+                     predictor_dataset=ERA5Data, cv=TimeSeriesSplit(n_splits=30, test_size=5, gap=12), 
+                                   scoring=scoring)
         else:
             
             
             SO.set_model(variable, method=estimator, daterange=from1961to2012, 
-                         predictor_dataset=ERA5Data, cv=KFold(n_splits=10), scoring=scoring)
+                         predictor_dataset=ERA5Data, cv=TimeSeriesSplit(n_splits=30, test_size=5, gap=12), 
+                                       scoring=scoring)
         
         #fitting model (with predictor selector optioin)
         
-        selector_method = "Recursive"
+        selector_method = "TreeBased"
         
         SO.fit(variable,  from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                selector_method=selector_method , selector_regressor="ARD",
-                cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
+                selector_method=selector_method , selector_regressor="RandomForest",
+                cal_relative_importance=False, impute=False, impute_method="spline", impute_order=5)
+        
+        
+        if estimator == "RandomForest":
+            importance = SO.tree_based_feature_permutation_importance(variable, from1961to2012, ERA5Data, fit_predictors=True, 
+                                                                      plot=False)
+            
         
         score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2012, ERA5Data,)
         
@@ -95,6 +103,9 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
         store_csv(stationname, "validation_predictions_" + estimator, ypred_fit, cachedir)
         store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
+        
+        if estimator == "RandomForest":
+            store_pickle(stationname, "importance_", importance, cachedir)
 
 
 

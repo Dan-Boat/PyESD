@@ -24,9 +24,9 @@ from settings import *
 def run_test(variable, regressor, selector_method, cachedir, stationnames,
                     station_datadi, standardizer_method=None):
     
-    num_of_stations = len(stationnames)
+    #num_of_stations = len(stationnames)
     
-    #num_of_stations = 1
+    num_of_stations = 10
     
 
 
@@ -55,15 +55,15 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
             
         #setting model
         scoring = ["neg_root_mean_squared_error",
-                   "neg_mean_absolute_percentage_error", "neg_mean_absolute_error"]
+                   "r2", "neg_mean_absolute_error"]
         
-        # SO.set_model(variable, method=regressor, cv=TimeSeriesSplit(n_splits=30,
-        #                                                             test_size=1, gap=12), 
-        #               scoring=scoring)
+        SO.set_model(variable, method=regressor, cv=TimeSeriesSplit(n_splits=30,
+                                                                    test_size=2, gap=12), 
+                      scoring=scoring)
         
         # SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), scoring=scoring)
         
-        SO.set_model(variable, method=regressor, cv=LeaveOneOut(), scoring=scoring)
+        #SO.set_model(variable, method=regressor, cv=LeaveOneOut(), scoring=scoring)
         
     
         #fitting model (with predictor selector optioin)

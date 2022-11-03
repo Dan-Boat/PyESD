@@ -142,10 +142,11 @@ class StationOperator():
     
     
     def cross_validate_and_predict(self, variable, daterange , predictor_dataset, fit_predictand=True,
-                                   **predictor_kwargs):
+                                   return_cv_scores=False, **predictor_kwargs):
         
         return self.variables[variable].cross_validate_and_predict(daterange , predictor_dataset, 
                                                                    fit_predictand=fit_predictand,
+                                                                   return_cv_scores=return_cv_scores, 
                                                                     **predictor_kwargs)
     
     def evaluate(self, variable, daterange, predictor_dataset,  fit_predictand=True, **predictor_kwargs):

@@ -145,7 +145,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
 
 def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
             varname="test_r2", filename="validation_score_",
-            fig_path=None, fig_name=None, colors=None, patch_artist=False):
+            fig_path=None, fig_name=None, colors=None, patch_artist=False, rot=45):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
@@ -161,7 +161,7 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
                }
     
     
-    boxplot = scores.plot(kind= "box", rot=45, ax=ax, fontsize=20, color= color, sym="+b", grid=False,
+    boxplot = scores.plot(kind= "box", rot=rot, ax=ax, fontsize=20, color= color, sym="+b", grid=False,
                 widths=0.9, notch=False, patch_artist=patch_artist, return_type="dict")
     
     
