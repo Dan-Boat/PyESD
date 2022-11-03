@@ -115,7 +115,7 @@ def apply_style(fontsize=20, style=None, linewidth=2):
     
     
 def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname_std="test_r2_std", 
-                 filename="validation_score_"):
+                 filename="validation_score_", use_id=False):
     
     df = pd.DataFrame(index=stationnames, columns=methods,)
     df_std = pd.DataFrame(index=stationnames, columns=methods,)
@@ -123,13 +123,16 @@ def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname
     for method in methods:
         scores = load_all_stations(filename + method, path_to_data, stationnames)
         df[method] = scores[varname]
-        df_std[method] = scores[varname_std]
         
+        if varname_std is not None:
+            df_std[method] = scores[varname_std]
         
-    df.reset_index(drop=True, inplace=True)
-    df.index += 1
-    df_std.reset_index(drop=True, inplace=True)
-    df_std.index += 1
+    if use_id == True:
+        
+        df.reset_index(drop=True, inplace=True)
+        df.index += 1
+        df_std.reset_index(drop=True, inplace=True)
+        df_std.index += 1
     
     return df, df_std
     
@@ -226,7 +229,7 @@ def resample_monthly(data, daterange):
 
 
 def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
-                  method):
+                  method, use_id=False):
 
     columns = ["DJF", "MAM", "JJA", "SON", "Annum"]
     
@@ -247,14 +250,16 @@ def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
         for j,season in enumerate(columns):
             df_stations.loc[stationname][season] = means[j]
     
-    df_stations.reset_index(drop=True, inplace=True)
-    df_stations.index +=1
-    df_stations = df_stations.T.astype(float)
+    
+    if use_id == True:
+        df_stations.reset_index(drop=True, inplace=True)
+        df_stations.index +=1
+        df_stations = df_stations.T.astype(float)
     
     return df_stations
              
 def monthly_mean(stationnames, path_to_data, filename, daterange, id_name,
-                 method):
+                 method, use_id=False):
     
     import calendar	
     month_names = [calendar.month_abbr[im+1] for im in np.arange(12)]
@@ -269,10 +274,11 @@ def monthly_mean(stationnames, path_to_data, filename, daterange, id_name,
         
         for j,month in enumerate(month_names):
             df_stations.loc[stationname][month] = month_means[j]
-            
-    df_stations.reset_index(drop=True, inplace=True)
-    df_stations.index +=1
-    df_stations = df_stations.T.astype(float)
+    
+    if use_id == True:
+        df_stations.reset_index(drop=True, inplace=True)
+        df_stations.index +=1
+        df_stations = df_stations.T.astype(float)
     
     return df_stations
         

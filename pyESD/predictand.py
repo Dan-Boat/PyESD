@@ -332,8 +332,8 @@ class PredictandTimeseries():
                       "train_r2": fit_score,
                       "test_rmse": -np.mean(val_score["test_neg_root_mean_squared_error"]),
                       "test_rmse_std": np.std(val_score["test_neg_root_mean_squared_error"]),
-                      "test_mae_precent": -np.mean(val_score["test_neg_mean_absolute_percentage_error"]),
-                      "test_mae_precent_std": np.std(val_score["test_neg_mean_absolute_percentage_error"]),
+                      "test_mae": -np.mean(val_score["test_neg_mean_absolute_error"]),
+                      "test_mae_std": np.std(val_score["test_neg_mean_absolute_error"]),
                       }
             
         else:

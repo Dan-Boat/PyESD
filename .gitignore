@@ -1,6 +1,8 @@
 /examples/Neckar/.predictors_200
 /examples/Ghana/.predictors_200
 /examples/Ghana/correlation_data
+/examples/Ghana/model_selection
+/examples/Ghana/predictor_selection
 /examples/Ghana/final_cache_Precipitation
 /examples/Ghana/final_cache_Temperature
 /examples/Ghana/experiment_1
@@ -18,4 +20,4 @@
 modules.txt
 *.predictors_500
 *.predictors_200
-
+*__pycache__

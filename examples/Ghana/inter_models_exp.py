@@ -15,6 +15,7 @@ from collections import OrderedDict
 from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
+from pyESD.splitter import TimeSeriesSplit, MonthlyBooststrapper, KFold, LeaveOneOut
 
 #relative imports 
 from read_data import *
@@ -23,7 +24,7 @@ from settings import *
 
 def run_experiment2(variable, estimator, cachedir, stationnames, 
                     station_datadir, base_estimators=None, 
-                    final_estimator=None):
+                    final_estimator=None, standardizer_method=None):
 
 
 
@@ -42,38 +43,51 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         SO.set_predictors(variable, predictors, predictordir, radius,)
         
         #setting standardardizer
-        SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
-                                                                        scaling=False))
+        if standardizer_method is None:
+            SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+                                                                            scaling=False))
+            
+        else: 
+            
+            SO.set_standardizer(variable, standardizer= standardizer_method)
+            
+    
         #setting model
+        
+        #setting model
+        scoring = ["neg_root_mean_squared_error",
+                   "r2", "neg_mean_absolute_error"]
+        
         
         if estimator == "Stacking":
             
             SO.set_model(variable, method=estimator, ensemble_learning=True, 
-                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2009,
-                     predictor_dataset=ERA5Data)
+                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2012,
+                     predictor_dataset=ERA5Data, cv=KFold(n_splits=10), scoring=scoring)
         else:
             
             
-            SO.set_model(variable, method=estimator, daterange=from1961to2009, predictor_dataset=ERA5Data)
+            SO.set_model(variable, method=estimator, daterange=from1961to2012, 
+                         predictor_dataset=ERA5Data, cv=KFold(n_splits=10), scoring=scoring)
         
         #fitting model (with predictor selector optioin)
         
         selector_method = "Recursive"
         
-        SO.fit(variable,  from1961to2009, ERA5Data, fit_predictors=True, predictor_selector=True, 
+        SO.fit(variable,  from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
                 selector_method=selector_method , selector_regressor="ARD",
                 cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
         
-        score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2009, ERA5Data,)
+        score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2012, ERA5Data,)
         
-        ypred_train = SO.predict(variable, from1961to2009, ERA5Data)
+        ypred_train = SO.predict(variable, from1961to2012, ERA5Data)
         
-        y_obs_train = SO.get_var(variable, from1961to2009, anomalies=True)
+        y_obs_train = SO.get_var(variable, from1961to2012, anomalies=True)
         
         
         predictions = pd.DataFrame({
             "obs_train" : y_obs_train,
-            "ERA5 1961-2009" : ypred_train})
+            "ERA5 1961-2012" : ypred_train})
         
         
         #storing of results
@@ -86,13 +100,15 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
 
 if __name__ == "__main__":
     
-    cachedir = [cachedir_prec, cachedir_temp ]
+    
+    selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/model_selection"
+    cachedir = selector_dir
        
-    variable = ["Precipitation", "Temperature"]
+    variable = "Precipitation"
        
-    stationnames = [stationnames_prec, stationnames_temp]
+    stationnames = stationnames_prec
        
-    station_datadir = [station_prec_datadir,station_temp_datadir]
+    station_datadir = station_prec_datadir
     
     final_estimator = "ExtraTree"
     
@@ -102,11 +118,10 @@ if __name__ == "__main__":
     estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
     
     
-    for i,idx in enumerate(variable):
         
-        for estimator in estimators:
-            
-            print("--------- runing model for:", estimator, "-----------")
+    for estimator in estimators:
         
-            run_experiment2(idx, estimator, cachedir[i], stationnames[i], station_datadir[i], 
-                            base_estimators, final_estimator)
+        print("--------- runing model for:", estimator, "-----------")
+    
+        run_experiment2(variable, estimator, cachedir, stationnames, station_datadir, 
+                        base_estimators, final_estimator)
