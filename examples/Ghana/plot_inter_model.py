@@ -36,19 +36,19 @@ def plot_estimators_metrics():
     
     colors = [grey, purple, lightbrown, tomato, skyblue, lightgreen, gold]
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    apply_style(fontsize=22, style=None, linewidth=2)
     
     fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(20, 15), sharex=False)
     
     
     boxplot(regressors, stationnames_prec, path_to_data, ax=ax1,  
                 varname="test_mae", filename="validation_score_", xlabel="Estimators",
-                ylabel="CV MAE", colors = colors, patch_artist=(True))
+                ylabel="CV MAE", colors = colors, patch_artist=(True),rot=90)
     
     
     plt.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-    plt.savefig(os.path.join(path_to_save, "inter_model_metrics.svg"), bbox_inches="tight", dpi=300)
+    plt.savefig(os.path.join(path_to_plot, "inter_model_metrics.svg"), bbox_inches="tight", dpi=300)
     
     
 plot_estimators_metrics()

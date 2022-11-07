@@ -12,48 +12,88 @@ from pathlib import Path as p
 
 data_path = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Stacked_Data/"
 path_to_store = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/preprocessed"
-filename = "ABE.csv"
-storename = "Abetifi"
-varname  = "Temperature"
-use_colums = ["Time","Tmean"]
 
-daterange = pd.date_range(start="1961-01-01", end="2013-12-01", freq="MS")
+path_to_data_new = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/"
+path_to_store_new = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/preprocessed"
 
-df_to_store = pd.DataFrame(columns = ["Time", varname])
-df_to_store["Time"] = daterange
-df_to_store = df_to_store.set_index(["Time"], drop=True)
+daterange_monthly = pd.date_range(start="1981-01-01", end="2018-12-01", freq="MS")
+
+daterange_daily = pd.date_range(start="1981-01-01", end="2018-12-01", freq="D")
+
+file_name = "stack_monthly_Ghana_rainfall_stations.csv"
+
+file_name_daily = "stack_daily_Ghana_rainfall_stations.csv"
+
+data_month = pd.read_csv(os.path.join(path_to_data_new, file_name))
+
+data_daily = pd.read_csv(os.path.join(path_to_data_new, file_name_daily), parse_dates=["Time"], 
+                         dayfirst=True)
 
 
+# reindex 
+df = data_daily.set_index(["Time"], drop=True)
 
-glob_name = "*.csv"
+df = df.replace(999, np.nan)
+df = df.replace(np.nan, -9999)
 
-for csv in p(data_path).glob(glob_name):
+#extract range
+colum_names = df.columns.values.tolist()
 
+
+# loop through all the list and extract the stations to store
+
+for i,station in enumerate(colum_names):
     
-    print(csv.name)
+    data_stn = df[station]
+    data_stn.to_csv(os.path.join(path_to_store_new, station + ".csv"))
 
-    # df_stats = df.describe()
-    # df_nans = df.isna().sum()
 
-    df = pd.read_csv(csv, usecols=use_colums,
-                     parse_dates=["Time"], dayfirst=True)
+
+# extract values, replace 999 or assert not more than 1000, resample with skipna
+
+
+
+def process_data_stacked(path_to_data, path_to_store):
+    
+    varname  = "Temperature"
+    use_colums = ["Time","Tmean"]
+
+    daterange = pd.date_range(start="1961-01-01", end="2013-12-01", freq="MS")
+    
+    df_to_store = pd.DataFrame(columns = ["Time", varname])
+    df_to_store["Time"] = daterange
+    df_to_store = df_to_store.set_index(["Time"], drop=True)
     
     
-    df = df.set_index(["Time"], drop=True)
     
-    # select the data that is part of the dates
-    df = df.loc[daterange[0]:daterange[-1]]
+    glob_name = "*.csv"
     
+    for csv in p(data_path).glob(glob_name):
     
-    df_to_store[varname][df.index] = df["Tmean"][df.index] 
-    
-    if varname == "Precipitation":
-        df_to_store = df_to_store.replace(np.nan, -9999)
-    
-    elif varname == "Temperature":
-        df_to_store = df_to_store.replace(np.nan, -8888)
         
+        print(csv.name)
     
+        # df_stats = df.describe()
+        # df_nans = df.isna().sum()
     
-    df_to_store.to_csv(os.path.join(path_to_store, csv.name), index=True)    
+        df = pd.read_csv(csv, usecols=use_colums,
+                         parse_dates=["Time"], dayfirst=True)
+        
+        
+        df = df.set_index(["Time"], drop=True)
+        
+        # select the data that is part of the dates
+        df = df.loc[daterange[0]:daterange[-1]]
+        
+        
+        df_to_store[varname][df.index] = df["Tmean"][df.index] 
+        
+        if varname == "Precipitation":
+            df_to_store = df_to_store.replace(np.nan, -9999)
+        
+        elif varname == "Temperature":
+            df_to_store = df_to_store.replace(np.nan, -8888)
+            
+        
+        df_to_store.to_csv(os.path.join(path_to_store, csv.name), index=True)    
 

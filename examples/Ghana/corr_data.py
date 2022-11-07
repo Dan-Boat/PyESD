@@ -27,7 +27,7 @@ from settings import *
 #directories
 corr_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/correlation_data"
 
-radius = 250  #km
+radius = 50  #km
 variable = "Precipitation"
 
 def generate_correlation():
@@ -49,10 +49,16 @@ def generate_correlation():
         
         corr = SO.predictor_correlation(variable, from1961to2012, ERA5Data, fit_predictor=True, 
                                  fit_predictand=True, method="pearson")
+        # get the time series
+        
+        y_obs = SO.get_var(variable, from1961to2012, anomalies=False)
+        
+        predictors_obs = SO._get_predictor_data(variable, from1961to2012, ERA5Data, fit_predictors=True,)
         
         #save values
-        
+        store_csv(stationname, varname="obs", var=y_obs, cachedir=corr_dir)
         store_csv(stationname, varname="corrwith_predictors", var=corr, cachedir=corr_dir)
+        store_csv(stationname, varname="predictors_data", var=predictors_obs, cachedir=corr_dir)
           
     
 # ploting of correlations
