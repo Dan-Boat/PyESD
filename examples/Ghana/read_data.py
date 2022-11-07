@@ -22,7 +22,7 @@ radius = 50 #km
 # ======================
             
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
-station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Precipitation/processed"
+station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/processed/monthly"
 station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/processed"
 
 predictordir = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius)))

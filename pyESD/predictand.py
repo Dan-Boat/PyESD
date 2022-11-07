@@ -20,6 +20,7 @@ try:
     from models import Regressors
     from ensemble_models import EnsembleRegressor
     from metrics import Evaluate
+    from MLR_model import BootstrappedForwardSelection, MultipleLSRegression
     
 except:
     from .standardizer import MonthlyStandardizer, NoStandardizer
@@ -79,7 +80,7 @@ class PredictandTimeseries():
             
     def set_model(self, method, ensemble_learning=False, estimators=None, cv=10, final_estimator_name=None,
                   daterange=None, predictor_dataset=None, fit_predictors=True, 
-                  scoring=["r2", "neg_root_mean_squared_error"], **predictor_kwargs):
+                  scoring=["r2", "neg_root_mean_squared_error"], MLR_learning=False, **predictor_kwargs):
         
         self.cv = cv
         self.scoring = scoring
@@ -122,6 +123,10 @@ class PredictandTimeseries():
             self.model = EnsembleRegressor(estimators=regressors, cv=self.cv, method=method, 
                                            final_estimator_name=final_estimator_name, 
                                            scoring=self.scoring)
+        
+        elif MLR_learning == True:
+            self.model = BootstrappedForwardSelection(MultipleLSRegression(), cv=self.cv)
+            
         else:
             
             self.model = Regressors(method=method, cv=self.cv, scoring=self.scoring)
