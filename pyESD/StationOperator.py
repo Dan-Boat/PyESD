@@ -182,6 +182,40 @@ class StationOperator():
     
     
     
+    def climate_score(self, variable, fit_period, score_period, predictor_dataset,
+              **predictor_kwargs):
+        """
+        Calculate the climate score of a fitted model for the given variable.
+
+        Parameters
+        ----------
+        variable : string
+            Variable name. "Temperature" or "Precipitation"
+        fit_period : pd.DatetimeIndex
+            Range of data that should will be used for creating the reference prediction.
+        score_period : pd.DatetimeIndex
+            Range of data for that the prediction score is evaluated
+        predictor_dataset : stat_downscaling_tools.Dataset
+            The dataset that should be used to calculate the predictors
+        predictor_kwargs : keyword arguments
+            These arguments are passed to the predictor's get function
+
+        Returns
+        -------
+        cscore : double
+            Climate score (similar to rho squared). 1 for perfect fit, 0 for no
+            skill, negative for even worse skill than mean prediction.
+        """
+        return self.variables[variable].climate_score(fit_period, score_period, predictor_dataset,
+                                                      **predictor_kwargs)
+    
+    
+    def get_explained_variance(self, variable):
+        """
+        If the model is fitted and has the attribute ``explained_variance``,
+        returns it, otherwise returns an array of zeros.
+        """
+        return self.variables[variable].explained_variance_predictors
     
     
     def save(self, directory=None, fname=None):

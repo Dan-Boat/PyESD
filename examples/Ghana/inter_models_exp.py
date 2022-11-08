@@ -21,6 +21,10 @@ from pyESD.splitter import TimeSeriesSplit, MonthlyBooststrapper, KFold, LeaveOn
 from read_data import *
 from settings import *
 
+# extract full csv results, use climate score also, add ols model, predict_for 2012_to2017, check the explained variance, 
+#use stacking but also predict for all and estimate the mean for comparing
+
+
 
 def run_experiment2(variable, estimator, cachedir, stationnames, 
                     station_datadir, base_estimators=None, 

@@ -29,6 +29,8 @@ path_to_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Gh
 path_to_plot = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/plots"
 shape_file_dir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Ghana_ShapeFile"
 
+station_info = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/processed/monthly/stationnames.csv"
+
 def plot_stations():
     
     df_prec_sm = seasonal_mean(stationnames_prec, path_to_data, filename="predictions_", 
@@ -60,7 +62,30 @@ def plot_stations():
 # ploting the locations of stations 
 data = gpd.read_file(shape_file_dir)
 
-fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 15))
+apply_style(fontsize=24, style=None, linewidth=2)
+fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(24, 16))
 
 data.boundary.plot(ax=ax, color="black", alpha=0.8, linewidth=2)
-data.plot(ax=ax, column="REGION", cmap="tab20", alpha=0.7, legend=True)
+data.plot(ax=ax, column="REGION", cmap="tab20", alpha=0.7, legend=True,
+          legend_kwds={"loc":"upper right", "fontsize": 18, "bbox_to_anchor":(1.15, 0.96)}) #add bbhox anchor to put it outside the fig
+
+df_info = pd.read_csv(station_info)
+
+gdf = gpd.GeoDataFrame(df_info, geometry=gpd.points_from_xy(x=df_info.Longitude, y=df_info.Latitude))
+
+gdf.plot(ax=ax, color="black", markersize=50)
+
+for x, y, label in zip(gdf.geometry.x, gdf.geometry.y, gdf.Name):
+    ax.annotate(label, xy=(x, y), xytext=(3, 3), textcoords="offset points", color="black", fontsize=22, 
+                fontweight="bold")
+
+ax.set_ylabel("Latitude [°N]", fontweight="bold", fontsize=20)
+ax.grid(True, linestyle="--", color="grey")
+
+ax.set_xlabel("Longitude [°E]", fontweight="bold", fontsize=20)
+plt.tight_layout()
+plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+plt.savefig(os.path.join(path_to_plot, "stations_map.svg"), bbox_inches="tight", format= "svg", dpi=500)
+
+
+

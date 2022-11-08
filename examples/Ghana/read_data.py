@@ -16,7 +16,7 @@ import numpy as np
 from pyESD.ESD_utils import Dataset
 from pyESD.Weatherstation import read_weatherstationnames
 
-radius = 50 #km
+radius = 150 #km
 
 # DEFINING PATHS TO DATA
 # ======================

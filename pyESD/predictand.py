@@ -252,7 +252,12 @@ class PredictandTimeseries():
         else:
             self.model.fit(X, y)
             
-            
+        # explained variance for OLS model
+        if hasattr(self.model, "regressor"):
+            if hasattr(self.model.regressor, "explained_variances"):
+                self.explained_variance_predictors = self.model.regressor.explained_variances
+                
+                
             
         if cal_relative_importance == True:
             
@@ -477,7 +482,54 @@ class PredictandTimeseries():
         return self.selector.feature_importance(X,y, plot=plot)
     
     
-    
+    def climate_score(self, fit_period, score_period, predictor_dataset, **predictor_kwargs):
+        """
+        How much better the prediction for the given period is then the
+        annual mean.
+
+        Parameters
+        ----------
+        fit_period : pd.DatetimeIndex
+            Range of data that should will be used for creating the reference prediction.
+        score_period : pd.DatetimeIndex
+            Range of data for that the prediction score is evaluated
+        predictor_dataset : stat_downscaling_tools.Dataset
+            The dataset that should be used to calculate the predictors
+        predictor_kwargs : keyword arguments
+            These arguments are passed to the predictor's get function
+
+        Returns
+        -------
+        cscore : double
+            Climate score (similar to rho squared). 1 for perfect fit, 0 for no
+            skill, negative for even worse skill than mean prediction.
+        """
+        if isinstance(self.standardizer, MonthlyStandardizer):
+            # the reference prediction is the seasonal cycle
+            y_fit_period = self.get(fit_period, anomalies=False)
+            new_standardizer = copy(self.standardizer)
+            new_standardizer.fit(y_fit_period)
+            zero_prediction = pd.Series(np.zeros(len(y_fit_period)), index=fit_period)
+            mean_prediction = new_standardizer.inverse_transform(zero_prediction)
+            climate_mse = np.mean((y_fit_period - mean_prediction).dropna()**2)
+            y_predict_period = self.get(score_period, anomalies=False)
+            # Anomalies need to be predicted and the anomalies converted using
+            # the new standardizer, otherwise the prediction has more info than the reference
+            yhat_anomalies = self.predict(score_period, predictor_dataset, anomalies=True, **predictor_kwargs)
+            yhat = new_standardizer.inverse_transform(yhat_anomalies)
+            prediction_mse = np.mean((y_predict_period - yhat).dropna()**2)
+        else:
+            # don't use this together with a transform
+            y_fit = self.get(fit_period, anomalies=True).dropna()
+            y_predict = self.get(score_period, anomalies=True)
+            yhat = self.predict(score_period, predictor_dataset, anomalies=True, **predictor_kwargs)
+            error = (y_predict - yhat).dropna()
+            prediction_mse = np.mean(error**2)
+            climate_mse = np.mean((np.mean(y_fit) - y_fit)**2)
+        if climate_mse == 0:
+            return 0.0             # identifier for such a case (avoid dividing by 0)
+        else:       
+            return 1 - prediction_mse/climate_mse
     
     
     

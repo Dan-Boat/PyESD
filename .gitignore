@@ -1,5 +1,5 @@
 /examples/Neckar/.predictors_200
-/examples/Ghana/.predictors_200
+/examples/Ghana/.predictors_150
 /examples/Ghana/.predictors_50
 /examples/Ghana/correlation_data
 /examples/Ghana/model_selection
@@ -19,6 +19,7 @@
 /examples/Neckar/plots
 *.pickel
 modules.txt
+*.predictors_150
 *.predictors_50
 *.predictors_500
 *.predictors_200

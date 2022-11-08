@@ -22,11 +22,11 @@ from settings import *
 
 
 def run_test(variable, regressor, selector_method, cachedir, stationnames,
-                    station_datadi, standardizer_method=None):
+                    station_datadi):
     
     #num_of_stations = len(stationnames)
     
-    num_of_stations = 10
+    num_of_stations = 1
     
 
 
@@ -45,20 +45,15 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         
         #setting standardardizer
         
-        if standardizer_method is None:
-            SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+        
+        SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                             scaling=False))
-            
-        else: 
-            
-            SO.set_standardizer(variable, standardizer= standardizer_method)
             
         #setting model
         scoring = ["neg_root_mean_squared_error",
                    "r2", "neg_mean_absolute_error"]
         
-        SO.set_model(variable, method=regressor, cv=TimeSeriesSplit(n_splits=30,
-                                                                    test_size=2, gap=12), 
+        SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), 
                       scoring=scoring)
         
         # SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), scoring=scoring)
@@ -69,18 +64,18 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         #fitting model (with predictor selector optioin)
         
         if selector_method == "Recursive":
-            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                     selector_method=selector_method , selector_regressor="ARD", 
                     cal_relative_importance=False)
             
         elif selector_method == "TreeBased":
         
-            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                    selector_method=selector_method , selector_regressor="RandomForest",)
         
         elif selector_method == "Sequential":
         
-            SO.fit(variable, from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
+            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                    selector_method=selector_method , selector_regressor="ARD", num_predictors=10, 
                    selector_direction="forward")
         else:
@@ -91,8 +86,8 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         selected_predictors = SO.selected_names(variable)
         
         # training estimate for the same model
-        
-        score, ypred = SO.cross_validate_and_predict(variable, from1961to2012, ERA5Data)
+        climate_score = SO.climate_score(variable, from1961to2017, from1961to2017, ERA5Data)
+        score, ypred = SO.cross_validate_and_predict(variable, from1961to2017, ERA5Data)
         
         # storing results
         
@@ -110,7 +105,7 @@ if __name__ == "__main__":
     
         selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/predictor_selection"
         
-        regressor = "RandomForest"
+        regressor = "LassoLarsCV"
         
         cachedir =selector_dir
         
@@ -119,6 +114,7 @@ if __name__ == "__main__":
         stationnames = stationnames_prec
         
         station_datadir = station_prec_datadir
+        
         
         
         
