@@ -28,13 +28,13 @@ from settings import *
 
 def run_experiment2(variable, estimator, cachedir, stationnames, 
                     station_datadir, base_estimators=None, 
-                    final_estimator=None, standardizer_method=None):
+                    final_estimator=None):
 
 
 
-    #num_of_stations = len(stationnames)
+    num_of_stations = len(stationnames)
     
-    num_of_stations = 10
+    #num_of_stations = 1
     
     for i in range(num_of_stations):
         
@@ -47,65 +47,63 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         SO.set_predictors(variable, predictors, predictordir, radius,)
         
         #setting standardardizer
-        if standardizer_method is None:
-            SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
+      
+        SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                             scaling=False))
             
-        else: 
-            
-            SO.set_standardizer(variable, standardizer= standardizer_method)
-            
-    
         #setting model
         
         #setting model
         scoring = ["neg_root_mean_squared_error",
                    "r2", "neg_mean_absolute_error"]
         
+        cv = TimeSeriesSplit(n_splits=10,test_size=12)
         
         if estimator == "Stacking":
             
             SO.set_model(variable, method=estimator, ensemble_learning=True, 
-                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2012,
-                     predictor_dataset=ERA5Data, cv=TimeSeriesSplit(n_splits=30, test_size=5, gap=12), 
+                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2017,
+                     predictor_dataset=ERA5Data, cv=KFold(n_splits=10), 
                                    scoring=scoring)
         else:
             
             
-            SO.set_model(variable, method=estimator, daterange=from1961to2012, 
-                         predictor_dataset=ERA5Data, cv=TimeSeriesSplit(n_splits=30, test_size=5, gap=12), 
+            SO.set_model(variable, method=estimator, daterange=from1961to2017, 
+                         predictor_dataset=ERA5Data, cv=cv, 
                                        scoring=scoring)
         
         #fitting model (with predictor selector optioin)
         
         selector_method = "TreeBased"
         
-        SO.fit(variable,  from1961to2012, ERA5Data, fit_predictors=True, predictor_selector=True, 
+        SO.fit(variable,  from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                 selector_method=selector_method , selector_regressor="RandomForest",
                 cal_relative_importance=False, impute=False, impute_method="spline", impute_order=5)
         
         
         if estimator == "RandomForest":
-            importance = SO.tree_based_feature_permutation_importance(variable, from1961to2012, ERA5Data, fit_predictors=True, 
+            importance = SO.tree_based_feature_permutation_importance(variable, from1961to2017, ERA5Data, fit_predictors=True, 
                                                                       plot=False)
             
         
-        score_fit, ypred_fit = SO.cross_validate_and_predict(variable,  from1961to2012, ERA5Data,)
+        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1961to2017, ERA5Data, return_cv_scores=True)
         
-        ypred_train = SO.predict(variable, from1961to2012, ERA5Data)
+        climate_score = SO.climate_score(variable, from1961to2017, from1961to2017, ERA5Data)
         
-        y_obs_train = SO.get_var(variable, from1961to2012, anomalies=True)
+        ypred_train = SO.predict(variable, from1961to2017, ERA5Data)
+        
+        y_obs_train = SO.get_var(variable, from1961to2017, anomalies=True)
         
         
         predictions = pd.DataFrame({
             "obs_train" : y_obs_train,
-            "ERA5 1961-2012" : ypred_train})
+            "ERA5 1961-2017" : ypred_train})
         
         
         #storing of results
         
         store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
-        store_csv(stationname, "validation_predictions_" + estimator, ypred_fit, cachedir)
+        store_pickle(stationname, "CV_scores_" + estimator, scores_all, cachedir)
         store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
         
         if estimator == "RandomForest":
@@ -125,12 +123,13 @@ if __name__ == "__main__":
        
     station_datadir = station_prec_datadir
     
-    final_estimator = "ExtraTree"
+    final_estimator = "LassoLarsCV"
     
-    base_estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging"]
+    base_estimators = ["ARD", "RandomForest", "Bagging"]
     
 
-    estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
+    #estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
+    estimators = ["Stacking"]
     
     
         

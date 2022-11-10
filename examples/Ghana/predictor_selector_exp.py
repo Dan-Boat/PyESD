@@ -53,7 +53,7 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         scoring = ["neg_root_mean_squared_error",
                    "r2", "neg_mean_absolute_error"]
         
-        SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), 
+        SO.set_model(variable, method=regressor, cv= KFold(n_splits=20), 
                       scoring=scoring)
         
         # SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), scoring=scoring)
