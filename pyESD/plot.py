@@ -290,8 +290,8 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     ax.spines["right"].set_visible(False)
     ax.get_xaxis().tick_bottom()
     ax.get_yaxis().tick_left()
-    ax.spines["left"].set_position(("outward", 10))
-    ax.spines["bottom"].set_position(("outward", 10))
+    ax.spines["left"].set_position(("outward", 20))
+    ax.spines["bottom"].set_position(("outward", 20))
     
     
     

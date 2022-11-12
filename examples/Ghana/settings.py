@@ -19,13 +19,12 @@ predictors = ["t2m", "tp","msl", "v10", "u10",
 
 
 
-from1961to2009 = pd.date_range(start="1961-01-01", end="2009-12-31", freq="MS")
-
-from2010to2017 = pd.date_range(start="2010-01-01", end="2017-12-31", freq="MS")
-
 from1961to2012 = pd.date_range(start="1961-01-01", end="2012-12-31", freq="MS")
 
-from1961to2017 = pd.date_range(start="1981-01-01", end="2017-12-31", freq="MS")
+from2013to2017 = pd.date_range(start="2013-01-01", end="2017-12-31", freq="MS")
+
+
+from1961to2017 = pd.date_range(start="1961-01-01", end="2017-12-31", freq="MS")
 
 fullAMIP = pd.date_range(start='1979-01-01', end='2008-12-31', freq='MS')
 

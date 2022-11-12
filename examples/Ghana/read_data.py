@@ -23,7 +23,6 @@ radius = 150 #km
             
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
 station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/processed/monthly"
-station_temp_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Temperature/processed"
 
 amip_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/AMIP"
 cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
@@ -44,13 +43,10 @@ CESM_85_datadir = "D:/Datasets/CMIP5/Monthly/CESM/RCP85"
 
 predictordir = os.path.join(os.path.dirname(__file__), '.predictors_' + str(int(radius)))
 cachedir_prec = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Precipitation'))
-cachedir_temp = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature'))
 
 namedict_prec = read_weatherstationnames(station_prec_datadir)
 stationnames_prec = list(namedict_prec.values())
 
-namedict_temp = read_weatherstationnames(station_temp_datadir)
-stationnames_temp = list(namedict_temp.values())
 
 ERA5Data = Dataset('ERA5', {
     't2m':os.path.join(era5_datadir, 't2m_monthly.nc'),
@@ -129,6 +125,11 @@ CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
     'v700':os.path.join(amip_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(amip_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(amip_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(amip_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(amip_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(amip_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(amip_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(amip_datadir, 'dtd1000_monthly.nc')
     }, domain_name= "Africa")
 
 
@@ -163,6 +164,11 @@ CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
     'v700':os.path.join(cmip5_26_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_26_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_26_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(cmip5_26_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_26_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_26_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_26_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_26_datadir, 'dtd1000_monthly.nc')
     }, domain_name= "Africa")
 
 
@@ -198,6 +204,11 @@ CMIP5_RCP45_R1 = Dataset('CMIP5_RCP45_R1', {
     'v700':os.path.join(cmip5_45_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_45_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_45_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(cmip5_45_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_45_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_45_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_45_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_45_datadir, 'dtd1000_monthly.nc')
     }, domain_name= "Africa")
 
 CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
@@ -231,6 +242,11 @@ CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
     'v700':os.path.join(cmip5_85_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_85_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_85_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(cmip5_85_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_85_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_85_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_85_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_85_datadir, 'dtd1000_monthly.nc')
     }, domain_name= "Africa")
 
 

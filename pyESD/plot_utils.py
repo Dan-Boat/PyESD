@@ -254,7 +254,8 @@ def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
     if use_id == True:
         df_stations.reset_index(drop=True, inplace=True)
         df_stations.index +=1
-        df_stations = df_stations.T.astype(float)
+    
+    df_stations = df_stations.T.astype(float)
     
     return df_stations
              
@@ -278,7 +279,9 @@ def monthly_mean(stationnames, path_to_data, filename, daterange, id_name,
     if use_id == True:
         df_stations.reset_index(drop=True, inplace=True)
         df_stations.index +=1
-        df_stations = df_stations.T.astype(float)
+        
+        
+    df_stations = df_stations.T.astype(float)
     
     return df_stations
         
@@ -288,8 +291,8 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
                             obs_test_name="obs 2011-2020", 
                             val_predict_name="ERA5 1958-2010", 
                             test_predict_name="ERA5 2011-2020",
-                            method = "Stacking"
-                            ):
+                            method = "Stacking",
+                            use_cv_all=False):
     
     stationname = stationnames[station_num]
     print("extracting information for the station: ", stationname)
@@ -304,23 +307,33 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
     obs_full = df["obs anomalies"].dropna()
     
     
+    # if use_cv_all == True:
+        
+    #     scores_df = load_pickle(stationname, varname="CV_scores_" + method, path=path_to_data)
+        
+            
+    #     test_score = scores_df["test_r2"].loc[stationname].max()
+        
+    # else:
+    #     test_score_filename = "test_score_" + method
+        
+    #     test_score = load_pickle(stationname, varname=test_score_filename,
+    #                              path=path_to_data)
+        
+        
+    # load score
     
-    validation_score_filename = "validation_score_" + method
-    test_score_filename = "test_score_" + method
+    # validation_score_filename = "validation_score_" + method
     
+
+    # validation_score = load_pickle(stationname, varname=validation_score_filename ,
+    #                                path=path_to_data)
     
-    #load scores
-    validation_score = load_pickle(stationname, varname=validation_score_filename ,
-                                   path=path_to_data)
-    test_score = load_pickle(stationname, varname=test_score_filename,
-                             path=path_to_data)
     
     station_info = {"obs_train": obs_train,
                     "obs_test": obs_test,
                     "ypred_train": ypred_validation,
                     "ypred_test": ypred_test,
-                    "train_score": validation_score, 
-                    "test_score": test_score,
                     "obs": obs_full}
     
     return station_info
