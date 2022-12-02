@@ -53,30 +53,30 @@ def run_main(variable, cachedir,
         
         
         SO.set_model(variable, method=method, ensemble_learning=ensemble_learning, 
-                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2017,
+                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1981to2017,
                       predictor_dataset=ERA5Data, scoring=scoring, cv=KFold(n_splits=10))
         
         
         # MODEL TRAINING (1961-2017)
         # ==========================
         
-        SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
+        SO.fit(variable, from1981to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                     selector_method="TreeBased" , selector_regressor="RandomForest",
-                    cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
+                    cal_relative_importance=False, impute=False, impute_method="spline", impute_order=5)
         
         
         selected_predictors = SO.selected_names(variable)
             
-        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1961to2017, ERA5Data, 
+        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1981to2017, ERA5Data, 
                                                                          return_cv_scores=True)
         
         
-        climate_score_13to17 = SO.climate_score(variable, from1961to2012, from2013to2017, ERA5Data) 
+        climate_score_13to17 = SO.climate_score(variable, from1981to2012, from2013to2017, ERA5Data) 
         
         
         score_2013to2017 = SO.evaluate(variable, from2013to2017, ERA5Data)
         
-        ypred_1961to2012 = SO.predict(variable, from1961to2012, ERA5Data)
+        ypred_1981to2012 = SO.predict(variable, from1981to2012, ERA5Data)
             
         ypred_2013to2017 = SO.predict(variable, from2013to2017, ERA5Data)
         
@@ -145,21 +145,21 @@ def run_main(variable, cachedir,
         # STORING OF RESULTS
         # ===================
         
-        y_obs_1961to2012 = SO.get_var(variable, from1961to2012, anomalies=True)
+        y_obs_1981to2012 = SO.get_var(variable, from1981to2012, anomalies=True)
             
         y_obs_2013to2017 = SO.get_var(variable, from2013to2017, anomalies=True)
             
-        y_obs_1961to2017 = SO.get_var(variable, from1961to2017, anomalies=True)
+        y_obs_1981to2017 = SO.get_var(variable, from1981to2017, anomalies=True)
         
-        y_obs_1961to2017_true = SO.get_var(variable, from1961to2017, anomalies=False)
+        y_obs_1981to2017_true = SO.get_var(variable, from1981to2017, anomalies=False)
         
         
         predictions = pd.DataFrame({
-            "obs": y_obs_1961to2017_true,
-            "obs anomalies": y_obs_1961to2017,
-            "obs 1961-2012": y_obs_1961to2012,
+            "obs": y_obs_1981to2017_true,
+            "obs anomalies": y_obs_1981to2017,
+            "obs 1981-2012": y_obs_1981to2012,
             "obs 2013-2017": y_obs_2013to2017,
-            "ERA5 1961-2012": ypred_1961to2012,
+            "ERA5 1981-2012": ypred_1981to2012,
             "ERA5 2013-2017": ypred_2013to2017,
             "CMIP5 AMIP anomalies": yhat_CMIP5_AMIP_R1_anomalies,
             "CMIP5 RCP2.6 anomalies":yhat_CMIP5_RCP26_R1_anomalies,

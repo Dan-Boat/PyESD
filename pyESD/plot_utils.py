@@ -370,7 +370,7 @@ def extract_comparison_data_means(stationnames, path_to_data,
                                   daterange, datasets, variable, dataset_varname,
                                   ):
     
-    models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
+    models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2"]
     
     df = pd.DataFrame(index=stationnames, columns=models_col_names)
     

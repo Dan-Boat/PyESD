@@ -280,7 +280,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     ax.scatter(obs_test, ypred_test, alpha=0.3, c=red, s=100, label=test_predict_name)
     
-    ax.plot(obs, regression_slope, color=skyblue, label="R² = {:.2f}".format(r2))
+    ax.plot(obs, regression_slope, color=red, label="R = {:.2f}".format(r2))
     
     ax.legend(loc= "upper left", fontsize=20)
     
@@ -340,11 +340,11 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
                                            method=method)
     
 
-    ypred_train = station_info["ypred_train"].rolling(6, min_periods=1, win_type="hann",
+    ypred_train = station_info["ypred_train"].rolling(3, min_periods=1, win_type="hann",
                                                   center=True).mean()
-    ypred_test = station_info["ypred_test"].rolling(6, min_periods=1, win_type="hann",
+    ypred_test = station_info["ypred_test"].rolling(3, min_periods=1, win_type="hann",
                                                   center=True).mean()
-    obs  = station_info["obs"].rolling(6, min_periods=1, win_type="hann",
+    obs  = station_info["obs"].rolling(3, min_periods=1, win_type="hann",
                                                   center=True).mean()
     
 
@@ -354,7 +354,7 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
     ax.plot(ypred_test, linestyle="--", color=red, label=test_predict_name)
     
     
-    ax.xaxis.set_major_locator(YearLocator(10))
+    ax.xaxis.set_major_locator(YearLocator(5))
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
     ax.axhline(y=0, linestyle="--", color=grey, linewidth=2)
     ax.legend(bbox_to_anchor=(0.01, 1.02, 1., 0.102), loc=3, ncol=3, borderaxespad=0., frameon = True, 
@@ -445,7 +445,7 @@ def plot_projection_comparison(stationnames, path_to_data,
                                       method, stationloc_dir, daterange, datasets, 
                                       variable, dataset_varname) 
    
-   models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
+   models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2"]
    
    
    if ax is None:
