@@ -83,6 +83,27 @@ Models_colors = {
 
 
 
+
+
+# colors for individual predictors 
+
+
+predictor_colors = {
+        'r250':green, 'r500':lightgreen, 'r700':green, 'r850':green, 'r1000':green,
+        'z250':pink, 'z500':green, 'z700':green, 'z850':green, 'z1000':green,
+        't250':tomato, 't500':green, 't700':green, 't850':purple, 't1000':green,
+        'v250':green, 'v500':green, 'v700':green, 'v850':green, 'v1000':green,
+        'u250':green, 'u500':green, 'u700':green, 'u850':green, 'u1000':green,
+        'dt250':green, 'dt500':green, 'dt700':green, 'dt850':lightblue, 'dt1000':green,
+        'NAO':magenta,
+        'EA':brown,
+        'EAWR':brown,
+        'SCAN':brown,
+        't2m':gold,
+        'msl':blue,
+        "u10": skyblue
+        }
+
 def apply_style(fontsize=20, style=None, linewidth=2):
     """
     
@@ -370,7 +391,7 @@ def extract_comparison_data_means(stationnames, path_to_data,
                                   daterange, datasets, variable, dataset_varname,
                                   ):
     
-    models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2"]
+    models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
     
     df = pd.DataFrame(index=stationnames, columns=models_col_names)
     

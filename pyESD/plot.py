@@ -103,7 +103,7 @@ def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=No
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))
         
     df, df_std = barplot_data(methods, stationnames, path_to_data, varname=varname, varname_std=varname_std, 
-                     filename=filename)
+                     filename=filename, use_id=True)
     
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
@@ -481,3 +481,9 @@ def plot_projection_comparison(stationnames, path_to_data,
         ax.legend(loc="upper right", bbox_to_anchor=(1.15, 1), borderaxespad=0., frameon=True, fontsize=20)
    plt.tight_layout()
    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+   
+   
+   
+   
+def plot_explained_variance():
+    pass

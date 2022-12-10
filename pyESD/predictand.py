@@ -28,6 +28,7 @@ except:
     from .models import Regressors
     from .ensemble_models import EnsembleRegressor
     from .metrics import Evaluate
+    from .MLR_model import BootstrappedForwardSelection, MultipleLSRegression
     
     
     
@@ -125,7 +126,8 @@ class PredictandTimeseries():
                                            scoring=self.scoring)
         
         elif MLR_learning == True:
-            self.model = BootstrappedForwardSelection(MultipleLSRegression(), cv=self.cv)
+            if method == "OLSForward":
+                self.model = BootstrappedForwardSelection(MultipleLSRegression(), cv=self.cv)
             
         else:
             
@@ -165,7 +167,7 @@ class PredictandTimeseries():
         
         corr = corr.to_frame()
         
-        return  corr.T
+        return  corr.T  # change the code with scipy stats in order to estimate the significance
             
             
     def fit_predictor(self, name, daterange, predictor_dataset):

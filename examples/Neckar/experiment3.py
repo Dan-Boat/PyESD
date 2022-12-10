@@ -14,6 +14,7 @@ from collections import OrderedDict
 from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
+from pyESD.splitter import KFold, TimeSeriesSplit
 
 
 #relative imports 
@@ -69,10 +70,17 @@ def run_experiment3(variable, cachedir,
         #setting standardardizer
         SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                         scaling=False))
+        
+        scoring = ["neg_root_mean_squared_error",
+                   "r2", "neg_mean_absolute_error"]
+        
         #setting model
         SO.set_model(variable, method=method, ensemble_learning=ensemble_learning, 
-                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
-                      predictor_dataset=ERA5Data)
+                      estimators=base_estimators, final_estimator_name=final_estimator, 
+                      daterange=from1958to2010,
+                      predictor_dataset=ERA5Data, 
+                      cv=KFold(n_splits=10),
+                      scoring = scoring)
         
         
         # MODEL TRAINING (1958-2000)
@@ -190,7 +198,7 @@ def run_experiment3(variable, cachedir,
 if __name__ == "__main__":
     cachedir = [cachedir_temp, cachedir_prec]
        
-    variable = ["Temperature", "Precipitation"]
+    variables = ["Temperature", "Precipitation"]
        
     stationnames = [stationnames_temp, stationnames_prec]
        
@@ -198,22 +206,23 @@ if __name__ == "__main__":
     
     
     # experiment with LassoLarsCV (then later use it as  the final estimator for the stacking)
-    
-    method = "LassoLarsCV"
+
     
     ensemble_method = "Stacking"
  
-    base_estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging"]
+    base_estimators = ["LassoLarsCV", "ARD", "RandomForest", "Bagging"]
 
     final_estimator = "ExtraTree"
 
-    for i,idx in enumerate(variable):
+    for i,variable in enumerate(variables):
         
         
-        print("---------- running for variable: ", idx, "-------")
-        run_experiment3(idx, cachedir[i], 
+        print("---------- running for variable: ", variable, "-------")
+        run_experiment3(variable, cachedir[i], 
                         stationnames[i], station_datadir[i],
-                        method)
+                        ensemble_method, final_estimator=final_estimator,
+                        base_estimators=base_estimators, 
+                        ensemble_learning=True)
         
         
         

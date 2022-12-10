@@ -51,6 +51,9 @@ predictordir    = os.path.join(os.path.dirname(__file__), '.predictors_' + str(i
 cachedir_temp        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature'))
 cachedir_prec        = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Precipitation'))
 
+cachedir_temp_predictor_importance = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Temperature_predictor_importance'))
+cachedir_prec_predictor_importance = os.path.abspath(os.path.join(__file__, os.pardir, 'final_cache_Precipitation_predictor_importance'))
+
 
 ERA5Data = Dataset('ERA5', {
     't2m':os.path.join(era5_datadir, 't2m_monthly.nc'),
@@ -90,7 +93,13 @@ ERA5Data = Dataset('ERA5', {
     'v850':os.path.join(era5_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(era5_datadir, 'v1000_monthly.nc'),
     'sst':os.path.join(era5_datadir, 'sst_monthly.nc'),
-    'd2m':os.path.join(era5_datadir, 'd2m_monthly.nc'), })
+    'd2m':os.path.join(era5_datadir, 'd2m_monthly.nc'), 
+    'dtd250':os.path.join(era5_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(era5_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(era5_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(era5_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(era5_datadir, 'dtd1000_monthly.nc'),},
+    domain_name= "NH") # select domain for Northern Hemisphere
 
 
 CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
@@ -124,7 +133,12 @@ CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
     'v700':os.path.join(amip_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(amip_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(amip_datadir, 'v1000_monthly.nc'),
-    })
+    'dtd250':os.path.join(amip_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(amip_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(amip_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(amip_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(amip_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
 
 CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
@@ -158,7 +172,12 @@ CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
     'v700':os.path.join(cmip5_26_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_26_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_26_datadir, 'v1000_monthly.nc'),
-    })
+    'dtd250':os.path.join(cmip5_26_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_26_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_26_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_26_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_26_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
 
 
@@ -193,7 +212,12 @@ CMIP5_RCP45_R1 = Dataset('CMIP5_RCP45_R1', {
     'v700':os.path.join(cmip5_45_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_45_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_45_datadir, 'v1000_monthly.nc'),
-    })
+    'dtd250':os.path.join(cmip5_45_datadir, 'dtd250_monthly.nc'), 
+   'dtd500':os.path.join(cmip5_45_datadir, 'dtd500_monthly.nc'),
+   'dtd700':os.path.join(cmip5_45_datadir, 'dtd700_monthly.nc'),
+   'dtd850':os.path.join(cmip5_45_datadir, 'dtd850_monthly.nc'),
+   'dtd1000':os.path.join(cmip5_45_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
 CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
     't2m':os.path.join(cmip5_85_datadir, 't2m_monthly.nc'),
@@ -226,44 +250,58 @@ CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
     'v700':os.path.join(cmip5_85_datadir, 'v700_monthly.nc'),
     'v850':os.path.join(cmip5_85_datadir, 'v850_monthly.nc'),
     'v1000':os.path.join(cmip5_85_datadir, 'v1000_monthly.nc'),
-    })
+    'dtd250':os.path.join(cmip5_85_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_85_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_85_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_85_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_85_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
 
 CORDEX_RCP26 = Dataset("CORDEX_RCP26", {
     "t2m": os.path.join(cordex_26_datadir, "t2m_monthly.nc"), 
-    "tp": os.path.join(cordex_26_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(cordex_26_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 CORDEX_RCP45 = Dataset("CORDEX_RCP45", {
     "t2m": os.path.join(cordex_45_datadir, "t2m_monthly.nc"), 
-    "tp": os.path.join(cordex_45_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(cordex_45_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 CORDEX_RCP85 = Dataset("CORDEX_RCP85", {
     "t2m": os.path.join(cordex_85_datadir, "t2m_monthly.nc"), 
-    "tp": os.path.join(cordex_85_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(cordex_85_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 CESM_RCP26 = Dataset("CESM_RCP26", {
     "t2m":os.path.join(CESM_26_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(CESM_26_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(CESM_26_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 CESM_RCP45 = Dataset("CESM_RCP45", {
     "t2m":os.path.join(CESM_45_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(CESM_45_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(CESM_45_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 CESM_RCP85 = Dataset("CESM_RCP85", {
     "t2m":os.path.join(CESM_85_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(CESM_85_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(CESM_85_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 HadGEM2_RCP26 = Dataset("HadGEM2_RCP26",{
     "t2m": os.path.join(HadGEM2_26_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(HadGEM2_26_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(HadGEM2_26_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 HadGEM2_RCP45 = Dataset("HadGEM2_RCP45",{
     "t2m": os.path.join(HadGEM2_45_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(HadGEM2_45_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(HadGEM2_45_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 HadGEM2_RCP85 = Dataset("HadGEM2_RCP85",{
     "t2m": os.path.join(HadGEM2_85_datadir, "t2m_monthly.nc"),
-    "tp": os.path.join(HadGEM2_85_datadir, "tp_monthly.nc")})
+    "tp": os.path.join(HadGEM2_85_datadir, "tp_monthly.nc")}, 
+    domain_name= "NH")
 
 
 

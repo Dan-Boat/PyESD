@@ -298,6 +298,8 @@ class ForwardSelection(MetaEstimator):
 
         # initial model: no active predictor
         self.fit_active(X_train, y_train, active)
+        #X_test_active = _get_active(X_test, active)
+        
         residual_test = y_test - self.regressor.predict(X_test)
         SST = np.mean(residual_test**2)
         explained_variance = 0
@@ -317,7 +319,7 @@ class ForwardSelection(MetaEstimator):
                 active.append(idx)
                 self.fit_active(X_train, y_train, active)
                 inactive_coefs.append(self.regressor.get_coefs())
-                residual_test = y_test - self.regressor.predict(X_test)
+                residual_test = y_test - self.regressor.predict(X_test)  # turn the reset in  _validate_data to False in sklean base
                 residual_train = y_train - self.regressor.predict(X_train)
                 inactive_mse_test.append(np.mean(residual_train**2))
                 inactive_mse_train.append(np.mean(residual_train**2))
@@ -355,6 +357,10 @@ class ForwardSelection(MetaEstimator):
 
     def predict(self, X):
         return self.regressor.predict(X)
+    
+    def predict_active(self, X, active):
+        X_active = _get_active(X, active)
+        return self.regressor.predict(X_active)
 
     def set_additional_results(self, add_results):
         self.additional_results = copy(add_results)
@@ -413,6 +419,13 @@ class LinearCoefsHandlerMixin:
         X_active = _get_active(X, active)
         self.fit(X_active, y)
         self.set_expand_coefs(active, X.shape[1])
+        
+    def predict_active(self, X, active):
+        """
+        Predict using only the columns of X whose index is in ``active``.
+        """
+        X_active = _get_active(X, active)
+        self.predict(X_active)
 
 
 class MultipleLSRegression(LinearCoefsHandlerMixin):

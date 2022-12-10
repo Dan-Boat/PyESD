@@ -11,9 +11,10 @@ import numpy as np
 from collections import OrderedDict
 
 
-from pyESD.WeatherstationPreprocessing import read_station_csv
+from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
+from pyESD.splitter import KFold, TimeSeriesSplit
 
 #relative imports 
 from read_data import *
@@ -42,16 +43,21 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
                                                                         scaling=False))
         #setting model
+        scoring = ["neg_root_mean_squared_error",
+                   "r2", "neg_mean_absolute_error"]
+        
         
         if estimator == "Stacking":
             
             SO.set_model(variable, method=estimator, ensemble_learning=True, 
                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010,
-                     predictor_dataset=ERA5Data)
+                     predictor_dataset=ERA5Data, cv=KFold(n_splits=10),
+                     scoring = scoring)
         else:
             
             
-            SO.set_model(variable, method=estimator)
+            SO.set_model(variable, method=estimator, cv=KFold(n_splits=10),
+                         scoring = scoring)
         
         #fitting model (with predictor selector optioin)
         
@@ -103,12 +109,13 @@ if __name__ == "__main__":
        
     station_datadir = [station_temp_datadir, station_prec_datadir]
     
-    final_estimator = "ExtraTree"
+    final_estimator = "LassoLarsCV"
     
     base_estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging"]
     
 
     estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
+    #estimators = ["Stacking"]
     
     for i,idx in enumerate(variable):
         

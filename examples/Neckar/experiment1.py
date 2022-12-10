@@ -16,10 +16,10 @@ import pandas as pd
 import numpy as np 
 from collections import OrderedDict
 
-from pyESD.WeatherstationPreprocessing import read_station_csv
+from pyESD.Weatherstation import read_station_csv
 from pyESD.standardizer import MonthlyStandardizer, StandardScaling
 from pyESD.ESD_utils import store_pickle, store_csv
-
+from pyESD.splitter import KFold, TimeSeriesSplit
 #relative imports 
 from read_data import *
 from predictor_settings import *
@@ -47,13 +47,15 @@ def run_experiment1(variable, regressor, selector_method, cachedir, stationnames
         
         #setting standardardizer
         SO.set_standardizer(variable, standardizer=MonthlyStandardizer(detrending=False,
-                                                                        scaling=False))
-        #setting model
-        SO.set_model(variable, method=regressor)
+                                                                       scaling=False))
         
-        #check predictor correlation
-        corr = SO.predictor_correlation(variable, from1958to2010, ERA5Data, fit_predictors=True, fit_predictand=True, 
-                                  method="pearson")
+        
+        scoring = ["neg_root_mean_squared_error",
+                   "r2", "neg_mean_absolute_error"]
+        #setting model
+        SO.set_model(variable, method=regressor, scoring=scoring, 
+                     cv=TimeSeriesSplit(n_splits=10))
+        
         
         #fitting model (with predictor selector optioin)
         
@@ -85,14 +87,11 @@ def run_experiment1(variable, regressor, selector_method, cachedir, stationnames
         
         # storing results
         
-        store_csv(stationname, "predictions_" + selector_method, ypred, cachedir)
-        
         store_pickle(stationname, "selected_predictors_" + selector_method, selected_predictors,
         cachedir)    
         
         store_pickle(stationname, "validation_score_" + selector_method, score, cachedir)
         
-        store_csv(stationname, "corrwith_predictors_" + selector_method, corr, cachedir)
       
     
         
