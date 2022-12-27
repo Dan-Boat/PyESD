@@ -24,7 +24,7 @@ bootstrapped forward selection regression:
 from copy import copy
 import numpy as np
 import pandas as pd
-import statsmodels.api as sm
+#import statsmodels.api as sm
 from sklearn.model_selection import check_cv
 from sklearn.linear_model import LinearRegression
 
@@ -33,7 +33,6 @@ __all__ =  ["BootstrappedRegression",
             "ForwardSelection",
             "BootstrappedForwardSelection",
             "MultipleLSRegression",
-            "GammaRegression",
 ]
 
 class MetaEstimator:
@@ -475,41 +474,41 @@ class MultipleLSRegression(LinearCoefsHandlerMixin):
             self.intercept_ = self.lm.intercept_
 
 
-class GammaRegression(LinearCoefsHandlerMixin):
-    """
-    Implementation of generalized linear gamma regression.
-    """
+# class GammaRegression(LinearCoefsHandlerMixin):
+#     """
+#     Implementation of generalized linear gamma regression.
+#     """
 
-    def __init__(self, family=sm.families.Gamma()):
-        self.family = family
+#     def __init__(self, family=sm.families.Gamma()):
+#         self.family = family
 
-    def fit(self, X, y):
-        n, m = X.shape
-        G = np.zeros((n, m+1))
-        G[:,0:-1] = X
-        G[:,-1] = np.ones(n)
-        self.glm = sm.GLM(y, G, family=self.family)
-        gamma_results = self.glm.fit()
-        self.coef_ = gamma_results.params[0:-1]
-        self.intercept_ = gamma_results.params[-1]
+#     def fit(self, X, y):
+#         n, m = X.shape
+#         G = np.zeros((n, m+1))
+#         G[:,0:-1] = X
+#         G[:,-1] = np.ones(n)
+#         self.glm = sm.GLM(y, G, family=self.family)
+#         gamma_results = self.glm.fit()
+#         self.coef_ = gamma_results.params[0:-1]
+#         self.intercept_ = gamma_results.params[-1]
 
-    def predict(self, X):
-        n, m = X.shape
-        G = np.zeros((n, m+1))
-        G[:,0:-1] = X
-        G[:,-1] = np.ones(n)
-        params = np.zeros(len(self.coef_) + 1)
-        params[0:-1] = self.coef_
-        params[-1] = self.intercept_
-        return self.glm.predict(params, exog=G)
+#     def predict(self, X):
+#         n, m = X.shape
+#         G = np.zeros((n, m+1))
+#         G[:,0:-1] = X
+#         G[:,-1] = np.ones(n)
+#         params = np.zeros(len(self.coef_) + 1)
+#         params[0:-1] = self.coef_
+#         params[-1] = self.intercept_
+#         return self.glm.predict(params, exog=G)
 
 
-    def set_expand_coefs(self, active, n_predictors):
-        # get a full coefficient vector back
-        coefs = np.zeros(n_predictors)
-        for i, idx in enumerate(active):
-            coefs[idx] = self.coef_[i]
-        self.coef_ = coefs
+#     def set_expand_coefs(self, active, n_predictors):
+#         # get a full coefficient vector back
+#         coefs = np.zeros(n_predictors)
+#         for i, idx in enumerate(active):
+#             coefs[idx] = self.coef_[i]
+#         self.coef_ = coefs
 
 
 

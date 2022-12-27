@@ -209,12 +209,12 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
             if cbar_ax is not None:
                 sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
                             square=True, cbar=cbar, cbar_kws={"label":label, 
-                                                              "shrink":.50,},
+                                                              "shrink":.80,},
                             linewidth=0.3, linecolor="black", cbar_ax=cbar_ax)
             else:
                 sns.heatmap(data=data, ax=ax, cmap=cmap, vmax=vmax, vmin=vmin, center=center, 
                             square=True, cbar=cbar, cbar_kws={"label":label, 
-                                                              "shrink":.50,},
+                                                              "shrink":.80,},
                             linewidth=0.3, linecolor="black")
     else:
         if cbar == False:
@@ -224,11 +224,11 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
             
             if cbar_ax is not None:
                 sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
-                            cbar_kws={"label":label,"shrink":.50,},
+                            cbar_kws={"label":label,"shrink":.80,},
                             linewidth=0.3, linecolor="black", cbar_ax=cbar_ax)
             else:
                 sns.heatmap(data=data, ax=ax, cmap=cmap, square=True, cbar=cbar,
-                            cbar_kws={"label":label,"shrink":.50,},
+                            cbar_kws={"label":label,"shrink":.80,},
                             linewidth=0.3, linecolor="black")
         
     if title is not None:

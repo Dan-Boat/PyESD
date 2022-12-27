@@ -39,7 +39,7 @@ from read_data import *
 path_mlr = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/predictor_importance"
 path_exp1 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment1"
 path_exp2 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment2"
-path_exp3 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment4"
+path_exp3 = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/experiment3"
 path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Neckar/plots/final"
 
 
@@ -254,92 +254,145 @@ def plot_seasonal_climatologies():
     
     path_to_data_prec = os.path.join(path_exp3, prec_folder_name)
     
-    
-    df_prec_26_from2040to2060 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
-                            use_id=True)
-    
-    
-    df_prec_85_from2040to2060 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+    #obs
+    df_prec_sm = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from1958to2010 , id_name="obs", method= "Stacking",
                             use_id=True)
     
     
     
-    df_prec_26_from2080to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+    
+    df_prec_26_from2040to2070 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from2040to2070 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
                             use_id=True)
     
     
-    df_prec_85_from2080to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+    df_prec_85_from2040to2070 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from2040to2070 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+                            use_id=True)
+    
+    
+    
+    df_prec_26_from2070to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from2070to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+                            use_id=True)
+    
+    
+    df_prec_85_from2070to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
+                            daterange=from2070to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
                             use_id=True)
     
     
     
     apply_style(fontsize=20, style=None, linewidth=2)
-    fig, ((ax1,ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20,15), sharex=False)
-    cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
     
-    heatmaps(data=df_prec_26_from2040to2060, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 2.6   (2040-2060)", 
-             ax=ax1, cbar=True, cbar_ax=cbar_ax, vmax=20, vmin=-20, center=0,)
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(20,15), sharex=False)
+    #cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
     
-    heatmaps(data=df_prec_85_from2040to2060, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5", 
-             ax=ax3, cbar=False, vmax=20, vmin=-20, center=0, xlabel="Precipitation stations")
+    # end of century
     
-    heatmaps(data=df_prec_26_from2080to2100, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 2.6   (2080-2100)", 
-             ax=ax2, cbar=False, vmax=20, vmin=-20, center=0,)
+    heatmaps(data=df_prec_sm, cmap="YlGnBu", label="Precipitation [mm/month]", title= "obs [1958-2010]", 
+             ax=ax1, cbar=True, )
     
-    heatmaps(data=df_prec_85_from2080to2100, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5", 
-             ax=ax4, cbar=False, vmax=20, vmin=-20, center=0, xlabel="Precipitation stations")
+    
+    heatmaps(data=df_prec_26_from2070to2100, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5 [2070-2100]", 
+             ax=ax2, cbar=True, vmax=20, vmin=-20, center=0, )
+    
+    heatmaps(data=df_prec_85_from2070to2100, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5 [2070-2100]", 
+             ax=ax3, cbar=True, vmax=20, vmin=-20, center=0, xlabel="Precipitation stations")
+    
     
     plt.tight_layout()
     plt.subplots_adjust(left=0.02, right=0.85, top=0.94, bottom=0.05,hspace=0.01)
-    plt.savefig(os.path.join(path_to_save, "seasonal_trend_prec.svg"), bbox_inches="tight", dpi=300)
+    plt.savefig(os.path.join(path_to_save, "seasonal_trend_prec_endcentury.svg"), bbox_inches="tight", dpi=300)
+    
+    
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(20,15), sharex=False)
+    #cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
+    
+    # mid of century
+    
+    heatmaps(data=df_prec_sm, cmap="YlGnBu", label="Precipitation [mm/month]", title= "obs [1958-2010]", 
+             ax=ax1, cbar=True, )
+    
+    
+    heatmaps(data=df_prec_26_from2040to2070, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5 [2040-2070]", 
+             ax=ax2, cbar=True, vmax=20, vmin=-20, center=0, )
+    
+    heatmaps(data=df_prec_85_from2040to2070, cmap=BrBG, label="Precipitation [mm/month]", title= "RCP 8.5 [2040-2070]", 
+             ax=ax3, cbar=True, vmax=20, vmin=-20, center=0, xlabel="Precipitation stations")
+     
+    
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.02, right=0.85, top=0.94, bottom=0.05,hspace=0.01)
+    plt.savefig(os.path.join(path_to_save, "seasonal_trend_prec_midcentury.svg"), bbox_inches="tight", dpi=300)
     
     
     
     path_to_data_temp = os.path.join(path_exp3, temp_folder_name)
     
-    df_temp_26_from2040to2060 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+    #obs
+    
+    df_temp_sm = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from1958to2010 , id_name="obs", method= "Stacking",
+                            use_id=True)
+    
+    df_temp_26_from2040to2070 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from2040to2070 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
                             use_id=True)
     
     
-    df_temp_85_from2040to2060 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+    df_temp_85_from2040to2070 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from2040to2070 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
                             use_id=True)
     
     
     
-    df_temp_26_from2080to2100 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+    df_temp_26_from2070to2100 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from2070to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
                             use_id=True)
     
     
-    df_temp_85_from2080to2100 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+    df_temp_85_from2070to2100 = seasonal_mean(stationnames_temp, path_to_data_temp, filename="predictions_", 
+                            daterange=from2070to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
                             use_id=True)
     
     apply_style(fontsize=20, style=None, linewidth=2)
-    fig, ((ax1,ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20,15), sharex=False)
-    cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(20,15), sharex=False)
+    #cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
     
-    heatmaps(data=df_temp_26_from2040to2060, cmap=seismic, label="Temperature [°C]", title= "RCP 2.6   (2040-2060)", 
-             ax=ax1, cbar=True, cbar_ax=cbar_ax, vmax=3, vmin=-3, center=0,)
+    # endofcentury
+    heatmaps(data=df_temp_sm, cmap="Spectral_r", label="Temperature [°C]", title= "obs [1958-2010]", 
+             ax=ax1, cbar=True, vmax=20, center=0, vmin=-5, )
     
-    heatmaps(data=df_temp_85_from2040to2060, cmap=seismic, label="Temperature [°C]", title= "RCP 8.5", 
-             ax=ax3, cbar=False, vmax=3, vmin=-3, center=0, xlabel="Precipitation stations")
+    heatmaps(data=df_temp_26_from2070to2100, cmap=seismic, label="Temperature [°C]", title= "RCP 2.6 [2070-2100]", 
+             ax=ax2, cbar=True, vmax=4, vmin=-4, center=0,)
     
-    heatmaps(data=df_temp_26_from2080to2100, cmap=seismic, label="Temperature [°C]", title= "RCP 2.6   (2080-2100)", 
-             ax=ax2, cbar=False, vmax=3, vmin=-3, center=0,)
+    heatmaps(data=df_temp_85_from2070to2100, cmap=seismic, label="Temperature [°C]", title= "RCP 8.5 [2070-2100]", 
+             ax=ax3, cbar=True, vmax=4, vmin=-4, center=0, xlabel="Temperature stations")
     
-    heatmaps(data=df_temp_85_from2080to2100, cmap=seismic, label="Temperature [°C]", title= "RCP 8.5", 
-             ax=ax4, cbar=False, vmax=3, vmin=-3, center=0, xlabel="Precipitation stations")
+    
     
     plt.tight_layout()
-    plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.0)
-    plt.savefig(os.path.join(path_to_save, "seasonal_trend_temp.svg"), bbox_inches="tight", dpi=300)
+    plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.1)
+    plt.savefig(os.path.join(path_to_save, "seasonal_trend_temp_endofcentury.svg"), bbox_inches="tight", dpi=300)
+    
+    
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(20,15), sharex=False)
+    
+    # endofcentury
+    heatmaps(data=df_temp_sm, cmap="Spectral_r", label="Temperature [°C]", title= "obs [1958-2010]", 
+             ax=ax1, cbar=True, vmax=20, center=0, vmin=-5, )
+    
+    heatmaps(data=df_temp_26_from2040to2070, cmap=seismic, label="Temperature [°C]", title= "RCP 2.6 [2040-2070]", 
+             ax=ax2, cbar=True, vmax=4, vmin=-4, center=0,)
+    
+    heatmaps(data=df_temp_85_from2040to2070, cmap=seismic, label="Temperature [°C]", title= "RCP 8.5 [2040-2070]", 
+             ax=ax3, cbar=True, vmax=4, vmin=-4, center=0, xlabel="Temperature stations")
+    
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.1)
+    plt.savefig(os.path.join(path_to_save, "seasonal_trend_temp_midofcentury.svg"), bbox_inches="tight", dpi=300)
 
 
 # PLOTTING FUTURE TIMESERIES 
@@ -360,22 +413,22 @@ def plot_ensemble_timeseries():
     
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
-                     color=black, label="RCP 2.6", ymax=30, ymin=-20, 
+                     color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
-                     color=red, label="RCP 4.5", ymax=30, ymin=-20,
+                     color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
-                     )
+                     window=12)
     
     plot_time_series(stationnames_prec, path_to_data_prec, filename="predictions_", 
                      id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
-                     color=blue, label="RCP 8.5", ymax=30, ymin=-20,
+                     color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
-                     )
+                     window=12)
     
     
     plt.tight_layout(h_pad=0.02)
@@ -540,8 +593,8 @@ if __name__ == "__main__":
     #plot_estimators_metrics()
     #plot_prediction_example(station_num_prec=6, station_num_temp=0)
     #plot_seasonal_climatologies()
-    #plot_ensemble_timeseries()
-    plot_different_projections(variable="Precipitation")
+    plot_ensemble_timeseries()
+    #plot_different_projections(variable="Precipitation")
     #plot_different_projections(variable="Temperature")
     #print("--plotting complete --")
     #plot_correlation()
