@@ -1,4 +1,5 @@
-**Python Package for Empirical Statistical Downscaling (v1.01)**
+**Python Package for Empirical Statistical Downscaling (v1.01) :sun_behind_rain_cloud: :cloud_with_snow: :cloud_with_rain: :fire: :thermometer:** 
+
 **_PyESD_** is an open-source framework of the Perfect Prognosis approach of statistical downscaling of any climate-related variable such as precipitation, temperature, and wind speed using reanalysis products eg. ERA5 as predictors. The package features all the downscaling cycles including data preprocessing, predictor selection, constructions (eg. using transformers), model selection, training, validation and evaluation, and future prediction. The package serves as the means of downscaling General Circulation Models of future climate to high resolution relevant for climate impact assessment such as droughts, flooding, wildfire risk, and others. 
 The main specialties of the pyESD include:
 
