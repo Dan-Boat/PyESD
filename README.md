@@ -11,7 +11,7 @@ The main component and the work flow of the package are summarised in the modeli
 
 ![Model outline](./img/Model%20outline-model%20outline%20presentation.drawio.png)
 
-**Installation**
+**Installation :hammer_and_wrench:**
 1. Install the standard version:
    `pip install pyESD` from PyPI or git clone git@github.com:Dan-Boat/PyESD.git
    `cd to the folder` | `pip install .`
@@ -20,7 +20,7 @@ The main component and the work flow of the package are summarised in the modeli
    `pip install -e pyESD` or `pip install -e .` in the package base folder clone from github
 The installation might require some dependencies that must be installed if not successful from the distribution from PyPI: [cartopy](https://scitools.org.uk/cartopy/docs/latest/), [xarray](https://docs.xarray.dev/en/stable/), [sciki-learn](https://scikit-learn.org/stable/), [scipy](https://scipy.org/) and the other scientific frameworks such as NumPy, pandas, [Matplotlib](https://matplotlib.org/), and [seaborn](https://seaborn.pydata.org/)
 3. Alternatively, to ensure the installation in an isolated environment, virtual python environment using `conda` or `virtualenv` can be used to create a separate env for the package installation
-## Documentation
+## Documentation :blue_book:
 
 The stable version of the doc would be hosted on a specific domain (in progress). However, the html version in the [_build folder](./docs/_build/html/index.html). The direct link would be updated when the stable version of the package is released. However, the edited doc for the edited version can be updated by executung the make file in the doc folder:
 `cd docs | make html`
@@ -127,4 +127,4 @@ Its application for weather station in Ghana was presented at the AGU22 and the 
 The pacakage is still in planing stage (v1.01)
 
 ## *Collaborators are welcomed: interms of model application, model improvement, documentation and expansion of the package!*
-@ Daniel Boateng ([linkedin](https://www.linkedin.com/in/daniel-boateng-3892311b4/)) : **University of Tuebingen**
+@ Daniel Boateng ([linkedin](https://www.linkedin.com/in/daniel-boateng-3892311b4/)) : **University of Tuebingen** :incoming_envelope: dannboateng@gmail.com
