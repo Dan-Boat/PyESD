@@ -584,7 +584,27 @@ def plot_stations_monthly_mean():
     plt.tight_layout()
     plt.savefig(os.path.join(path_to_save, "station_monthly.svg"), bbox_inches="tight", dpi=300)
 
-
+def save_count_predictors():
+    
+    path_to_data_prec = os.path.join(path_exp1, prec_folder_name)
+    path_to_data_temp = os.path.join(path_exp1, temp_folder_name)
+    
+    selector_methods = ["Recursive", "TreeBased", "Sequential"]
+    
+    df_prec = count_predictors(methods=selector_methods , stationnames=stationnames_prec,
+                               path_to_data=path_to_data_prec, filename="selected_predictors_",
+                               predictors=predictors)
+    
+    df_temp = count_predictors(methods=selector_methods , stationnames=stationnames_temp,
+                               path_to_data=path_to_data_temp, filename="selected_predictors_",
+                               predictors=predictors)
+    
+    df_prec.to_csv(os.path.join(path_to_save, "predictors_prec_count.csv"))
+    df_temp.to_csv(os.path.join(path_to_save, "predictors_temp_count.csv"))
+    
+    
+    
+    
 if __name__ == "__main__":
 
     #plot_stations()
@@ -593,11 +613,12 @@ if __name__ == "__main__":
     #plot_estimators_metrics()
     #plot_prediction_example(station_num_prec=6, station_num_temp=0)
     #plot_seasonal_climatologies()
-    plot_ensemble_timeseries()
+    #plot_ensemble_timeseries()
     #plot_different_projections(variable="Precipitation")
     #plot_different_projections(variable="Temperature")
     #print("--plotting complete --")
     #plot_correlation()
+    save_count_predictors()
 
 
 
