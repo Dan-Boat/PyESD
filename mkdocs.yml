@@ -13,8 +13,8 @@ theme:
     features:
         - navigation.instant
         - search.highlight
-        # - navigation.expand
-        # - navigation.tabs
+        - navigation.expand
+        - navigation.tabs
     custom_dir: "docs/overrides"
 
 plugins:
