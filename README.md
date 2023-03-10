@@ -22,12 +22,12 @@ The installation might require some dependencies that must be installed if not s
 3. Alternatively, to ensure the installation in an isolated environment, virtual python environment using `conda` or `virtualenv` can be used to create a separate env for the package installation
 ## Documentation :blue_book:
 
-The stable version of the doc would be hosted on a specific domain (in progress). However, the html version in the [_build folder](./docs/_build/html/index.html). The direct link would be updated when the stable version of the package is released. However, the edited doc for the edited version can be updated by executung the make file in the doc folder:
+The stable version of the doc would be hosted on a specific domain (in progress). However, the html version in the [_build folder](./docs/_build/html/index.html). The direct link would be updated when the stable version of the package is released. However, the edited doc for the edited version can be updated by executing the make file in the doc folder:
 `cd docs | make html`
 This doc compilation might require the [sphinx](https://sphinx-tutorial.readthedocs.io/start/#) if not installed as part of the dist. 
 
 ## Examples
-The package has been used for downscaling precipitation and temperature for a catchment located in southwestern Germnany. We have also used it for generating future rainfall product for all the synoptic weather stations in Ghana. Their respective control scripts are located in the [examples folder](./pyESD/examples/). Generally, the control scripts follow the modeling workflow as shown in:
+The package has been used for downscaling precipitation and temperature for a catchment located in southwestern Germnany. We have also used it for generating future rainfall products for all the synoptic weather stations in Ghana. Their respective control scripts are located in the [examples folder](./pyESD/examples/). Generally, the control scripts follow the modeling workflow as shown in:
 ![Downscaling steps](./img/Model%20outline-Page-1.drawio.png). 
 For instance, the downscaling framework show below can be experimented with to select the robust predictor selection method and emprical transfer function for a specific location and predictand variable.
 ![modeling framework](./img/Model%20outline-Page-2.drawio.png)
@@ -121,7 +121,7 @@ The package is tested using the `unittest` framework with synthetic generated da
 
 ## Publications
 The package description and application paper is currently under preparation (to be submitted to EGU GMD journal)
-Its application for weather station in Ghana was presented at the AGU22 and the paper is under preparation
+Its application for weather station in Ghana was presented at the AGU22 [Link](http://dx.doi.org/10.22541/essoar.167458059.91056213/v1) and the paper is under preparation
 
 ## Future versions
 The pacakage is still in planing stage (v1.01)

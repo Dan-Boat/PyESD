@@ -1,56 +1,58 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 11 13:50:59 2022
+#!/usr/bin/env python
 
-@author: dboateng
-"""
+"""The setup script."""
 
-from setuptools import setup
-import sys
-import pathlib
+import io
+from os import path as op
+from setuptools import setup, find_packages
 
-HERE = pathlib.Path(__file__).parent
-README = (HERE / "README.md").read_text()
+with open('README.md') as readme_file:
+    readme = readme_file.read()
+
+here = op.abspath(op.dirname(__file__))
+
+# get the dependencies and installs
+with io.open(op.join(here, "requirements.txt"), encoding="utf-8") as f:
+    all_reqs = f.read().split("\n")
+
+install_requires = [x.strip() for x in all_reqs if "git+" not in x]
+dependency_links = [x.strip().replace("git+", "") for x in all_reqs if "git+" not in x]
+
+requirements = [ ]
+
+setup_requirements = ['pytest-runner', ]
+
+test_requirements = ['pytest>=3', ]
 
 setup(
-      name = "pyESD",
-      version = "0.0.1",
-      description= "Python package for Empirical Statistical Downscaling",
-      long_description = README,
-      long_description_content_type = "text/markdown",
-      keywords = "climate downscaling", "statistical downscaling", "scikit-learn", "xarray", 
-      url="https://github.com/Dan-Boat/PyESD",
-      author="Daniel Boateng",
-      author_email= "dannboateng@gmail.com",
-      license="MIT",
-      packages=["pyESD"],
-      install_requires=["mpi4py",
-                        "numpy", 
-                        "pandas",
-                        "xarray", 
-                        "statsmodels",
-                        "seaborn",
-                        "sklearn",
-                        "scipy",
-                        "eofs",
-                        ],
-
-      classifiers = [
-        'Development Status :: 1 - Planning',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: MIT License',  
-        'Operating System :: POSIX :: Linux',        
+    author="Daniel Boateng",
+    author_email='dannboateng@gmail.com',
+    python_requires='>=3.7',
+    classifiers=[
+        'Development Status :: 2 - Pre-Alpha',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: MIT License',
+        'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
-        'Programming Language :: Python :: 3.5', 
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8', 
+        'Programming Language :: Python :: 3.8',
         'Programming Language :: Python :: 3.9',
-        
-          ],
-      
-      include_package_data = True,
-      entry_points = {}
-      
-      )
+        'Programming Language :: Python :: 3.10',
+    ],
+    description="Python Package for Empirical Statistical Downscaling. pyESD is under active development and all colaborators are welcomed. The purpose of the package is to downscale any climate variables e.g. precipitation and temperature using predictors from  reanalysis datasets (eg. ERA5) to point scale. pyESD adopts many ML and AL as the transfer function. ",
+    install_requires=install_requires,
+    dependency_links=dependency_links,
+    license="MIT license",
+    long_description=readme,
+    long_description_content_type='text/markdown',
+    include_package_data=True,
+    keywords='PyESD',
+    name='PyESD',
+    packages=find_packages(include=['PyESD', 'PyESD.*']),
+    setup_requires=setup_requirements,
+    test_suite='tests',
+    tests_require=test_requirements,
+    url='https://github.com/Dan-Boat/PyESD',
+    version='0.0.1',
+    zip_safe=False,
+)
