@@ -1,4 +1,0 @@
- 
-# PyESD module
-
-::: PyESD.PyESD
