@@ -1,0 +1,10 @@
+name: pyESD
+dependencies:
+  - python=3.8
+  - numpy
+  - pip
+  - pip:
+    - sphinx
+    - sphinx-rtd-theme
+    - pytest
+    - -e .
