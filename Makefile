@@ -7,7 +7,7 @@ SPHINXOPTS    ?=
 SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = docs/source
 BUILDDIR      = docs/build
-GH_PAGES_SOURCES = docs pyESD tests setup.py setup.cfg Makefile
+GH_PAGES_SOURCES = docs pyESD tests setup.py setup.cfg Makefile .readthedocs.yml environment.yml
 
 # Put it first so that "make" without argument is like "make help".
 help:
