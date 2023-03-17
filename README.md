@@ -22,7 +22,7 @@ The installation might require some dependencies that must be installed if not s
 3. Alternatively, to ensure the installation in an isolated environment, virtual python environment using `conda` or `virtualenv` can be used to create a separate env for the package installation
 ## Documentation :blue_book:
 
-The stable version of the doc would be hosted on github pages (..in progress).
+The package documentation is still in progress. The initial structure is accessible at [github-pages](https://dan-boat.github.io/PyESD/)
 
 ## Examples
 The package has been used for downscaling precipitation and temperature for a catchment located in southwestern Germnany. We have also used it for generating future rainfall products for all the synoptic weather stations in Ghana. Their respective control scripts are located in the [examples folder](./pyESD/examples/). Generally, the control scripts follow the modeling workflow as shown in:
