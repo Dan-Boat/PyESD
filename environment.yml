@@ -7,4 +7,4 @@ dependencies:
     - sphinx
     - sphinx-rtd-theme
     - pytest
-    - -e .
+    - pyESD
