@@ -118,8 +118,11 @@ plt.show()
 The package is tested using the `unittest` framework with synthetic generated data. The testing scripts are located in the [test](./test) folder. Running  the various scripts with -v flag (higher level of verbose), would validate the modified version of the package. 
 
 ## Publications
-The package description and application paper is currently under preparation (to be submitted to Environmental Modelling and Sofware Journal)
+The package description and application paper is currently under preparation (to be submitted to GMD)
 Its application for weather station in Ghana was presented at the AGU22 [Link](http://dx.doi.org/10.22541/essoar.167458059.91056213/v1) and the paper is under preparation
+
+Citation:
+Upload on zenodo: https://doi.org/10.5281/zenodo.7748769
 
 ## Future versions
 The pacakage is still in planing stage (v.0.0.1) (The stable version would be uploaded on pypi with the version number v.1.0.1)
