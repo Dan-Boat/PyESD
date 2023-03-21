@@ -49,13 +49,13 @@ def generate_correlation():
         # set standardizer 
         SO.set_standardizer(variable, standardizer= MonthlyStandardizer(detrending=False,scaling=False))
         
-        corr = SO.predictor_correlation(variable, from1961to2017, ERA5Data, fit_predictor=True, 
+        corr = SO.predictor_correlation(variable, from1981to2017, ERA5Data, fit_predictor=True, 
                                  fit_predictand=True, method="pearson")
         # get the time series
         
-        y_obs = SO.get_var(variable, from1961to2017, anomalies=False)
+        y_obs = SO.get_var(variable, from1981to2017, anomalies=False)
         
-        predictors_obs = SO._get_predictor_data(variable, from1961to2017, ERA5Data, fit_predictors=True,)
+        predictors_obs = SO._get_predictor_data(variable, from1981to2017, ERA5Data, fit_predictors=True,)
         
         predictors_obs["Precipitation"] = y_obs
         
@@ -73,7 +73,7 @@ def plot_correlation():
     
     fig, ax = plt.subplots(1,1, figsize=(20,15))
                             
-    correlation_heatmap(data=df, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
+    correlation_heatmap(data=df, cmap="RdBu", ax=ax, vmax=0.5, vmin=-0.5, center=0, cbar_ax=None, fig=fig,
                             add_cbar=True, title=None, label= "Pearson Correlation Coefficinet", fig_path=path_to_store,
                             xlabel="Predictors", ylabel="Stations", fig_name="correlation_prec.svg",)
     

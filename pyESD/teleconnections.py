@@ -56,11 +56,14 @@ def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True,
         print("The sklearn implementation of EOF analysis is used! for the teleconnections")
         
         time_mean = data.mean(dim="time")
+        
+        deviations = data - time_mean
+
         pcs = np.empty(neofs)
         
         PCA = decomposition.PCA(n_components=neofs)
         
-        X = np.reshape(data.values, (len(data.time), time_mean.size))
+        X = np.reshape(deviations.values, (len(data.time), time_mean.size))
         
         PCA.fit(X)
         
@@ -75,7 +78,7 @@ def eof_analysis(data, neofs, method="eof_package", apply_equal_wtgs=True,
             
         eofs_cov = xr.concat(ls_eofs, pd.Index(range(1, neofs+1), name="eof_number"))
         
-        eofs_cov = eofs_cov.sortby(eofs_cov.lon)
+        #eofs_cov = eofs_cov.sortby(eofs_cov.lon)
         
     
     else:
@@ -103,6 +106,103 @@ def extract_region(data, datarange, varname, minlat, maxlat, minlon, maxlon):
     data = data.where((data.lon >=minlon) & (data.lon <= maxlon), drop=True)
     
     return data
+        
+# implementation of MEI (not tested)
+
+class MEI(Predictor):
+    def __init__(self, **kwargs):
+        super().__init__(name="MEI", longname= "Multivariate ENSO Index", **kwargs)
+        self.variables = ["t2m", "msl", "u10", "v10", "sst"] # replace temperature with outgoing long wave radiation!
+        
+    def _generate(self, datarange, dataset, fit, patterns_from, params_from):
+        
+        if hasattr(dataset, "expver"):
+            data = dataset.drop("expver")
+        
+        
+        bi_monthly={}
+        params = self.params[params_from]
+        
+        if fit:
+            params["nonan_indices"] = {}
+            
+        for v in self.variables:
+            # load data and restrict to area of interest
+            da = dataset.get(v)
+            da = da.sel(time=datarange)
+            da = da.where((da.latitude <= 30) & (da.latitude >= -30)
+                            & (da.longitude <= 100) & (da.longitude >= -70), drop=True)
+
+            # multiply by area weight (cos(lat)) -check if needed here
+            da *= np.sqrt(np.cos(da.latitude*np.pi/180))
+            
+            if hasattr(da, "longitude"):
+                da = da.rename({"longitude":"lon", "latitude":"lat"})
+            # stack into one vector
+            stacked = da.stack(z=['lat', 'lon'])
+
+            if fit:
+                # get the indices with non-nan entries (only relevant for sst)
+                params["nonan_indices"][v] = np.where(~np.isnan(stacked.isel(time=0)))[0]
+            stacked = stacked.isel(z=params["nonan_indices"][v])
+
+
+            # get bimonthly season values
+            b = stacked.rolling(time=2).mean()
+            b[0,:] = stacked[0,:] # the first bimonthly season consist of only the first month
+            bi_monthly[v] = b
+
+        # this assumes that all dataarrays have the same time axis
+        month = da.time.values.astype('datetime64[M]').astype(int) % 12
+        
+        # find EOF pattern for each bimonthly window
+        if fit:
+            self.patterns[dataset.name] = {}
+            self.patterns[dataset.name]['eofs'] = []
+            params["timeseries_means"] = {}
+            params["timeseries_stds"] = {}
+        mei = np.empty(len(month))
+        for i in range(12):
+            this_month = np.where(month == i)[0]
+            normalized = []
+            for v in bi_monthly:
+                # select months
+                ts = bi_monthly[v].isel(time=this_month)
+                # normalize
+                if fit:
+                    params["timeseries_means"][v] = ts.mean(dim='time')
+                    params["timeseries_stds"][v] = ts.std(dim='time')
+                ts -= params["timeseries_means"][v]
+                ts /= params["timeseries_stds"][v]
+                normalized.append(ts)
+
+            vector = xr.concat(normalized, dim='z')
+            
+            if fit:
+                eof, _ = eof_analysis(data=vector, neofs=1, method="sklearn_package", apply_equal_wtgs=False)
+                eof1 = eof.sel(eof_number=1) 
+                # this guarantees that the EOFs of the different months have
+                # the same direction
+                if i != 0:
+                    if np.dot(eof, eof1) < 0:
+                        eof *= -1
+                else:
+                    eof1 = eof
+                self.patterns[dataset.name]['eofs'].append(eof)
+            index = np.dot(vector, self.patterns[patterns_from]['eofs'][i].squeeze())
+            mei[this_month] = index
+            
+        # the standard deviation that is used to normalize the index should be the same as the one
+        # found when constructing the patterns, that's why it's stored together with the patterns
+        if fit:
+            self.patterns[dataset.name]['std'] = np.std(mei)
+        mei /= self.patterns[patterns_from]['std']
+
+        mei_series = pd.Series(data=mei, name='MEI', index=da.time.values)
+
+        return mei_series
+            
+            
         
         
 

@@ -17,12 +17,12 @@ try:
     from .Predictor_Generator import *
     from .standardizer import MonthlyStandardizer
     from .predictand import PredictandTimeseries
-    from .teleconnections import NAO, SCAN, EA, EAWR
+    from .teleconnections import NAO, SCAN, EA, EAWR, MEI
 except:
     from Predictor_Generator import *
     from standardizer import MonthlyStandardizer
     from predictand import PredictandTimeseries
-    from teleconnections import NAO, SCAN, EA, EAWR
+    from teleconnections import NAO, SCAN, EA, EAWR, MEI
     
     
 class StationOperator():
@@ -59,6 +59,9 @@ class StationOperator():
             
             elif name == "EAWR":
                 predictor_list.append(EAWR(cachedir=cachedir))
+                
+            elif name == "MEI":
+                predictor_list.append(MEI(cachedir=cachedir))
             else:
                 
                 if standardizer == None: 

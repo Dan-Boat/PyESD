@@ -29,6 +29,7 @@ cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
 cmip5_45_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP45"
 cmip5_85_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP85"
 
+#add cordex africa!
 cordex_26_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP26"
 cordex_45_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP45"
 cordex_85_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP85"
