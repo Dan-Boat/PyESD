@@ -1,7 +1,35 @@
 Installation
 ============
 
+Install from PyPI
+-----------------
+- The standard version can be intalled with::
+    pip install pyESD
+
+- The same version can be installed in editable mode with the e flag::
+    pip install -e pyESD
+
+Install from Github
+-------------------
+The updated version (in development) can be clone from github:
+    git clone git@github.com:Dan-Boat/PyESD.git
+    pip install . (in the clone folder)
+
+It is recommended to install the package in an isolated environment.
+Virtualenv or conda can be used to create a new environment. 
+The package requires some dependencies that can be installed through the distro. If failed to be install
+through pip intallation, the following modules require manual installation.
+
 
 Dependencies
 ------------
+- cartopy 
+- sklearn 
+- xarray 
+- pandas
+- seaborn 
+- tensorflow 
+- matplotlib
+- netCDF4
+- 
 
