@@ -18,7 +18,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Methods" href="methods.html" />
-    <link rel="prev" title="pyESD (Python framwork for Empirical Statistical Downscaling)!" href="index.html" /> 
+    <link rel="prev" title="Python framwork for Empirical Statistical Downscaling" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,6 +43,8 @@
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-github">Install from Github</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
@@ -77,8 +79,46 @@
              
   <section id="installation">
 <h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading"></a></h1>
+<section id="install-from-pypi">
+<h2>Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>The standard version can be intalled with::</dt><dd><p>pip install pyESD</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>The same version can be installed in editable mode with the e flag::</dt><dd><p>pip install -e pyESD</p>
+</dd>
+</dl>
+</li>
+</ul>
+</section>
+<section id="install-from-github">
+<h2>Install from Github<a class="headerlink" href="#install-from-github" title="Permalink to this heading"></a></h2>
+<dl class="simple">
+<dt>The updated version (in development) can be clone from github:</dt><dd><p>git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:Dan-Boat/PyESD.git
+pip install . (in the clone folder)</p>
+</dd>
+</dl>
+<p>It is recommended to install the package in an isolated environment.
+Virtualenv or conda can be used to create a new environment.
+The package requires some dependencies that can be installed through the distro. If failed to be install
+through pip intallation, the following modules require manual installation.</p>
+</section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>cartopy</p></li>
+<li><p>sklearn</p></li>
+<li><p>xarray</p></li>
+<li><p>pandas</p></li>
+<li><p>seaborn</p></li>
+<li><p>tensorflow</p></li>
+<li><p>matplotlib</p></li>
+<li><p>netCDF4</p></li>
+<li></li>
+</ul>
 </section>
 </section>
 
@@ -86,7 +126,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="pyESD (Python framwork for Empirical Statistical Downscaling)!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Python framwork for Empirical Statistical Downscaling" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="methods.html" class="btn btn-neutral float-right" title="Methods" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

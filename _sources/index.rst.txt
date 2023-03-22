@@ -3,9 +3,25 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-pyESD (Python framwork for Empirical Statistical Downscaling)!
+Python framwork for Empirical Statistical Downscaling
 ==============================================================
+PyESD is an open-source framework of the Perfect Prognosis approach of statistical downscaling of 
+any climate-related variable such as precipitation, temperature, and wind speed using reanalysis 
+products eg. ERA5 as predictors. The package features all the downscaling cycles including data 
+preprocessing, predictor selection, constructions (eg. using transformers), model selection, 
+training, validation and evaluation, and future prediction. The package serves as the means 
+of downscaling General Circulation Models of future climate to high resolution relevant for 
+climate impact assessment such as droughts, flooding, wildfire risk, and others. The main 
+specialties of the pyESD include:
 
+- Well designed in an OOP style that considers weather stations as individual objects and all 
+the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end 
+downscaling of climate change variable products.
+- PyESD features many machine learning algorithms and predictor selection techniques that can be
+experimented with toward the selection and design of robust transfer functions that can be coupled 
+with GCM to generate future estimates of climate change
+- And many other functionalities that are highlighted in the paper description of the package 
+(to be submitted)
 
 Documentation
 =============

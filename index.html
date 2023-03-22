@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyESD (Python framwork for Empirical Statistical Downscaling)! &mdash; pyESD 0.0.1 documentation</title>
+  <title>Python framwork for Empirical Statistical Downscaling &mdash; pyESD 0.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -61,7 +61,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">pyESD (Python framwork for Empirical Statistical Downscaling)!</li>
+      <li class="breadcrumb-item active">Python framwork for Empirical Statistical Downscaling</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -71,8 +71,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pyesd-python-framwork-for-empirical-statistical-downscaling">
-<h1>pyESD (Python framwork for Empirical Statistical Downscaling)!<a class="headerlink" href="#pyesd-python-framwork-for-empirical-statistical-downscaling" title="Permalink to this heading"></a></h1>
+  <section id="python-framwork-for-empirical-statistical-downscaling">
+<h1>Python framwork for Empirical Statistical Downscaling<a class="headerlink" href="#python-framwork-for-empirical-statistical-downscaling" title="Permalink to this heading"></a></h1>
+<p>PyESD is an open-source framework of the Perfect Prognosis approach of statistical downscaling of
+any climate-related variable such as precipitation, temperature, and wind speed using reanalysis
+products eg. ERA5 as predictors. The package features all the downscaling cycles including data
+preprocessing, predictor selection, constructions (eg. using transformers), model selection,
+training, validation and evaluation, and future prediction. The package serves as the means
+of downscaling General Circulation Models of future climate to high resolution relevant for
+climate impact assessment such as droughts, flooding, wildfire risk, and others. The main
+specialties of the pyESD include:</p>
+<ul class="simple">
+<li><p>Well designed in an OOP style that considers weather stations as individual objects and all</p></li>
+</ul>
+<p>the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end
+downscaling of climate change variable products.
+- PyESD features many machine learning algorithms and predictor selection techniques that can be
+experimented with toward the selection and design of robust transfer functions that can be coupled
+with GCM to generate future estimates of climate change
+- And many other functionalities that are highlighted in the paper description of the package
+(to be submitted)</p>
 </section>
 <section id="documentation">
 <h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h1>
@@ -80,6 +98,8 @@
 <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-pypi">Install from PyPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#install-from-github">Install from Github</a></li>
 <li class="toctree-l2"><a class="reference internal" href="installation.html#dependencies">Dependencies</a></li>
 </ul>
 </li>
