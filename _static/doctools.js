@@ -4,12 +4,26 @@
  *
  * Base JavaScript utilities for all Sphinx HTML documentation.
  *
+<<<<<<< HEAD
  * :copyright: Copyright 2007-2022 by the Sphinx team, see AUTHORS.
+=======
+ * :copyright: Copyright 2007-2023 by the Sphinx team, see AUTHORS.
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
  * :license: BSD, see LICENSE for details.
  *
  */
 "use strict";
 
+<<<<<<< HEAD
+=======
+const BLACKLISTED_KEY_CONTROL_ELEMENTS = new Set([
+  "TEXTAREA",
+  "INPUT",
+  "SELECT",
+  "BUTTON",
+]);
+
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
 const _ready = (callback) => {
   if (document.readyState !== "loading") {
     callback();
@@ -19,6 +33,7 @@ const _ready = (callback) => {
 };
 
 /**
+<<<<<<< HEAD
  * highlight a given string on a node by wrapping it in
  * span elements with the given class name.
  */
@@ -80,11 +95,16 @@ const _highlightText = (thisNode, text, className) => {
 };
 
 /**
+=======
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
  * Small JavaScript module for the documentation.
  */
 const Documentation = {
   init: () => {
+<<<<<<< HEAD
     Documentation.highlightSearchWords();
+=======
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
     Documentation.initDomainIndexTable();
     Documentation.initOnKeyListeners();
   },
@@ -127,6 +147,7 @@ const Documentation = {
   },
 
   /**
+<<<<<<< HEAD
    * highlight the search words provided in the url in the text
    */
   highlightSearchWords: () => {
@@ -172,6 +193,8 @@ const Documentation = {
   },
 
   /**
+=======
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
    * helper function to focus on search bar
    */
   focusSearchBar: () => {
@@ -210,6 +233,7 @@ const Documentation = {
     )
       return;
 
+<<<<<<< HEAD
     const blacklistedElements = new Set([
       "TEXTAREA",
       "INPUT",
@@ -219,6 +243,13 @@ const Documentation = {
     document.addEventListener("keydown", (event) => {
       if (blacklistedElements.has(document.activeElement.tagName)) return; // bail for input elements
       if (event.altKey || event.ctrlKey || event.metaKey) return; // bail with special keys
+=======
+    document.addEventListener("keydown", (event) => {
+      // bail for input elements
+      if (BLACKLISTED_KEY_CONTROL_ELEMENTS.has(document.activeElement.tagName)) return;
+      // bail with special keys
+      if (event.altKey || event.ctrlKey || event.metaKey) return;
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
 
       if (!event.shiftKey) {
         switch (event.key) {
@@ -240,10 +271,13 @@ const Documentation = {
               event.preventDefault();
             }
             break;
+<<<<<<< HEAD
           case "Escape":
             if (!DOCUMENTATION_OPTIONS.ENABLE_SEARCH_SHORTCUTS) break;
             Documentation.hideSearchWords();
             event.preventDefault();
+=======
+>>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
         }
       }
 
