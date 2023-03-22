@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-var DOCUMENTATION_OPTIONS = {
-    URL_ROOT: document.getElementById("documentation_options").getAttribute('data-url_root'),
-    VERSION: '0.0.1',
-    LANGUAGE: 'en',
-    COLLAPSE_INDEX: false,
-    BUILDER: 'html',
-    FILE_SUFFIX: '.html',
-    LINK_SUFFIX: '.html',
-    HAS_SOURCE: true,
-    SOURCELINK_SUFFIX: '.txt',
-    NAVIGATION_WITH_KEYS: false,
-    SHOW_SEARCH_SUMMARY: true,
-    ENABLE_SEARCH_SHORTCUTS: false,
-=======
 var DOCUMENTATION_OPTIONS = {
     URL_ROOT: document.getElementById("documentation_options").getAttribute('data-url_root'),
     VERSION: '0.0.1',
@@ -26,5 +11,4 @@ var DOCUMENTATION_OPTIONS = {
     NAVIGATION_WITH_KEYS: false,
     SHOW_SEARCH_SUMMARY: true,
     ENABLE_SEARCH_SHORTCUTS: true,
->>>>>>> d9d8db747f8038b78e4ef90ac80606346b4099d7
 };
