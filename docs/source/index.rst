@@ -3,16 +3,27 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyESD's documentation!
-=================================
+pyESD (Python framwork for Empirical Statistical Downscaling)!
+==============================================================
+
+
+Documentation
+=============
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Getting Started:
 
+   installation
+   methods
+   examples
+   testing
    modules
 
 
+License
+=======
+pyESD is published under the MIT License (Copyright (c) 2023, Daniel Boateng)
 
 Indices and tables
 ==================
