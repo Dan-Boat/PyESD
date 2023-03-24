@@ -30,6 +30,8 @@ Dependencies
 - tensorflow (pip install tensorflow)
 - matplotlib
 - netCDF4
-- eofs
+- eofs (pip install eofs)
 - cartopy (conda install -c conda-forge cartopy) (not required for the modelling routines), optional
+- xgboost (pip install xgboost)
+- scikit-optimize (pip install scikit-optimize)
 

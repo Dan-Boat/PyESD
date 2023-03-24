@@ -5,7 +5,7 @@ Submodules
 ----------
 
 pyESD.ESD\_utils module
------------------------
+------------------------
 
 .. automodule:: pyESD.ESD_utils
    :members:
@@ -21,7 +21,7 @@ pyESD.Predictor\_Base module
    :show-inheritance:
 
 pyESD.Predictor\_Generator module
----------------------------------
+----------------------------------
 
 .. automodule:: pyESD.Predictor_Generator
    :members:
@@ -133,7 +133,7 @@ pyESD.teleconnections module
    :show-inheritance:
 
 pyESD.data_preprocessing_utils module
-----------------------------
+--------------------------------------
 
 .. automodule:: pyESD.data_preprocessing_utils
    :members:
@@ -141,7 +141,7 @@ pyESD.data_preprocessing_utils module
    :show-inheritance:
 
 pyESD.MLR module
-----------------------------
+-----------------
 
 .. automodule:: pyESD.MLR_model
    :members:

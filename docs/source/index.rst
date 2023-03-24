@@ -15,16 +15,16 @@ climate impact assessment such as droughts, flooding, wildfire risk, and others.
 specialties of the pyESD include:
 
 - Well designed in an OOP style that considers weather stations as individual objects and all 
-the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end 
-downscaling of climate change variable products.
+   the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end 
+   downscaling of climate change variable products.
 - PyESD features many machine learning algorithms and predictor selection techniques that can be
-experimented with toward the selection and design of robust transfer functions that can be coupled 
-with GCM to generate future estimates of climate change
+   experimented with toward the selection and design of robust transfer functions that can be coupled 
+   with GCM to generate future estimates of climate change
 - And many other functionalities that are highlighted in the paper description of the package 
-(to be submitted)
+   (to be submitted)
 
 .. image:: ./imgs/img1.png
-   :width: 400
+   :width: 600
    :alt: Model Outline
 
 Documentation
@@ -40,7 +40,6 @@ Documentation
    examples
    testing
    modules
-   readme
 
 
 License
