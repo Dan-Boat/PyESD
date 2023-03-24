@@ -8,6 +8,7 @@ private/
 /examples/Ghana/.predictors_50
 /examples/Ghana/correlation_data
 /examples/Ghana/model_selection
+/examples/Ghana/final_experiment
 /examples/Ghana/predictor_selection
 /examples/Ghana/final_cache_Precipitation
 /examples/Ghana/final_cache_Temperature
