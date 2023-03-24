@@ -3,6 +3,8 @@
 Created on Wed Mar 16 12:26:01 2022
 
 @author: dboateng
+
+This module require further development of add deep learning models!
 """
 
 # importing models 

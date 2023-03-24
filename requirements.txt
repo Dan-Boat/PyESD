@@ -10,3 +10,4 @@ sklearn
 tensorflow
 eofs
 netCDF4
+scikit-optimize
