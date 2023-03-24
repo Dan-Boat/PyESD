@@ -64,7 +64,7 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         if estimator == "Stacking":
             
             SO.set_model(variable, method=estimator, ensemble_learning=True, 
-                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1981to2017,
+                     estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1961to2017,
                      predictor_dataset=ERA5Data, cv=KFold(n_splits=10), 
                                    scoring=scoring)
         else:
@@ -78,20 +78,17 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         
         selector_method = "TreeBased"
         
-        SO.fit(variable,  from1981to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
+        SO.fit(variable,  from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                 selector_method=selector_method , selector_regressor="RandomForest",
-                cal_relative_importance=False, impute=False, impute_method="spline", impute_order=5)
+                cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
         
         
-        if estimator == "RandomForest":
-            importance = SO.tree_based_feature_permutation_importance(variable, from1981to2017, ERA5Data, fit_predictors=True, 
-                                                                      plot=False)
             
         
-        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1981to2017, ERA5Data, 
+        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1961to2017, ERA5Data, 
                                                                          return_cv_scores=True)
         
-        climate_score = SO.climate_score(variable, from1981to2017, from1981to2017, ERA5Data)
+        climate_score = SO.climate_score(variable, from1961to2017, from1961to2017, ERA5Data)
         
         #ypred_train = SO.predict(variable, from1981to2017, ERA5Data)
         
@@ -130,8 +127,7 @@ if __name__ == "__main__":
     
     base_estimators = ["ARD", "RandomForest", "Bagging"]
     
-
-    estimators = ["LassoLarsCV", "ARD", "RandomForest", "XGBoost", "Bagging", "AdaBoost"]
+    estimators = ["LassoLarsCV", "ARD", "RandomForest", "XGBoost", "Bagging", "AdaBoost", "RidgeCV"]
     #estimators = ["Stacking"]
     
     

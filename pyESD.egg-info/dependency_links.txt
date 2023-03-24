@@ -1,1 +1,14 @@
-
+numpy
+scipy
+matplotlib
+xarray
+seaborn
+eofs
+statsmodels
+pandas
+cartopy
+sklearn
+tensorflow
+xeofs
+eofs
+netCDF4

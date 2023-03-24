@@ -389,7 +389,7 @@ def extract_time_series(stationnames, path_to_data, filename, id_name, method,
 def extract_comparison_data_means(stationnames, path_to_data,
                                   filename, id_name, method, stationloc_dir,
                                   daterange, datasets, variable, dataset_varname,
-                                  ):
+                                  use_id=True):
     
     models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
     
@@ -424,9 +424,10 @@ def extract_comparison_data_means(stationnames, path_to_data,
             elif variable == "Precipitation":
                 df[models_col_names[j+1]].loc[stationname] = df_proj_mean *60*60*24*30
     
+    if use_id == True:
+        df.reset_index(drop=True, inplace=True)
+        df.index +=1
     
-    df.reset_index(drop=True, inplace=True)
-    df.index +=1
     df = df.astype(float)
     
     return df

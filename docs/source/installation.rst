@@ -23,13 +23,14 @@ through pip intallation, the following modules require manual installation.
 
 Dependencies
 ------------
-- cartopy 
-- sklearn 
-- xarray 
+- cartopy (conda install -c conda-forge cartopy)
+- sklearn (pip install -U scikit-learn)
+- xarray (conda install -c conda-forge xarray dask netCDF4 bottleneck)
 - pandas
 - seaborn 
-- tensorflow 
+- tensorflow (pip install tensorflow)
 - matplotlib
 - netCDF4
-- 
+- eofs
+- xeofs (conda install -c conda-forge xeofs)
 

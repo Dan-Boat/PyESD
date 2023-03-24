@@ -28,8 +28,7 @@ path_to_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Gh
 path_to_plot = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/plots"
 
 
-regressors = ["LassoLarsCV", "ARD", "MLP", "RandomForest",
-              "XGBoost", "Bagging", "Stacking"]
+regressors = ["LassoLarsCV", "ARD", "RandomForest", "XGBoost", "Bagging", "AdaBoost", "RidgeCV"]
 
 
 
@@ -57,8 +56,6 @@ for regressor in regressors:
     df_r2[regressor] = df["r2"]
     df_mae[regressor] = df["mae"]    
 
-df_r2 = df_r2.drop(labels=["Enchi", "Yendi"])
-df_mae = df_mae.drop(labels=["Enchi", "Yendi"])
 
 def box_plot_(data, ax, colors, ylabel=None, xlabel=None):
     color = { "boxes": black,
@@ -91,40 +88,15 @@ def box_plot_(data, ax, colors, ylabel=None, xlabel=None):
         ax.set_xticklabels([])
         
         
-        
-colors = [grey, purple, lightbrown, tomato, skyblue, lightgreen, gold]        
+apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)       
+colors = [grey, purple, lightbrown, tomato, skyblue, lightgreen, gold, '#2ca02c',]        
 fig, (ax1,ax2) = plt.subplots(2,1, sharex=False, figsize=(20, 15))
 
-box_plot_(df_r2, ax1, colors, ylabel="Cross-validation R²")
-box_plot_(df_mae, ax2, colors, ylabel="Cross-validation MAE", xlabel="ML Estimators")
+box_plot_(df_r2, ax1, colors, ylabel="CV R²")
+box_plot_(df_mae, ax2, colors, ylabel="CV MAE", xlabel="Learning Models")
        
 plt.tight_layout()
 plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
 
-plt.savefig(os.path.join(path_to_plot, "estimators_metrics.svg"), bbox_inches="tight", format= "svg")
+plt.savefig(os.path.join(path_to_plot, "estimators_metrics_train1961_2017.svg"), bbox_inches="tight", format= "svg")
 
-print(scores_df)
-
-def plot_estimators_metrics():
-    
-    regressors = ["LassoLarsCV", "ARD", "MLP", "RandomForest",
-                  "XGBoost", "Bagging", "Stacking"]
-    
-    colors = [grey, purple, lightbrown, tomato, skyblue, lightgreen, gold]
-    
-    apply_style(fontsize=22, style=None, linewidth=2)
-    
-    fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(20, 15), sharex=False)
-    
-    
-    boxplot(regressors, stationnames_prec, path_to_data, ax=ax1,  
-                varname="train_r2", filename="validation_score_", xlabel="Estimators",
-                ylabel="Fit R²", colors = colors, patch_artist=(True),rot=90)
-    
-    
-    plt.tight_layout()
-    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
-    plt.savefig(os.path.join(path_to_plot, "inter_model_fit_metrics.svg"), bbox_inches="tight", dpi=300)
-    
-    
-plot_estimators_metrics()

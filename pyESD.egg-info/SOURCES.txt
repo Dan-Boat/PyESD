@@ -9,8 +9,16 @@ PyESD.egg-info/PKG-INFO
 PyESD.egg-info/SOURCES.txt
 PyESD.egg-info/dependency_links.txt
 PyESD.egg-info/not-zip-safe
+PyESD.egg-info/requires.txt
 PyESD.egg-info/top_level.txt
 pyESD.egg-info/PKG-INFO
 pyESD.egg-info/SOURCES.txt
 pyESD.egg-info/dependency_links.txt
 pyESD.egg-info/top_level.txt
+tests/test_ensemble.py
+tests/test_models.py
+tests/test_pyESD.py
+tests/test_pyESD_utils.py
+tests/test_standardizer.py
+tests/test_syn_data.py
+tests/test_utils.py

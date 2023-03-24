@@ -23,6 +23,10 @@ with GCM to generate future estimates of climate change
 - And many other functionalities that are highlighted in the paper description of the package 
 (to be submitted)
 
+.. image:: ./imgs/img1.png
+   :width: 400
+   :alt: Model Outline
+
 Documentation
 =============
 
@@ -30,11 +34,13 @@ Documentation
    :maxdepth: 2
    :caption: Getting Started:
 
+   
    installation
    methods
    examples
    testing
    modules
+   readme
 
 
 License

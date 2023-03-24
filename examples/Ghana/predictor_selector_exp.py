@@ -22,12 +22,10 @@ from settings import *
 
 
 def run_test(variable, regressor, selector_method, cachedir, stationnames,
-                    station_datadi):
+                    station_datadir):
     
-    #num_of_stations = len(stationnames)
-    
-    num_of_stations = 1
-    
+    num_of_stations = len(stationnames)
+        
 
 
 
@@ -56,38 +54,25 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         SO.set_model(variable, method=regressor, cv= KFold(n_splits=20), 
                       scoring=scoring)
         
-        # SO.set_model(variable, method=regressor, cv=KFold(n_splits=10), scoring=scoring)
-        
-        #SO.set_model(variable, method=regressor, cv=LeaveOneOut(), scoring=scoring)
-        
+
     
         #fitting model (with predictor selector optioin)
-        
-        if selector_method == "Recursive":
-            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                    selector_method=selector_method , selector_regressor="ARD", 
-                    cal_relative_importance=False)
+    
             
-        elif selector_method == "TreeBased":
+       
         
-            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                   selector_method=selector_method , selector_regressor="RandomForest",)
+        SO.fit(variable, from1981to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
+               selector_method=selector_method , selector_regressor="RandomForest",)
         
-        elif selector_method == "Sequential":
+
         
-            SO.fit(variable, from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
-                   selector_method=selector_method , selector_regressor="ARD", num_predictors=10, 
-                   selector_direction="forward")
-        else:
-            raise ValueError("Define selector not recognized")
-            
         # extracting selected predictors
         
         selected_predictors = SO.selected_names(variable)
         
         # training estimate for the same model
-        climate_score = SO.climate_score(variable, from1961to2017, from1961to2017, ERA5Data)
-        score, ypred = SO.cross_validate_and_predict(variable, from1961to2017, ERA5Data)
+        climate_score = SO.climate_score(variable, from1981to2017, from1981to2017, ERA5Data)
+        score, ypred = SO.cross_validate_and_predict(variable, from1981to2017, ERA5Data)
         
         # storing results
         
@@ -115,15 +100,9 @@ if __name__ == "__main__":
         
         station_datadir = station_prec_datadir
         
-        
-        
-        
             
-        selector_methods = ["Recursive", "TreeBased", "Sequential"]
+        selector_method = "TreeBased"
         
-        for selector_method in selector_methods:
-        
-            print("------ runing for model: ", selector_method, "----------")
-        
-            run_test(variable, regressor, selector_method, cachedir, stationnames, 
+       
+        run_test(variable, regressor, selector_method, cachedir, stationnames, 
                             station_datadir)

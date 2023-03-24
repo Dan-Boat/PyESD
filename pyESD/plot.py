@@ -280,7 +280,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     ax.scatter(obs_test, ypred_test, alpha=0.3, c=red, s=100, label=test_predict_name)
     
-    ax.plot(obs, regression_slope, color=red, label="R = {:.2f}".format(r2))
+    ax.plot(obs, regression_slope, color=red, label="PCC = {:.2f}".format(r2))
     
     ax.legend(loc= "upper left", fontsize=20)
     
@@ -439,13 +439,14 @@ def plot_projection_comparison(stationnames, path_to_data,
                                   filename, id_name, method, stationloc_dir,
                                   daterange, datasets, variable, dataset_varname,
                                   ax=None, xlabel=None, ylabel=None, legend=True,
-                                  figpath=None, figname=None, width=0.5, title=None):
+                                  figpath=None, figname=None, width=0.5, title=None,
+                                  vmax=None, vmin=None, use_id=True):
     
    df = extract_comparison_data_means(stationnames, path_to_data, filename, id_name, 
                                       method, stationloc_dir, daterange, datasets, 
-                                      variable, dataset_varname) 
+                                      variable, dataset_varname, use_id=use_id) 
    
-   models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2"]
+   models_col_names = ["ESD", "MPIESM", "CESM5", "HadGEM2", "CORDEX"]
    
    
    if ax is None:
@@ -454,10 +455,13 @@ def plot_projection_comparison(stationnames, path_to_data,
    colors = [Models_colors[c] for c in models_col_names] 
    mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)
    
+   if use_id:
+       df.plot(kind="bar", rot=0, ax=ax, legend=legend, fontsize=20, width=width)
+   else:
+       df.plot(kind="bar", rot=45, ax=ax, legend=legend, fontsize=20, width=width)
    
-   df.plot(kind="bar", rot=0, ax=ax, legend=legend, fontsize=20, width=width)
-   
-   
+   if vmax is not None:
+       ax.set_ylim(vmin, vmax)
    if ylabel is not None:
         ax.set_ylabel(ylabel, fontweight="bold", fontsize=20)
         ax.grid(True, linestyle="--", color=gridline_color)
@@ -483,7 +487,3 @@ def plot_projection_comparison(stationnames, path_to_data,
    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
    
    
-   
-   
-def plot_explained_variance():
-    pass

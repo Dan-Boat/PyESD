@@ -20,45 +20,17 @@ import geopandas as gpd
 from pyESD.ESD_utils import load_all_stations, load_pickle, load_csv
 from pyESD.plot import *
 from pyESD.plot_utils import *
-from pyESD.plot_utils import *
+
 
 from settings import *
 from read_data import *
 
-path_to_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/model_selection"
+path_to_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/final_experiment"
 path_to_plot = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/plots"
 shape_file_dir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Ghana_ShapeFile"
 
 station_info = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/processed/monthly/stationnames.csv"
 
-def plot_stations(stationnames):
-    
-    df_prec_sm = seasonal_mean(stationnames, path_to_data, filename="predictions_", 
-                            daterange=from1961to2012 , id_name="obs", method= "Stacking")
-    
-    
-    df_prec = monthly_mean(stationnames, path_to_data, filename="predictions_", 
-                            daterange=from1961to2012 , id_name="obs", method= "Stacking")
-    
-    means_prec, stds_prec = estimate_mean_std(df_prec)
-    
-    
-    
-    apply_style(fontsize=22, style=None, linewidth=3)
-    
-    fig, (ax1, ax2) = plt.subplots(nrows=2, ncols=1, figsize=(20, 15))
-    
-    heatmaps(data=df_prec_sm, cmap="Blues", label="Precipitation [mm/month]", title= None, 
-             ax=ax1, cbar=True, xlabel="Precipitation stations")
-    
-    plot_monthly_mean(means=means_prec, stds=stds_prec, color=seablue, ylabel="Precipitation [mm/month]", 
-                      ax=ax2)
-    
-    plt.tight_layout()
-    
-    plt.savefig(os.path.join(path_to_plot, "stations.svg"), bbox_inches="tight", dpi=300)
-    
-    
 # ploting the locations of stations 
 
 def plot_location_map():
@@ -88,6 +60,58 @@ def plot_location_map():
     plt.tight_layout()
     plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
     plt.savefig(os.path.join(path_to_plot, "stations_map.svg"), bbox_inches="tight", format= "svg", dpi=600)
+
+def estimate_mean_std(df):
+    means = df.mean(axis=1)
+    stds = df.std(axis=1)
+    
+    return means, stds 
+
+def plot_stations(stationnames, ax, save_fig=False):
+    
+    # df_prec_sm = seasonal_mean(stationnames, path_to_data, filename="predictions_", 
+    #                         daterange=from1961to2012 , id_name="obs", method= "Stacking")
+    
+    
+    df_prec = monthly_mean(stationnames, path_to_data, filename="predictions_", 
+                            daterange=from1981to2017 , id_name="obs", method= "Stacking")
+    
+    means_prec, stds_prec = estimate_mean_std(df_prec)
+    
+    
+    #apply_style(fontsize=22, style=None, linewidth=3)
+    
+    if ax is None:
+        fig, ax = plt.subplots(nrows=1, ncols=1, figsize=(20, 15))
+    
+    # heatmaps(data=df_prec_sm, cmap="Blues", label="Precipitation [mm/month]", title= None, 
+    #          ax=ax1, cbar=True, xlabel="Precipitation stations")
+    
+    plot_monthly_mean(means=means_prec, stds=stds_prec, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax)
+    
+    plt.tight_layout()
+    
+    if save_fig:
+        plt.savefig(os.path.join(path_to_plot, "stations.svg"), bbox_inches="tight", dpi=300)
+    
+
+
+apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)    
+fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15, 20), sharex=True, sharey=True)
+
+stationnames_north= ["Navrongo", "Bolgatanga", "Wa","Bole"]
+stationnames_central = ["Wenchi", "Sunyani", "Dormaa-Ahenkro",] 
+stationnames_south = ["Kumasi", "Abetifi", "Dunkwa", "Tarkwa", "Axim", "Takoradi", 
+                      "Saltpond", "Accra", "Tema", "Akuse", "Akim-Oda"]
+
+plot_stations(stationnames_north, ax1)
+plot_stations(stationnames_central, ax2)
+plot_stations(stationnames_south, ax3)
+plt.tight_layout()
+plt.savefig(os.path.join(path_to_plot, "stations_months.svg"), bbox_inches="tight", dpi=600)
+
+    
 
 
 
