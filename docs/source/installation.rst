@@ -18,7 +18,7 @@ The updated version (in development) can be clone from github:
 It is recommended to install the package in an isolated environment.
 Virtualenv or conda can be used to create a new environment. 
 The package requires some dependencies that can be installed through the distro. If failed to be install
-through pip intallation, the following modules require manual installation.
+through pip installation, the following modules would require manual installation.
 
 
 Dependencies

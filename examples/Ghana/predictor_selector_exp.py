@@ -70,18 +70,12 @@ def run_test(variable, regressor, selector_method, cachedir, stationnames,
         
         selected_predictors = SO.selected_names(variable)
         
-        # training estimate for the same model
-        climate_score = SO.climate_score(variable, from1981to2017, from1981to2017, ERA5Data)
-        score, ypred = SO.cross_validate_and_predict(variable, from1981to2017, ERA5Data)
         
         # storing results
-        
-        store_csv(stationname, "predictions_" + selector_method, ypred, cachedir)
         
         store_pickle(stationname, "selected_predictors_" + selector_method, selected_predictors,
         cachedir)    
         
-        store_pickle(stationname, "validation_score_" + selector_method, score, cachedir)
         
         
         

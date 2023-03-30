@@ -12,6 +12,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from copy import copy
 from collections import OrderedDict
+import scipy.stats as stats
 
 
 try:
@@ -149,7 +150,7 @@ class PredictandTimeseries():
         return pd.concat(Xs, axis=1)
     
     def predictor_correlation(self, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True, 
-                              method="pearson", **predictor_kwargs):
+                              method="pearson", use_scipy=False, **predictor_kwargs):
         
         X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors=fit_predictors, 
                                      **predictor_kwargs)
@@ -162,12 +163,30 @@ class PredictandTimeseries():
         
         y = y.dropna()
         
-        
-        corr = X.corrwith(other=y, axis=0, drop=True, method=method)
-        
-        corr = corr.to_frame()
-        
-        return  corr.T  # change the code with scipy stats in order to estimate the significance
+        if use_scipy:
+            df_results = pd.DataFrame(index=np.arange(2), columns=X.columns)
+            
+            for column in X.columns:
+                if method =="pearson":
+                    corr = stats.pearsonr(y, X[column])
+                    df_results[column][0] = corr[0]
+                    df_results[column][1] = corr[1]
+                    
+                elif method == "spearman":
+                    corr = stats.spearmanr(y, X[column])
+                    df_results[column][0] = corr[0]
+                    df_results[column][1] = corr[1]
+                else:
+                    raise ValueError("The defined method is not accurate")
+                    
+            return df_results
+            
+        else:
+            corr = X.corrwith(other=y, axis=0, drop=True, method=method)
+            
+            corr = corr.to_frame()
+            
+            return  corr.T  # change the code with scipy stats in order to estimate the significance
             
             
     def fit_predictor(self, name, daterange, predictor_dataset):

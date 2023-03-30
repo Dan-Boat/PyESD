@@ -158,22 +158,48 @@ def barplot_data(methods, stationnames, path_to_data, varname="test_r2", varname
     return df, df_std
     
 
-def correlation_data(stationnames, path_to_data, filename, predictors, use_id=False):
+def correlation_data(stationnames, path_to_data, filename, predictors, use_id=False, use_scipy=False):
     
     df = pd.DataFrame(index=stationnames, columns=predictors)
+    
+    if use_scipy:
+        df_pval = pd.DataFrame(index=stationnames, columns=predictors)
+        
     
     
     for i,idx in enumerate(stationnames):
         
-        df.iloc[i] = load_csv(idx, filename, path_to_data)
+        if use_scipy:
+            df_corr = load_csv(idx, filename, path_to_data)
+            
+            df.iloc[i] = df_corr.loc[0,:]
+            df_pval.iloc[i] = df_corr.loc[1,:]
+            
+        else:
+            df.iloc[i] = load_csv(idx, filename, path_to_data)
     
-    df = df.astype(float)
     
-    if use_id == True:
-        df.reset_index(drop=True, inplace=True)
-        df.index += 1
-    
-    return df 
+    if use_scipy:
+        df = df.astype(float)
+        df_pval = df_pval.astype(float)
+        
+        if use_id == True:
+            df.reset_index(drop=True, inplace=True)
+            df.index += 1
+            
+            df_pval.reset_index(drop=True, inplace=True)
+            df_pval.index += 1
+        
+        return df, df_pval
+    else:
+        
+        df = df.astype(float)
+        
+        if use_id == True:
+            df.reset_index(drop=True, inplace=True)
+            df.index += 1
+        
+        return df 
 
 def count_predictors(methods, stationnames, path_to_data, filename, predictors,
                      ):
