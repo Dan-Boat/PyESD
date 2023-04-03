@@ -56,4 +56,4 @@ Indices and tables
 
 
 .. warning::
-    Please note that this page is under active delopement! Thanks for the understanding
+    Please note that this page is under active delopement and would benefit from its extension! Thanks for the understanding
