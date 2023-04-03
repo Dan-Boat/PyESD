@@ -22,7 +22,7 @@ help:
 
 gh-pages:
 	git checkout gh-pages
-	rm -rf build _sources _static _modules chapters
+	/bin/rm -rf build _sources _static _modules _images
 	git checkout main $(GH_PAGES_SOURCES) .gitignore
 	git reset HEAD
 	make html
