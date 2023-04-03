@@ -16,4 +16,4 @@ regressor to improve the performance of the transfer function require for downsc
 
 
 .. warning::
-    Please note that this page is under active delopement! Thanks for the understanding
+    Please note that this page is under active delopement and would benefit from its extension! Thanks for the understanding
