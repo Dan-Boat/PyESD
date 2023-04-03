@@ -74,8 +74,8 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
         
         sns.heatmap(ax=ax, data=data, cmap=cmap, vmax=vmax, vmin=vmin, center=center, cbar=add_cbar,
                     square=True, cbar_ax = cbar_ax, cbar_kws={"label": label, "shrink":0.5,
-                                                              "drawedges": False},
-                    linewidth=0.5, linecolor="black")
+                                                              "drawedges": False,},
+                    linewidth=0.5, linecolor="black",)
     else:
         
         sns.heatmap(ax=ax, data=data, cmap=cmap, robust=True, cbar=add_cbar,

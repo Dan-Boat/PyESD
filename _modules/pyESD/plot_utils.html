@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyESD.plot_utils &mdash; pyESD 0.0.1 documentation</title>
+  <title>pyESD.plot_utils &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -42,6 +42,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
@@ -230,22 +231,48 @@
     <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_std</span></div>
     
 
-<div class="viewcode-block" id="correlation_data"><a class="viewcode-back" href="../../pyESD.html#pyESD.plot_utils.correlation_data">[docs]</a><span class="k">def</span> <span class="nf">correlation_data</span><span class="p">(</span><span class="n">stationnames</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">predictors</span><span class="p">,</span> <span class="n">use_id</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="correlation_data"><a class="viewcode-back" href="../../pyESD.html#pyESD.plot_utils.correlation_data">[docs]</a><span class="k">def</span> <span class="nf">correlation_data</span><span class="p">(</span><span class="n">stationnames</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">predictors</span><span class="p">,</span> <span class="n">use_id</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     
     <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">stationnames</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">predictors</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">use_scipy</span><span class="p">:</span>
+        <span class="n">df_pval</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">stationnames</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">predictors</span><span class="p">)</span>
+        
     
     
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">stationnames</span><span class="p">):</span>
         
-        <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use_scipy</span><span class="p">:</span>
+            <span class="n">df_corr</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">)</span>
+            
+            <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_corr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span>
+            <span class="n">df_pval</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_corr</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">,:]</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_csv</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">)</span>
     
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     
-    <span class="k">if</span> <span class="n">use_id</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
-    
-    <span class="k">return</span> <span class="n">df</span> </div>
+    <span class="k">if</span> <span class="n">use_scipy</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">df_pval</span> <span class="o">=</span> <span class="n">df_pval</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">use_id</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+            
+            <span class="n">df_pval</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df_pval</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">df</span><span class="p">,</span> <span class="n">df_pval</span>
+    <span class="k">else</span><span class="p">:</span>
+        
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">use_id</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">return</span> <span class="n">df</span> </div>
 
 <div class="viewcode-block" id="count_predictors"><a class="viewcode-back" href="../../pyESD.html#pyESD.plot_utils.count_predictors">[docs]</a><span class="k">def</span> <span class="nf">count_predictors</span><span class="p">(</span><span class="n">methods</span><span class="p">,</span> <span class="n">stationnames</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">predictors</span><span class="p">,</span>
                      <span class="p">):</span>

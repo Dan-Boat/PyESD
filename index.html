@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python framwork for Empirical Statistical Downscaling &mdash; pyESD 0.0.1 documentation</title>
+  <title>Python framwork for Empirical Statistical Downscaling &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -44,6 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="methods.html">Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
@@ -82,23 +83,9 @@ of downscaling General Circulation Models of future climate to high resolution r
 climate impact assessment such as droughts, flooding, wildfire risk, and others. The main
 specialties of the pyESD include:</p>
 <ul class="simple">
-<li><dl class="simple">
-<dt>Well designed in an OOP style that considers weather stations as individual objects and all</dt><dd><p>the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end
-downscaling of climate change variable products.</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>PyESD features many machine learning algorithms and predictor selection techniques that can be</dt><dd><p>experimented with toward the selection and design of robust transfer functions that can be coupled
-with GCM to generate future estimates of climate change</p>
-</dd>
-</dl>
-</li>
-<li><dl class="simple">
-<dt>And many other functionalities that are highlighted in the paper description of the package</dt><dd><p>(to be submitted)</p>
-</dd>
-</dl>
-</li>
+<li><p>Well designed in an OOP style that considers weather stations as individual objects and all the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end downscaling of climate change variable products.</p></li>
+<li><p>PyESD features many machine learning algorithms and predictor selection techniques that can be experimented with toward the selection and design of robust transfer functions that can be coupled with GCM to generate future estimates of climate change.</p></li>
+<li><p>And many other functionalities that are highlighted in the paper description of the package (submitted to GMD)</p></li>
 </ul>
 <a class="reference internal image-reference" href="_images/img1.png"><img alt="Model Outline" src="_images/img1.png" style="width: 600px;" /></a>
 </section>
@@ -117,7 +104,15 @@ with GCM to generate future estimates of climate change</p>
 <li class="toctree-l2"><a class="reference internal" href="methods.html#modelling-framework">Modelling framework</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#downscaling-of-precipitation-and-temperature-for-weather-station-located-in-the-neckar-catchment-southwestern-germany">1. Downscaling of precipitation and temperature for weather station located in the Neckar catchment, Southwestern Germany</a></li>
+<li class="toctree-l2"><a class="reference internal" href="examples.html#downscaling-of-precipitation-for-synoptic-weather-stations-in-ghana-using-stacked-generalization">2. Downscaling of precipitation for synoptic weather stations in Ghana using Stacked Generalization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#unittest-framework">UNITTEST FRAMEWORK</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyESD.html">pyESD package</a></li>
 </ul>
@@ -136,6 +131,16 @@ with GCM to generate future estimates of climate change</p>
 <li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
 <li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The content of this website would be improve in future developments! However, we would acknowledge your help in making
+the pyESD documentation better for wider usability. Please kindly raise a pull request with the improved version on github:
+<code class="docutils literal notranslate"><span class="pre">https://github.com/Dan-Boat/PyESD</span></code></p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please note that this page is under active delopement! Thanks for the understanding</p>
+</div>
 </section>
 
 

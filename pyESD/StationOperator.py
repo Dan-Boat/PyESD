@@ -103,11 +103,11 @@ class StationOperator():
     
     
     def predictor_correlation(self, variable, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True, 
-                              method="pearson", **predictor_kwargs):
+                              method="pearson", use_scipy=False, **predictor_kwargs):
         
         return self.variables[variable].predictor_correlation(daterange, predictor_dataset, fit_predictors=fit_predictors, 
                                                               fit_predictand=fit_predictand, 
-                                  method= method, **predictor_kwargs)
+                                  method= method, use_scipy=use_scipy, **predictor_kwargs)
     
     
     

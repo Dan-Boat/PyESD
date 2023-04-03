@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyESD.StationOperator &mdash; pyESD 0.0.1 documentation</title>
+  <title>pyESD.StationOperator &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -42,6 +42,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
@@ -175,11 +176,11 @@
     
     
 <div class="viewcode-block" id="StationOperator.predictor_correlation"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.predictor_correlation">[docs]</a>    <span class="k">def</span> <span class="nf">predictor_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                              <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+                              <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
         
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">predictor_correlation</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span> 
                                                               <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span> 
-                                  <span class="n">method</span><span class="o">=</span> <span class="n">method</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+                                  <span class="n">method</span><span class="o">=</span> <span class="n">method</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="n">use_scipy</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
     
     
     

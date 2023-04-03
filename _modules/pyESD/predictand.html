@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyESD.predictand &mdash; pyESD 0.0.1 documentation</title>
+  <title>pyESD.predictand &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -42,6 +42,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
@@ -84,6 +85,7 @@
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">import</span> <span class="nn">scipy.stats</span> <span class="k">as</span> <span class="nn">stats</span>
 
 
 <span class="k">try</span><span class="p">:</span>
@@ -221,7 +223,7 @@
         <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">Xs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     
 <div class="viewcode-block" id="PredictandTimeseries.predictor_correlation"><a class="viewcode-back" href="../../pyESD.html#pyESD.predictand.PredictandTimeseries.predictor_correlation">[docs]</a>    <span class="k">def</span> <span class="nf">predictor_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
-                              <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+                              <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
         
         <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_predictor_data</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span> 
                                      <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span>
@@ -234,12 +236,30 @@
         
         <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
         
-        
-        <span class="n">corr</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
-        
-        <span class="n">corr</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
-        
-        <span class="k">return</span>  <span class="n">corr</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># change the code with scipy stats in order to estimate the significance</span></div>
+        <span class="k">if</span> <span class="n">use_scipy</span><span class="p">:</span>
+            <span class="n">df_results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">columns</span><span class="o">=</span><span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+            
+            <span class="k">for</span> <span class="n">column</span> <span class="ow">in</span> <span class="n">X</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">method</span> <span class="o">==</span><span class="s2">&quot;pearson&quot;</span><span class="p">:</span>
+                    <span class="n">corr</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">pearsonr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+                    <span class="n">df_results</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">df_results</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    
+                <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;spearman&quot;</span><span class="p">:</span>
+                    <span class="n">corr</span> <span class="o">=</span> <span class="n">stats</span><span class="o">.</span><span class="n">spearmanr</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">X</span><span class="p">[</span><span class="n">column</span><span class="p">])</span>
+                    <span class="n">df_results</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">df_results</span><span class="p">[</span><span class="n">column</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The defined method is not accurate&quot;</span><span class="p">)</span>
+                    
+            <span class="k">return</span> <span class="n">df_results</span>
+            
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">corr</span> <span class="o">=</span> <span class="n">X</span><span class="o">.</span><span class="n">corrwith</span><span class="p">(</span><span class="n">other</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+            
+            <span class="n">corr</span> <span class="o">=</span> <span class="n">corr</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+            
+            <span class="k">return</span>  <span class="n">corr</span><span class="o">.</span><span class="n">T</span>  <span class="c1"># change the code with scipy stats in order to estimate the significance</span></div>
             
             
 <div class="viewcode-block" id="PredictandTimeseries.fit_predictor"><a class="viewcode-back" href="../../pyESD.html#pyESD.predictand.PredictandTimeseries.fit_predictor">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predictor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">):</span>

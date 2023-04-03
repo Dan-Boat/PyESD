@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; pyESD 0.0.1 documentation</title>
+  <title>Installation &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -50,6 +50,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="methods.html">Methods</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
@@ -83,12 +84,12 @@
 <h2>Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>The standard version can be intalled with::</dt><dd><p>pip install pyESD</p>
+<dt>The standard version can be intalled with::</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyESD</span></code></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>The same version can be installed in editable mode with the e flag::</dt><dd><p>pip install -e pyESD</p>
+<dt>The same version can be installed in editable mode with the e flag::</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">pyESD</span></code></p>
 </dd>
 </dl>
 </li>
@@ -97,29 +98,29 @@
 <section id="install-from-github">
 <h2>Install from Github<a class="headerlink" href="#install-from-github" title="Permalink to this heading"></a></h2>
 <dl class="simple">
-<dt>The updated version (in development) can be clone from github:</dt><dd><p>git clone <a class="reference external" href="mailto:git&#37;&#52;&#48;github&#46;com">git<span>&#64;</span>github<span>&#46;</span>com</a>:Dan-Boat/PyESD.git
-pip install . (in the clone folder)</p>
+<dt>The updated version (in development) can be clone from github:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:Dan-Boat/PyESD.git</span></code>
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> (in the clone folder)</p>
 </dd>
 </dl>
 <p>It is recommended to install the package in an isolated environment.
 Virtualenv or conda can be used to create a new environment.
 The package requires some dependencies that can be installed through the distro. If failed to be install
-through pip intallation, the following modules require manual installation.</p>
+through pip installation, the following modules would require manual installation.</p>
 </section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>sklearn (pip install -U scikit-learn)</p></li>
-<li><p>xarray (conda install -c conda-forge xarray dask netCDF4 bottleneck)</p></li>
+<li><p>sklearn (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-U</span> <span class="pre">scikit-learn</span></code>)</p></li>
+<li><p>xarray (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">xarray</span> <span class="pre">dask</span> <span class="pre">netCDF4</span> <span class="pre">bottleneck</span></code>)</p></li>
 <li><p>pandas</p></li>
 <li><p>seaborn</p></li>
-<li><p>tensorflow (pip install tensorflow)</p></li>
+<li><p>tensorflow (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tensorflow</span></code>)</p></li>
 <li><p>matplotlib</p></li>
 <li><p>netCDF4</p></li>
-<li><p>eofs (pip install eofs)</p></li>
-<li><p>cartopy (conda install -c conda-forge cartopy) (not required for the modelling routines), optional</p></li>
-<li><p>xgboost (pip install xgboost)</p></li>
-<li><p>scikit-optimize (pip install scikit-optimize)</p></li>
+<li><p>eofs (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">eofs</span></code>)</p></li>
+<li><p>cartopy (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">cartopy</span></code>) (not required for the modelling routines), optional</p></li>
+<li><p>xgboost (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">xgboost</span></code>)</p></li>
+<li><p>scikit-optimize (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">scikit-optimize</span></code>)</p></li>
 </ul>
 </section>
 </section>

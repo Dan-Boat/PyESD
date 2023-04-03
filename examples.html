@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Practical examples &mdash; pyESD 0.0.1 documentation</title>
+  <title>Practical examples &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -17,7 +17,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="&lt;no title&gt;" href="testing.html" />
+    <link rel="next" title="Testing" href="testing.html" />
     <link rel="prev" title="Methods" href="methods.html" /> 
 </head>
 
@@ -44,7 +44,12 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="methods.html">Methods</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Practical examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Practical examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#downscaling-of-precipitation-and-temperature-for-weather-station-located-in-the-neckar-catchment-southwestern-germany">1. Downscaling of precipitation and temperature for weather station located in the Neckar catchment, Southwestern Germany</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#downscaling-of-precipitation-for-synoptic-weather-stations-in-ghana-using-stacked-generalization">2. Downscaling of precipitation for synoptic weather stations in Ghana using Stacked Generalization</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
@@ -74,6 +79,22 @@
              
   <section id="practical-examples">
 <h1>Practical examples<a class="headerlink" href="#practical-examples" title="Permalink to this heading"></a></h1>
+<p>The package has been demonstrated with using real word observation datasets.</p>
+<section id="downscaling-of-precipitation-and-temperature-for-weather-station-located-in-the-neckar-catchment-southwestern-germany">
+<h2>1. Downscaling of precipitation and temperature for weather station located in the Neckar catchment, Southwestern Germany<a class="headerlink" href="#downscaling-of-precipitation-and-temperature-for-weather-station-located-in-the-neckar-catchment-southwestern-germany" title="Permalink to this heading"></a></h2>
+<p>In this example, we show the modeling routine followed in generating downscaling products for the Neckar catchment. The control scripts of the individual
+steps can be found in the folder: <code class="docutils literal notranslate"><span class="pre">examples\Neckar</span></code>. All the data used for this example is publicly available.</p>
+</section>
+<section id="downscaling-of-precipitation-for-synoptic-weather-stations-in-ghana-using-stacked-generalization">
+<h2>2. Downscaling of precipitation for synoptic weather stations in Ghana using Stacked Generalization<a class="headerlink" href="#downscaling-of-precipitation-for-synoptic-weather-stations-in-ghana-using-stacked-generalization" title="Permalink to this heading"></a></h2>
+<p>This project rely on non-open access weather station data collected from the Ghana Meteorology Agency (Gmet). The example demonstrates the use of stacking
+regressor to improve the performance of the transfer function require for downscaling monthly rainfall in Ghana. All the control scripts are located in the folder:
+<code class="docutils literal notranslate"><span class="pre">examples\Ghana</span></code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Please note that this page is under active delopement! Thanks for the understanding</p>
+</div>
+</section>
 </section>
 
 
@@ -81,7 +102,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="methods.html" class="btn btn-neutral float-left" title="Methods" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="testing.html" class="btn btn-neutral float-right" title="&lt;no title&gt;" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
