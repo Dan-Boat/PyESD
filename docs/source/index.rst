@@ -14,16 +14,11 @@ of downscaling General Circulation Models of future climate to high resolution r
 climate impact assessment such as droughts, flooding, wildfire risk, and others. The main 
 specialties of the pyESD include:
 
-* Well designed in an OOP style that considers weather stations as individual objects and all 
-the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end 
-downscaling of climate change variable products.
+* Well designed in an OOP style that considers weather stations as individual objects and all the downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end downscaling of climate change variable products.
 
-* PyESD features many machine learning algorithms and predictor selection techniques that can be
-experimented with toward the selection and design of robust transfer functions that can be coupled 
-with GCM to generate future estimates of climate change.
+* PyESD features many machine learning algorithms and predictor selection techniques that can be experimented with toward the selection and design of robust transfer functions that can be coupled with GCM to generate future estimates of climate change.
 
-* And many other functionalities that are highlighted in the paper description of the package 
-(submitted to GMD)
+* And many other functionalities that are highlighted in the paper description of the package (submitted to GMD)
 
 .. image:: ./imgs/img1.png
    :width: 600
