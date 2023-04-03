@@ -1,10 +1,11 @@
 Methods
 =======
 The modeling steps and framework require to generate station-based downscaling products are highlighted here. The 
-following outline shows a typical example step that can be used to develop a transfer function:
+following outline shows a typical example step that can be used to develop a transfer function.
+
 .. image:: ./imgs/img2.png
    :width: 600
-   :alt: Model Outline
+   :alt: Modeling steps
 
 Modelling framework
 -------------------
