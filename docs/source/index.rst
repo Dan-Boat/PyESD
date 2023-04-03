@@ -52,3 +52,11 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+.. note::
+   The content of this website would be improve in future developments! However, we would acknowledge your help in making 
+   the pyESD documentation better for wider usability. Please kindly raise a pull request with the improved version on github:
+   `https://github.com/Dan-Boat/PyESD`
+
+
+.. warning::
+    Please note that this page is under active delopement! Thanks for the understanding
