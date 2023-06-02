@@ -23,6 +23,8 @@ private/
 /examples/Neckar/experiment4
 /examples/__pycache__
 /examples/Neckar/plots
+/examples/Human_Vs_Machines
+/examples/VALUE
 *.pickel
 *.predictors_150
 *.predictors_50

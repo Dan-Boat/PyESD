@@ -214,6 +214,9 @@ def count_predictors(methods, stationnames, path_to_data, filename, predictors,
             
             selected = load_pickle(idx, filename + method, path_to_data)
             
+            if isinstance(selected, pd.Index):
+                selected = selected.to_frame().T
+                
             df = pd.concat([df, selected], axis=0)
         
         for predictor in predictors:
