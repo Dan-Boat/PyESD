@@ -6,7 +6,7 @@ seaborn
 eofs
 statsmodels
 pandas
-sklearn
+scikit-learn
 tensorflow
 eofs
 netCDF4
