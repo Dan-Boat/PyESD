@@ -9,4 +9,13 @@ Sphinx
 twine
 grip
 pytest
+pytest-cov
 pytest-runner
+netCDF4
+matplotlib
+Sphinx-rtd-theme
+setuptools
+pydocstyle
+packaging>=21.3
+h5netcdf
+importlib-metadata>=4.4

@@ -31,7 +31,9 @@ Dependencies
 - matplotlib
 - netCDF4
 - eofs (``pip install eofs``)
-- cartopy (``conda install -c conda-forge cartopy``) (not required for the modelling routines), optional
+- cartopy (``conda install -c conda-forge cartopy``) (not required for the modelling routines), optional. Installing cartopy
+can be tricky. Check the `Cartopy page <https://scitools.org.uk/cartopy/docs/latest/installing.html>`_ for more details. 
+
 - xgboost (``pip install xgboost``)
 - scikit-optimize (``pip install scikit-optimize``)
 
