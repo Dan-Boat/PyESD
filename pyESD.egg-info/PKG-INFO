@@ -1,13 +1,12 @@
 Metadata-Version: 2.1
-Name: PyESD
-Version: 1.0.4
+Name: pyESD
+Version: 1.0.7
 Summary: Python Package for Empirical Statistical Downscaling. pyESD is under active development and all colaborators are welcomed. The purpose of the package is to downscale any climate variables e.g. precipitation and temperature using predictors from  reanalysis datasets (eg. ERA5) to point scale. pyESD adopts many ML and AL as the transfer function. 
 Home-page: https://github.com/Dan-Boat/PyESD
 Author: Daniel Boateng
 Author-email: dannboateng@gmail.com
 License: MIT license
-Keywords: PyESD
-Platform: UNKNOWN
+Keywords: pyESD Empirical Statistical Downscaling
 Classifier: Development Status :: 2 - Pre-Alpha
 Classifier: Intended Audience :: Developers
 Classifier: License :: OSI Approved :: MIT License
@@ -19,6 +18,7 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Requires-Python: >=3.7
 Description-Content-Type: text/markdown
+Provides-Extra: dev
 License-File: LICENSE
 License-File: AUTHORS.rst
 
@@ -153,5 +153,3 @@ The pacakage is still in planing stage (v.0.0.1) (The stable version would be up
 
 ## *Collaborators are welcomed: interms of model application, model improvement, documentation and expansion of the package!*
 @ Daniel Boateng ([linkedin](https://www.linkedin.com/in/daniel-boateng-3892311b4/)) : **University of Tuebingen** :incoming_envelope: dannboateng@gmail.com
-
-

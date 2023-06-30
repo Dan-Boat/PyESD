@@ -9,21 +9,24 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
+
+with open("HISTORY.rst") as history_file:
+    history = history_file.read()
+
 here = op.abspath(op.dirname(__file__))
 
 # get the dependencies and installs
 
-requirements = ["cftime>=1.6",
+requirements = ["cftime>=1.6.0",
     "eofs>=1.4",
     "geopandas>=0.12",
     "numpy>=1.21",
-    "pandas>=1.3"
+    "pandas>=1.3",
     "scikit-learn>=0.24",
     "scikit-optimize>=0.9.0",
     "scipy>=1.7",
     "seaborn>=0.11",
     "tensorflow>=2.8.0",
-    "packaging>=21.3"
     "xarray>=2023.1",
     "xgboost>=1.5",
     "cycler>=0.10"
@@ -56,17 +59,17 @@ setup(
     description="Python Package for Empirical Statistical Downscaling. pyESD is under active development and all colaborators are welcomed. The purpose of the package is to downscale any climate variables e.g. precipitation and temperature using predictors from  reanalysis datasets (eg. ERA5) to point scale. pyESD adopts many ML and AL as the transfer function. ",
     install_requires=requirements,
     license="MIT license",
-    long_description=readme,
+    long_description=readme + "\n\n" + history,
     long_description_content_type='text/markdown',
     include_package_data=True,
     keywords=KEYWORDS,
-    name='PyESD',
-    packages=find_packages(include=['PyESD', 'PyESD.*']),
+    name='pyESD',
+    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Dan-Boat/PyESD',
     extras_require={"dev": dev_requirements},
-    version='1.0.5',
+    version='1.0.7',
     zip_safe=False,
 )
