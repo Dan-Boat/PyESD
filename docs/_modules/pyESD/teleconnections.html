@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyESD.teleconnections &mdash; pyESD 1.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyESD
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyESD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyESD.teleconnections</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyESD.teleconnections</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Mon Mar 14 16:58:59 2022</span>
+
+<span class="sd">@author: dboateng</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># import modules </span>
+<span class="kn">import</span> <span class="nn">os</span> 
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span> 
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">from</span> <span class="nn">eofs.xarray</span> <span class="kn">import</span> <span class="n">Eof</span> 
+<span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">decomposition</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">cartopy.feature</span> <span class="k">as</span> <span class="nn">cfeature</span> 
+<span class="kn">from</span> <span class="nn">cartopy.mpl.gridliner</span> <span class="kn">import</span> <span class="n">LATITUDE_FORMATTER</span><span class="p">,</span> <span class="n">LONGITUDE_FORMATTER</span>
+<span class="kn">from</span> <span class="nn">cartopy.util</span> <span class="kn">import</span> <span class="n">add_cyclic_point</span>
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Predictor_Base</span> <span class="kn">import</span> <span class="n">Predictor</span>
+    <span class="kn">from</span> <span class="nn">.ESD_utils</span> <span class="kn">import</span> <span class="n">map_to_xarray</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Predictor_Base</span> <span class="kn">import</span> <span class="n">Predictor</span>
+    <span class="kn">from</span> <span class="nn">ESD_utils</span> <span class="kn">import</span> <span class="n">map_to_xarray</span>
+
+
+<div class="viewcode-block" id="eof_analysis"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.eof_analysis">[docs]</a><span class="k">def</span> <span class="nf">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">neofs</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;eof_package&quot;</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                 <span class="n">pcscaling</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;longitude&quot;</span><span class="p">:</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">:</span><span class="s2">&quot;lat&quot;</span><span class="p">})</span>
+    
+    <span class="k">if</span> <span class="n">apply_equal_wtgs</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">wtgs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">)))</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">*</span> <span class="n">wtgs</span>
+    
+    <span class="k">if</span> <span class="kc">True</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">isnull</span><span class="p">():</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;eof_package&quot;</span><span class="p">:</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The EoF Package implementation of EOF analysis is used! for the teleconnections&quot;</span><span class="p">)</span>
+        
+        <span class="n">solver</span> <span class="o">=</span> <span class="n">Eof</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">eofs_cov</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">eofsAsCovariance</span><span class="p">(</span><span class="n">neofs</span><span class="o">=</span><span class="n">neofs</span><span class="p">,</span> <span class="n">pcscaling</span><span class="o">=</span><span class="n">pcscaling</span><span class="p">)</span>
+        
+        <span class="n">eofs_cov</span> <span class="o">=</span> <span class="n">eofs_cov</span><span class="o">.</span><span class="n">sortby</span><span class="p">(</span><span class="n">eofs_cov</span><span class="o">.</span><span class="n">lon</span><span class="p">)</span>
+        
+        <span class="n">pcs</span> <span class="o">=</span> <span class="n">solver</span><span class="o">.</span><span class="n">pcs</span><span class="p">(</span><span class="n">pcscaling</span><span class="o">=</span><span class="n">pcscaling</span><span class="p">,</span> <span class="n">npcs</span><span class="o">=</span><span class="n">neofs</span><span class="p">)</span>
+        
+    <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;sklearn_package&quot;</span><span class="p">:</span>
+        
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The sklearn implementation of EOF analysis is used! for the teleconnections&quot;</span><span class="p">)</span>
+        
+        <span class="n">time_mean</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+        <span class="n">deviations</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="n">time_mean</span>
+
+        <span class="n">pcs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">neofs</span><span class="p">)</span>
+        
+        <span class="n">PCA</span> <span class="o">=</span> <span class="n">decomposition</span><span class="o">.</span><span class="n">PCA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="n">neofs</span><span class="p">)</span>
+        
+        <span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">deviations</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">time</span><span class="p">),</span> <span class="n">time_mean</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        
+        <span class="n">PCA</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+        
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="n">neofs</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">time_mean</span><span class="p">))</span>
+        
+        <span class="n">np_eofs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">PCA</span><span class="o">.</span><span class="n">components_</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+        <span class="n">pcs</span> <span class="o">=</span> <span class="n">PCA</span><span class="o">.</span><span class="n">explained_variance_</span>
+        
+        <span class="n">ls_eofs</span><span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">neofs</span><span class="p">):</span>
+            <span class="n">ls_eofs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">map_to_xarray</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="n">np_eofs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">datarray</span><span class="o">=</span><span class="n">data</span><span class="p">))</span>
+            
+        <span class="n">eofs_cov</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">ls_eofs</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">Index</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">neofs</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;eof_number&quot;</span><span class="p">))</span>
+        
+        <span class="c1">#eofs_cov = eofs_cov.sortby(eofs_cov.lon)</span>
+        
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Define the method or defaut of EOF package is used&quot;</span><span class="p">)</span>
+        
+        
+        
+    <span class="k">if</span> <span class="n">apply_equal_wtgs</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">eofs_cov</span><span class="p">,</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">wtgs</span>
+    
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">eofs_cov</span><span class="p">,</span> <span class="n">pcs</span> </div>
+        
+
+<div class="viewcode-block" id="extract_region"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.extract_region">[docs]</a><span class="k">def</span> <span class="nf">extract_region</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">varname</span><span class="p">,</span> <span class="n">minlat</span><span class="p">,</span> <span class="n">maxlat</span><span class="p">,</span> <span class="n">minlon</span><span class="p">,</span> <span class="n">maxlon</span><span class="p">):</span>
+        
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">varname</span><span class="p">)</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">datarange</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;longitude&quot;</span><span class="p">:</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">:</span><span class="s2">&quot;lat&quot;</span><span class="p">})</span>
+    
+    <span class="c1">#data = data.assign_coords({&quot;lon&quot;: (((data.lon + 180) % 360) - 180)})</span>
+    
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">lat</span> <span class="o">&gt;=</span><span class="n">minlat</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lat</span> <span class="o">&lt;=</span><span class="n">maxlat</span><span class="p">),</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">lon</span> <span class="o">&gt;=</span><span class="n">minlon</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">lon</span> <span class="o">&lt;=</span> <span class="n">maxlon</span><span class="p">),</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">data</span></div>
+        
+<span class="c1"># implementation of MEI (not tested)</span>
+
+<div class="viewcode-block" id="MEI"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.MEI">[docs]</a><span class="k">class</span> <span class="nc">MEI</span><span class="p">(</span><span class="n">Predictor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;MEI&quot;</span><span class="p">,</span> <span class="n">longname</span><span class="o">=</span> <span class="s2">&quot;Multivariate ENSO Index&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;t2m&quot;</span><span class="p">,</span> <span class="s2">&quot;msl&quot;</span><span class="p">,</span> <span class="s2">&quot;u10&quot;</span><span class="p">,</span> <span class="s2">&quot;v10&quot;</span><span class="p">,</span> <span class="s2">&quot;sst&quot;</span><span class="p">]</span> <span class="c1"># replace temperature with outgoing long wave radiation!</span>
+        
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">patterns_from</span><span class="p">,</span> <span class="n">params_from</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;expver&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;expver&quot;</span><span class="p">)</span>
+        
+        
+        <span class="n">bi_monthly</span><span class="o">=</span><span class="p">{}</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">params_from</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;nonan_indices&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            
+        <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="c1"># load data and restrict to area of interest</span>
+            <span class="n">da</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+            <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">datarange</span><span class="p">)</span>
+            <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">da</span><span class="o">.</span><span class="n">latitude</span> <span class="o">&lt;=</span> <span class="mi">30</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">latitude</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">30</span><span class="p">)</span>
+                            <span class="o">&amp;</span> <span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">longitude</span> <span class="o">&lt;=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">longitude</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">70</span><span class="p">),</span> <span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># multiply by area weight (cos(lat)) -check if needed here</span>
+            <span class="n">da</span> <span class="o">*=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">latitude</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">))</span>
+            
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">da</span><span class="p">,</span> <span class="s2">&quot;longitude&quot;</span><span class="p">):</span>
+                <span class="n">da</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">rename</span><span class="p">({</span><span class="s2">&quot;longitude&quot;</span><span class="p">:</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span> <span class="s2">&quot;latitude&quot;</span><span class="p">:</span><span class="s2">&quot;lat&quot;</span><span class="p">})</span>
+            <span class="c1"># stack into one vector</span>
+            <span class="n">stacked</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+                <span class="c1"># get the indices with non-nan entries (only relevant for sst)</span>
+                <span class="n">params</span><span class="p">[</span><span class="s2">&quot;nonan_indices&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">stacked</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">0</span><span class="p">)))[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">stacked</span> <span class="o">=</span> <span class="n">stacked</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">z</span><span class="o">=</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;nonan_indices&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">])</span>
+
+
+            <span class="c1"># get bimonthly season values</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">stacked</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="o">=</span> <span class="n">stacked</span><span class="p">[</span><span class="mi">0</span><span class="p">,:]</span> <span class="c1"># the first bimonthly season consist of only the first month</span>
+            <span class="n">bi_monthly</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
+
+        <span class="c1"># this assumes that all dataarrays have the same time axis</span>
+        <span class="n">month</span> <span class="o">=</span> <span class="n">da</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;datetime64[M]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">%</span> <span class="mi">12</span>
+        
+        <span class="c1"># find EOF pattern for each bimonthly window</span>
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;eofs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_stds&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">mei</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">month</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">12</span><span class="p">):</span>
+            <span class="n">this_month</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">month</span> <span class="o">==</span> <span class="n">i</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">normalized</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bi_monthly</span><span class="p">:</span>
+                <span class="c1"># select months</span>
+                <span class="n">ts</span> <span class="o">=</span> <span class="n">bi_monthly</span><span class="p">[</span><span class="n">v</span><span class="p">]</span><span class="o">.</span><span class="n">isel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">this_month</span><span class="p">)</span>
+                <span class="c1"># normalize</span>
+                <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_means&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+                    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_stds&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+                <span class="n">ts</span> <span class="o">-=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_means&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">]</span>
+                <span class="n">ts</span> <span class="o">/=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;timeseries_stds&quot;</span><span class="p">][</span><span class="n">v</span><span class="p">]</span>
+                <span class="n">normalized</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+
+            <span class="n">vector</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">normalized</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+            
+            <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+                <span class="n">eof</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">vector</span><span class="p">,</span> <span class="n">neofs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;sklearn_package&quot;</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="n">eof1</span> <span class="o">=</span> <span class="n">eof</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">eof_number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> 
+                <span class="c1"># this guarantees that the EOFs of the different months have</span>
+                <span class="c1"># the same direction</span>
+                <span class="k">if</span> <span class="n">i</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">eof</span><span class="p">,</span> <span class="n">eof1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">eof</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">eof1</span> <span class="o">=</span> <span class="n">eof</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;eofs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">eof</span><span class="p">)</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s1">&#39;eofs&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">())</span>
+            <span class="n">mei</span><span class="p">[</span><span class="n">this_month</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span>
+            
+        <span class="c1"># the standard deviation that is used to normalize the index should be the same as the one</span>
+        <span class="c1"># found when constructing the patterns, that&#39;s why it&#39;s stored together with the patterns</span>
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s1">&#39;std&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">mei</span><span class="p">)</span>
+        <span class="n">mei</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s1">&#39;std&#39;</span><span class="p">]</span>
+
+        <span class="n">mei_series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">mei</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;MEI&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">da</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">mei_series</span></div>
+            
+            
+        
+        
+
+
+<div class="viewcode-block" id="NAO"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.NAO">[docs]</a><span class="k">class</span> <span class="nc">NAO</span><span class="p">(</span><span class="n">Predictor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;NAO&quot;</span><span class="p">,</span> <span class="n">longname</span><span class="o">=</span> <span class="s2">&quot;North Atlantic Oscilation&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">patterns_from</span><span class="p">,</span> <span class="n">params_from</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;expver&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;expver&quot;</span><span class="p">)</span>
+        
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">params_from</span><span class="p">]</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">extract_region</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="s2">&quot;msl&quot;</span><span class="p">,</span> <span class="n">minlat</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxlat</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> 
+                              <span class="n">minlon</span><span class="o">=-</span><span class="mi">80</span><span class="p">,</span> <span class="n">maxlon</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        
+        <span class="c1"># removing monthly cycle</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.month&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+            <span class="n">anomalies</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="n">_get_month</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+        
+        <span class="c1">#anomalies = group - params[&quot;monthly_means&quot;]</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;month&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+        <span class="n">anomalies</span> <span class="o">/=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span>
+        
+        <span class="n">area_weighted</span> <span class="o">=</span> <span class="n">anomalies</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anomalies</span><span class="o">.</span><span class="n">lat</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)))</span> 
+        
+        
+        <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;eof_package&quot;</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">eofs</span><span class="p">,</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">wtgs</span>  <span class="o">=</span> <span class="n">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">anomalies</span><span class="p">,</span> <span class="n">neofs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_name</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                <span class="n">pcscaling</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="s2">&quot;eof_number&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">eof_number</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">method_name</span> <span class="o">==</span> <span class="s2">&quot;sklearn_package&quot;</span><span class="p">:</span>
+            <span class="n">nao</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">area_weighted</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span> 
+            
+            <span class="n">nao</span> <span class="o">=</span> <span class="n">pcs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+        <span class="n">nao</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;NAO&quot;</span>
+        
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nao</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            
+        <span class="n">nao</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
+        
+        <span class="n">nao_series</span> <span class="o">=</span> <span class="n">nao</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span>
+        
+        
+        <span class="k">return</span> <span class="n">nao_series</span>
+    
+<div class="viewcode-block" id="NAO.plot_cov_matrix"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.NAO.plot_cov_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cov_matrix</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+        
+
+
+<div class="viewcode-block" id="EA"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.EA">[docs]</a><span class="k">class</span> <span class="nc">EA</span><span class="p">(</span><span class="n">Predictor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;EA&quot;</span><span class="p">,</span> <span class="n">longname</span><span class="o">=</span> <span class="s2">&quot;East Atlantic Oscilation&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">patterns_from</span><span class="p">,</span> <span class="n">params_from</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;expver&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;expver&quot;</span><span class="p">)</span>
+        
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">params_from</span><span class="p">]</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">extract_region</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="s2">&quot;msl&quot;</span><span class="p">,</span> <span class="n">minlat</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxlat</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> 
+                              <span class="n">minlon</span><span class="o">=-</span><span class="mi">80</span><span class="p">,</span> <span class="n">maxlon</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        
+        <span class="c1"># removing monthly cycle</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.month&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+            <span class="n">anomalies</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="n">_get_month</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+        
+        <span class="c1">#anomalies = group - params[&quot;monthly_means&quot;]</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;month&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+        <span class="n">anomalies</span> <span class="o">/=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span>
+        
+        <span class="n">area_weighted</span> <span class="o">=</span> <span class="n">anomalies</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anomalies</span><span class="o">.</span><span class="n">lat</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)))</span> 
+        
+        <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;eof_package&quot;</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">eofs</span><span class="p">,</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">wtgs</span>  <span class="o">=</span> <span class="n">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">anomalies</span><span class="p">,</span> <span class="n">neofs</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_name</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                <span class="n">pcscaling</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="s2">&quot;eof_number&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">eof_number</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">method_name</span> <span class="o">==</span> <span class="s2">&quot;sklearn_package&quot;</span><span class="p">:</span>
+            <span class="n">ea</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">area_weighted</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span> 
+            
+            <span class="n">ea</span> <span class="o">=</span> <span class="n">pcs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            
+        <span class="n">ea</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;EA&quot;</span>
+        
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            
+        <span class="n">ea</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
+        
+        <span class="n">ea_series</span> <span class="o">=</span> <span class="n">ea</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span>
+        
+        
+        <span class="k">return</span> <span class="n">ea_series</span>   
+
+    
+<div class="viewcode-block" id="EA.plot_cov_matrix"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.EA.plot_cov_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cov_matrix</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="SCAN"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.SCAN">[docs]</a><span class="k">class</span> <span class="nc">SCAN</span><span class="p">(</span><span class="n">Predictor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SCAN&quot;</span><span class="p">,</span> <span class="n">longname</span><span class="o">=</span> <span class="s2">&quot;Scandinavian Oscilation&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">patterns_from</span><span class="p">,</span> <span class="n">params_from</span><span class="p">):</span>
+        
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;expver&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;expver&quot;</span><span class="p">)</span>
+        
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">params_from</span><span class="p">]</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">extract_region</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="s2">&quot;msl&quot;</span><span class="p">,</span> <span class="n">minlat</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxlat</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> 
+                              <span class="n">minlon</span><span class="o">=-</span><span class="mi">80</span><span class="p">,</span> <span class="n">maxlon</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        
+        <span class="c1"># removing monthly cycle</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.month&quot;</span><span class="p">)</span>
+            
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+            <span class="n">anomalies</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="n">_get_month</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+        
+        <span class="c1">#anomalies = group - params[&quot;monthly_means&quot;]</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;month&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+        <span class="n">anomalies</span> <span class="o">/=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span>
+        
+        <span class="n">area_weighted</span> <span class="o">=</span> <span class="n">anomalies</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anomalies</span><span class="o">.</span><span class="n">lat</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)))</span> 
+        
+        <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;sklearn_package&quot;</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">eofs</span><span class="p">,</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">wtgs</span>  <span class="o">=</span> <span class="n">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">anomalies</span><span class="p">,</span> <span class="n">neofs</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_name</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                <span class="n">pcscaling</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="s2">&quot;eof_number&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">eof_number</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">method_name</span> <span class="o">==</span> <span class="s2">&quot;sklearn_package&quot;</span><span class="p">:</span>
+            <span class="n">scan</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">area_weighted</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span> 
+            
+            <span class="n">scan</span> <span class="o">=</span> <span class="n">pcs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        
+        <span class="n">scan</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;SCAN&quot;</span>
+        
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            
+        <span class="n">scan</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
+        
+        <span class="n">scan_series</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span>
+        
+        
+        <span class="k">return</span> <span class="n">scan_series</span>    
+        
+    
+<div class="viewcode-block" id="SCAN.plot_cov_matrix"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.SCAN.plot_cov_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cov_matrix</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+
+<div class="viewcode-block" id="EAWR"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.EAWR">[docs]</a><span class="k">class</span> <span class="nc">EAWR</span><span class="p">(</span><span class="n">Predictor</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;EAWR&quot;</span><span class="p">,</span> <span class="n">longname</span><span class="o">=</span> <span class="s2">&quot;East Atlantic_West Russian Oscilation&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">_generate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit</span><span class="p">,</span> <span class="n">patterns_from</span><span class="p">,</span> <span class="n">params_from</span><span class="p">):</span>
+        
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s2">&quot;expver&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;expver&quot;</span><span class="p">)</span>
+        
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">params</span><span class="p">[</span><span class="n">params_from</span><span class="p">]</span>
+        
+        <span class="n">data</span> <span class="o">=</span> <span class="n">extract_region</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">datarange</span><span class="p">,</span> <span class="n">varname</span><span class="o">=</span><span class="s2">&quot;msl&quot;</span><span class="p">,</span> <span class="n">minlat</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">maxlat</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> 
+                              <span class="n">minlon</span><span class="o">=-</span><span class="mi">80</span><span class="p">,</span> <span class="n">maxlon</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+        
+        <span class="c1"># removing monthly cycle</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">&quot;time.month&quot;</span><span class="p">)</span>
+            
+            
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+            <span class="n">anomalies</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">month</span><span class="o">=</span><span class="n">_get_month</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+        <span class="p">)</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;monthly_means&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+        
+        
+        <span class="c1">#anomalies = group - params[&quot;monthly_means&quot;]</span>
+        <span class="n">anomalies</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s2">&quot;month&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">anomalies</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+            
+        <span class="n">anomalies</span> <span class="o">/=</span> <span class="n">params</span><span class="p">[</span><span class="s2">&quot;std_field&quot;</span><span class="p">]</span>
+        
+        <span class="n">area_weighted</span> <span class="o">=</span> <span class="n">anomalies</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">anomalies</span><span class="o">.</span><span class="n">lat</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mi">180</span><span class="p">)))</span> 
+        
+        <span class="n">method_name</span> <span class="o">=</span> <span class="s2">&quot;sklearn_package&quot;</span>
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">eofs</span><span class="p">,</span> <span class="n">pcs</span><span class="p">,</span> <span class="n">wtgs</span>  <span class="o">=</span> <span class="n">eof_analysis</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">anomalies</span><span class="p">,</span> <span class="n">neofs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method_name</span><span class="p">,</span> <span class="n">apply_equal_wtgs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                <span class="n">pcscaling</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            
+            
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">eofs</span><span class="p">,</span> <span class="s2">&quot;eof_number&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">eof_number</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eofs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+                
+        <span class="k">if</span> <span class="n">method_name</span> <span class="o">==</span> <span class="s2">&quot;sklearn_package&quot;</span><span class="p">:</span>
+            <span class="n">ea_wr</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;eof&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">area_weighted</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">))</span>
+            
+        <span class="k">else</span><span class="p">:</span> 
+            
+            <span class="n">ea_wr</span> <span class="o">=</span> <span class="n">pcs</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+        
+        <span class="n">ea_wr</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;EAWR&quot;</span>
+        
+        
+        <span class="k">if</span> <span class="n">fit</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ea_wr</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+            
+        <span class="n">ea_wr</span> <span class="o">/=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patterns</span><span class="p">[</span><span class="n">patterns_from</span><span class="p">][</span><span class="s2">&quot;std&quot;</span><span class="p">]</span>
+        
+        <span class="n">ea_wr_series</span> <span class="o">=</span> <span class="n">ea_wr</span><span class="o">.</span><span class="n">to_series</span><span class="p">()</span>
+        
+        
+        <span class="k">return</span> <span class="n">ea_wr_series</span>
+    
+    
+<div class="viewcode-block" id="EAWR.plot_cov_matrix"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections.EAWR.plot_cov_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cov_matrix</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">pass</span></div></div>
+    
+<div class="viewcode-block" id="_get_month"><a class="viewcode-back" href="../../pyESD.html#pyESD.teleconnections._get_month">[docs]</a><span class="k">def</span> <span class="nf">_get_month</span><span class="p">(</span><span class="n">npdatetime64</span><span class="p">):</span>
+<span class="w">    </span>
+<span class="w">     </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">     Returns the month for a given npdatetime64 object, 1 for January, 2 for</span>
+<span class="sd">     February, ...</span>
+<span class="sd">     &quot;&quot;&quot;</span>
+     <span class="n">month</span> <span class="o">=</span>  <span class="n">npdatetime64</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;datetime64[M]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">%</span> <span class="mi">12</span> <span class="o">+</span> <span class="mi">1</span>
+     
+     <span class="k">return</span> <span class="n">month</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Boateng.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
