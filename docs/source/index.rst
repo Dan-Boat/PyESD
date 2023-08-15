@@ -6,6 +6,7 @@
 Akwaaba! Welcome to PyESD Documentation!
 ==============================================================
 **Python framwork for Empirical Statistical Downscaling**
+
 PyESD is an open-source framework of the Perfect Prognosis approach of statistical downscaling of 
 any climate-related variable such as precipitation, temperature, and wind speed using reanalysis 
 products eg. ERA5 as predictors. The package features all the downscaling cycles including data 
@@ -37,6 +38,7 @@ Documentation
 
 .. toctree::
    :maxdepth: 2
+   :hidden:
    :caption: Getting Started:
 
    overview
