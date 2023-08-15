@@ -1,13 +1,1 @@
-numpy
-scipy
-matplotlib
-xarray
-seaborn
-eofs
-statsmodels
-pandas
-sklearn
-tensorflow
-eofs
-netCDF4
-scikit-optimize
+

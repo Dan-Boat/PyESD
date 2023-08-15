@@ -7,6 +7,7 @@ Created on Mon Jan  3 17:18:14 2022
 """
 
 # importing modules 
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +18,8 @@ from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit, LeaveOneOut, LeaveOneGroupOut
 from sklearn.svm import SVR
 from sklearn.ensemble import ExtraTreesRegressor, ExtraTreesClassifier
+
+from pyESD.plot_utils import apply_style
 
 
 
@@ -100,33 +103,50 @@ class TreeBasedSelection():
         X_new = self.regressor.transform(X)
         return X_new
     
-    def feature_importance(self, X,y, plot=False):
+    def feature_importance(self, X,y, plot=False, fig_path=None, fig_name=None, save_fig=False, station_name=None):
         self.estimator.fit(X,y)
         importance = self.estimator.feature_importances_
         feature_names = X.columns
         forest_importances = pd.Series(importance, index=feature_names)
         
         if plot == True:
+            apply_style(fontsize=28, style="seaborn-talk", linewidth=3, usetex=False)  
             std = np.std([tree.feature_importances_ for tree in self.estimator.estimators_], axis=0)
-            fig,ax = plt.subplots()
+            fig,ax = plt.subplots(figsize=(15, 13))
             forest_importances.plot.bar(yerr=std, ax=ax)
-            ax.set_title("Feature importances using tree regressor")
+            if station_name is not None:
+                ax.set_title("Feature importances using tree regressor (" + station_name + ")",
+                             fontweight="bold", fontsize=24)
+                
+            else:
+                ax.set_title("Feature importances using tree regressor")
+                
+            ax.set_ylabel("Mean Decrease in impurity", fontweight="bold", fontsize=24)
             fig.tight_layout()
-            plt.show()
+            if save_fig:
+                plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "png")
+                
+            else:
+                plt.show()
             
         return forest_importances
     
-    def permutation_importance_(self, X,y, plot=False):
+    def permutation_importance_(self, X,y, plot=False, fig_path=None, fig_name=None, save_fig=False):
         self.estimator.fit(X,y)
         importance = permutation_importance(estimator=self.estimator, X=X, y=y, scoring=self.scoring,
                                             n_repeats=10, n_jobs=self.n_jobs)
         sorted_idx = importance.importance_mean.argsort()
         if plot == True:
-            fig,ax = plt.subplots()
+            fig,ax = plt.subplots(figsize=(15, 13))
             ax.boxplot(importance.importances[sorted_idx].T, vert=False, labels=X.columns[sorted_idx])
             ax.set_title("Permutation Importances (On test data)")
+            ax.set_ylabel("Mean accuracy decrease", fontweight="bold", fontsize=20)
             fig.tight_layout()
-            plt.show()
+            if save_fig:
+                plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "png")
+                
+            else:
+                plt.show()
             
         return sorted_idx
             

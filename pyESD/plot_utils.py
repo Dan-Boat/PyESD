@@ -104,7 +104,7 @@ predictor_colors = {
         "u10": skyblue
         }
 
-def apply_style(fontsize=20, style=None, linewidth=2):
+def apply_style(fontsize=20, style=None, linewidth=2, usetex=True):
     """
     
 
@@ -124,7 +124,7 @@ def apply_style(fontsize=20, style=None, linewidth=2):
         plt.style.use(style)  
         
     rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
-    mpl.rc('text', usetex=True)
+    mpl.rc('text', usetex=usetex)
     mpl.rc('xtick', labelsize=fontsize)
     mpl.rc('ytick', labelsize=fontsize)
     mpl.rc('legend', fontsize=fontsize)
@@ -214,6 +214,9 @@ def count_predictors(methods, stationnames, path_to_data, filename, predictors,
             
             selected = load_pickle(idx, filename + method, path_to_data)
             
+            if isinstance(selected, pd.Index):
+                selected = selected.to_frame().T
+                
             df = pd.concat([df, selected], axis=0)
         
         for predictor in predictors:

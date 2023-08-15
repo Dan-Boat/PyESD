@@ -41,14 +41,18 @@ def save_count_predictors():
     
     
     df_prec.to_csv(os.path.join(path_to_plot, "predictors_prec_count.csv"))
+
+save_count_predictors()
+
+
+def plot():    
+    selected_predictors = ["tp", "u700", "v850", "u850", "r250", "v700", "u500", "r500", "v1000", "NAO",]
+    number = [19, 16, 13, 13, 13, 9, 8, 7, 6, 6]
     
-selected_predictors = ["tp", "u700", "v850", "u850", "r250", "v700", "u500", "r500", "v1000", "NAO",]
-number = [19, 16, 13, 13, 13, 9, 8, 7, 6, 6]
-
-apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)    
-fig,ax = plt.subplots(nrows=1, ncols=1, figsize=(15, 12))
-ax.bar(x=selected_predictors, height=number)
-ax.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
-
-plt.tight_layout()
-plt.savefig(os.path.join(path_to_plot, "predictors_count.svg"), bbox_inches="tight", dpi=600)
+    apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)    
+    fig,ax = plt.subplots(nrows=1, ncols=1, figsize=(15, 12))
+    ax.bar(x=selected_predictors, height=number)
+    ax.yaxis.set_major_formatter(FormatStrFormatter('%.0f'))
+    
+    plt.tight_layout()
+    plt.savefig(os.path.join(path_to_plot, "predictors_count.svg"), bbox_inches="tight", dpi=600)

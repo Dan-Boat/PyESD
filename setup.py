@@ -9,20 +9,37 @@ from setuptools import setup, find_packages
 with open('README.md') as readme_file:
     readme = readme_file.read()
 
+
+with open("HISTORY.rst") as history_file:
+    history = history_file.read()
+
 here = op.abspath(op.dirname(__file__))
 
 # get the dependencies and installs
-with io.open(op.join(here, "requirements.txt"), encoding="utf-8") as f:
-    all_reqs = f.read().split("\n")
 
-install_requires = [x.strip() for x in all_reqs if "git+" not in x]
-dependency_links = [x.strip().replace("git+", "") for x in all_reqs if "git+" not in x]
-
-requirements = [ ]
+requirements = ["cftime>=1.6.0",
+    "eofs>=1.4",
+    "geopandas>=0.12",
+    "numpy>=1.21",
+    "pandas>=1.3",
+    "scikit-learn>=0.24",
+    "scikit-optimize>=0.9.0",
+    "scipy>=1.7",
+    "seaborn>=0.11",
+    "tensorflow>=2.8.0",
+    "xarray>=2023.1",
+    "xgboost>=1.5",
+    "cycler>=0.10"
+    ]
+dev_requirements = []
+with open("requirements_dev.txt") as dev:
+    for dependency in dev.readlines():
+        dev_requirements.append(dependency)
 
 setup_requirements = ['pytest-runner', ]
 
 test_requirements = ['pytest>=3', ]
+KEYWORDS = "pyESD Empirical Statistical Downscaling"
 
 setup(
     author="Daniel Boateng",
@@ -40,19 +57,19 @@ setup(
         'Programming Language :: Python :: 3.10',
     ],
     description="Python Package for Empirical Statistical Downscaling. pyESD is under active development and all colaborators are welcomed. The purpose of the package is to downscale any climate variables e.g. precipitation and temperature using predictors from  reanalysis datasets (eg. ERA5) to point scale. pyESD adopts many ML and AL as the transfer function. ",
-    install_requires=install_requires,
-    dependency_links=dependency_links,
+    install_requires=requirements,
     license="MIT license",
-    long_description=readme,
+    long_description=readme + "\n\n" + history,
     long_description_content_type='text/markdown',
     include_package_data=True,
-    keywords='PyESD',
-    name='PyESD',
-    packages=find_packages(include=['PyESD', 'PyESD.*']),
+    keywords=KEYWORDS,
+    name='pyESD',
+    packages=find_packages(),
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/Dan-Boat/PyESD',
-    version='1.0.1',
+    extras_require={"dev": dev_requirements},
+    version='1.0.7',
     zip_safe=False,
 )
