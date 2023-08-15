@@ -23,8 +23,8 @@ private/
 /examples/Neckar/experiment4
 /examples/__pycache__
 /examples/Neckar/plots
-/examples/Human_Vs_Machines/
-/examples/IsoPP/
+/examples/Human_Vs_Machines
+/examples/IsoPP
 *.pickel
 *.predictors_150
 *.predictors_50
