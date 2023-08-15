@@ -25,6 +25,7 @@ private/
 /examples/Neckar/plots
 /examples/Human_Vs_Machines
 /examples/IsoPP
+/examples/VALUE
 *.pickel
 *.predictors_150
 *.predictors_50
