@@ -153,6 +153,7 @@ The pacakage is still in planing stage (v.0.0.1) (The stable version would be up
 
 ## *Collaborators are welcomed: interms of model application, model improvement, documentation and expansion of the package!*
 @ Daniel Boateng ([linkedin](https://www.linkedin.com/in/daniel-boateng-3892311b4/)) : **University of Tuebingen** :incoming_envelope: dannboateng@gmail.com
+<<<<<<< HEAD
 
 
 =======
@@ -178,3 +179,5 @@ To do
 * Implement wet and dry day classifiers before model training
 * implement the various calibration metric for daily data 
 * Add simple MOS method (quantile mapping)
+=======
+>>>>>>> 6456ea781d135f2526589128c826261fe69a8c1b
