@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Installation &mdash; pyESD 1.0.1 documentation</title>
@@ -12,9 +12,10 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
-        <script src="_static/sphinx_highlight.js"></script>
-        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -27,15 +28,11 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-
-          
-          
-          <a href="index.html" class="icon icon-home">
-            pyESD
+            <a href="index.html" class="icon icon-home"> pyESD
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -56,7 +53,6 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="notebooks/data_structure.html">How does the imported datasets look like?</a></li>
 </ul>
 
         </div>
@@ -72,8 +68,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Installation</li>
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -89,12 +85,12 @@
 <h2>Install from PyPI<a class="headerlink" href="#install-from-pypi" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>The standard version can be intalled with::</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyESD</span></code></p>
+<dt>The standard version can be intalled with::</dt><dd><p class="linemarker linemarker-7"><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyESD</span></code></p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>The same version can be installed in editable mode with the e flag::</dt><dd><p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">pyESD</span></code></p>
+<dt>The same version can be installed in editable mode with the e flag::</dt><dd><p class="linemarker linemarker-10"><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">pyESD</span></code></p>
 </dd>
 </dl>
 </li>
@@ -103,59 +99,59 @@
 <section id="install-from-github">
 <h2>Install from Github<a class="headerlink" href="#install-from-github" title="Permalink to this heading"></a></h2>
 <dl class="simple">
-<dt>The updated version (in development) can be clone from github:</dt><dd><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:Dan-Boat/PyESD.git</span></code>
+<dt>The updated version (in development) can be clone from github:</dt><dd><p class="linemarker linemarker-15"><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:Dan-Boat/PyESD.git</span></code>
 <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">.</span></code> (in the clone folder)</p>
 </dd>
 </dl>
-<p>It is recommended to install the package in an isolated environment.
+<p class="linemarker linemarker-18">It is recommended to install the package in an isolated environment.
 Virtualenv or conda can be used to create a new environment.
 The package requires some dependencies that can be installed through the distro. If failed to be install
 through pip installation, the following modules would require manual installation.</p>
 </section>
 <section id="common-issues">
 <h2>Common issues<a class="headerlink" href="#common-issues" title="Permalink to this heading"></a></h2>
-<p><strong>Installing and Using Cartopy for Data Visualization</strong></p>
-<p>Visualizing large-scale datasets with cartopy can be a bit challenging. However,
+<p class="linemarker linemarker-25"><strong>Installing and Using Cartopy for Data Visualization</strong></p>
+<p class="linemarker linemarker-27">Visualizing large-scale datasets with cartopy can be a bit challenging. However,
 if you plan to use cartopy, keep in mind that it’s not necessary for any of the downscaling
 routines. Here’s a step-by-step guide to set it up:</p>
 <ol class="arabic">
-<li><p>Create a Cartopy Environment:
+<li><p class="linemarker linemarker-31">Create a Cartopy Environment:
 First, create a new environment specifically for cartopy:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>cartopy_env
 </pre></div>
 </div>
 </li>
-<li><p>Install Cartopy:
+<li><p class="linemarker linemarker-38">Install Cartopy:
 Once the environment is set up, install cartopy using the conda-forge channel:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>cartopy
 </pre></div>
 </div>
 </li>
-<li><p>Clone Cartopy Environment:
+<li><p class="linemarker linemarker-45">Clone Cartopy Environment:
 When creating an environment (“env_name”) for installing pyESD, you can clone the previously created cartopy environment to include its settings:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>--name<span class="w"> </span>env_name<span class="w"> </span>--clone<span class="w"> </span>cartopy_env
 </pre></div>
 </div>
 </li>
 </ol>
-<p>Keep in mind that cartopy has specific dependencies that need to be installed on your system.
+<p class="linemarker linemarker-52">Keep in mind that cartopy has specific dependencies that need to be installed on your system.
 For more detailed information about these dependencies and how to set up cartopy, you can refer
 to the cartopy website: <a class="reference external" href="https://scitools.org.uk/cartopy/docs/latest/">Cartopy Documentation</a>. This will provide you with a comprehensive understanding of the setup process.</p>
 </section>
 <section id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p>sklearn (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-U</span> <span class="pre">scikit-learn</span></code>)</p></li>
-<li><p>xarray (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">xarray</span> <span class="pre">dask</span> <span class="pre">netCDF4</span> <span class="pre">bottleneck</span></code>)</p></li>
-<li><p>pandas</p></li>
-<li><p>seaborn</p></li>
-<li><p>tensorflow (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tensorflow</span></code>)</p></li>
-<li><p>matplotlib</p></li>
-<li><p>netCDF4</p></li>
-<li><p>eofs (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">eofs</span></code>)</p></li>
-<li><p>cartopy (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">cartopy</span></code>) (not required for the modelling routines), optional</p></li>
-<li><p>xgboost (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">xgboost</span></code>)</p></li>
-<li><p>scikit-optimize (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">scikit-optimize</span></code>)</p></li>
+<li><p class="linemarker linemarker-59">sklearn (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-U</span> <span class="pre">scikit-learn</span></code>)</p></li>
+<li><p class="linemarker linemarker-60">xarray (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">xarray</span> <span class="pre">dask</span> <span class="pre">netCDF4</span> <span class="pre">bottleneck</span></code>)</p></li>
+<li><p class="linemarker linemarker-61">pandas</p></li>
+<li><p class="linemarker linemarker-62">seaborn</p></li>
+<li><p class="linemarker linemarker-63">tensorflow (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">tensorflow</span></code>)</p></li>
+<li><p class="linemarker linemarker-64">matplotlib</p></li>
+<li><p class="linemarker linemarker-65">netCDF4</p></li>
+<li><p class="linemarker linemarker-66">eofs (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">eofs</span></code>)</p></li>
+<li><p class="linemarker linemarker-67">cartopy (<code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">cartopy</span></code>) (not required for the modelling routines), optional</p></li>
+<li><p class="linemarker linemarker-68">xgboost (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">xgboost</span></code>)</p></li>
+<li><p class="linemarker linemarker-69">scikit-optimize (<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">scikit-optimize</span></code>)</p></li>
 </ul>
 </section>
 </section>

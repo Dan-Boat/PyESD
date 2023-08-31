@@ -35,6 +35,7 @@ Documentation
 * :doc:`overview`
 * :doc:`installation`
 * :doc:`methods`
+* :doc:`notebooks/data_structure`
 
 .. toctree::
    :maxdepth: 2
