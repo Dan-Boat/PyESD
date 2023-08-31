@@ -48,6 +48,7 @@ Documentation
    examples
    testing
    modules
+   notebooks/data_structure
 
 
 License

@@ -38,9 +38,12 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.napoleon',
               'sphinx.ext.duration',
               'sphinx.ext.doctest',
-              'myst_parser']
+              'myst_parser',
+              'nbsphinx']
 
 # Add any paths that contain templates here, relative to this directory.
+# installing nbsphinx require some dependencies: jinja2==3.0.3 and nbconvert==6.4.4
+# and also pandoc must be installed in your system: sudo apt-get install pandoc. 
 templates_path = ['_templates']
 
 # List of patterns, relative to source directory, that match files and

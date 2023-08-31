@@ -91,55 +91,60 @@ Daniel believes in “Trusting The Process” (TTP) in all aspects of life.
    :width: 600
    :alt: Picture
 
-Getting in touch with us:
+Getting in touch with us
 -------------------------
 
 If you're interested in using pyESD for your weather station analysis, we've made sure that the modelling steps 
 are user-friendly and applicable to weather stations worldwide. Whether you're new to pyESD and need help getting 
-started, want to enhance or add new components, have found a bug, or simply want to discuss potential collaborations,
- you have several ways to reach out to us:
+started, want to enhance or add new components, have found a bug, or simply want to discuss potential collaborations, 
+you have several ways to reach out to us:
 
 1. **Start a Discussion**: Have general questions about the scientific methods behind our tools? 
 Need assistance with setting up experiments using pyESD? Looking for more information about features 
-that might not be fully documented? You can initiate a _discussion on our GitHub page: 
-_discusion: https://github.com/Dan-Boat/PyESD/discussions.
+that might not be fully documented? You can initiate a _discussion on our GitHub page: `Start a Discussion
+<https://github.com/Dan-Boat/PyESD/discussions>`_.
 
 2. **Report an Issue**: If you encounter bugs in the source code, feel that certain features are missing, 
 or have suggestions for techniques to improve, you can open an issue on our 
-GitHub repository: [Open an Issue](https://github.com/Dan-Boat/PyESD/issues). 
+GitHub repository: `[Open an Issue]<https://github.com/Dan-Boat/PyESD/issues>. 
 We're also interested in contributions to enhance our documentation.
 
 3. **Email Us**: Feel free to reach out to us via email at dannboateng@gmail.com.
 
 We're always thrilled to hear about the ways in which pyESD is being utilized. 
-If you've incorporated pyESD into your research, activities, or teaching, please consider
- submitting a pull request to let us know. This helps us keep track of the various applications of pyESD.
+If you've incorporated pyESD into your research, activities, or teaching, please consider 
+submitting a pull request to let us know. This helps us keep track of the various applications of pyESD.
 
 Thank you for considering pyESD for your endeavors!
 
 Some papers and preprints that have used pyESD
+--------------------------------------------------
 
-Kindly make a pull request to let us know if you’ve used pyESD in your research, activities or teaching:
-Boateng, D. and Mutz, S. G.: pyESDv1.0.1: An open-source Python framework for empirical-statistical 
+**Kindly make a pull request to let us know if you’ve used pyESD in your research, activities or teaching:**
+
+1. Boateng, D. and Mutz, S. G.: pyESDv1.0.1: An open-source Python framework for empirical-statistical 
 downscaling of climate information, Geoscientific Model Development Discussions, 
 1–58, https://doi.org/10.5194/gmd-2023-67, 2023.
-Arthur, F., Boateng, D., and Baidu, M.: Prediction of Rainfall Response to the 21st-century Climate Change
+
+2. Arthur, F., Boateng, D., and Baidu, M.: Prediction of Rainfall Response to the 21st-century Climate Change
 in Ghana using Machine Learning Empirical Statistical Downscaling, 2022, H25A-04, 2022.
 
-Citing pyESD
+**Citing pyESD**
+
 BibTeX
+
 @article{boateng_pyesdv101_2023,
-	title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
-	shorttitle = {{pyESDv1}.0.1},
-	url = {https://gmd.copernicus.org/preprints/gmd-2023-67/},
-	doi = {10.5194/gmd-2023-67},
-	language = {English},
-	urldate = {2023-07-24},
-	journal = {Geoscientific Model Development Discussions},
-	author = {Boateng, Daniel and Mutz, Sebastian G.},
-	month = apr,
-	year = {2023},
-	note = {Publisher: Copernicus GmbH},
-	pages = {1--58},
-	file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
+title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
+shorttitle = {{pyESDv1}.0.1},
+url = {https://gmd.copernicus.org/preprints/gmd-2023-67/},
+doi = {10.5194/gmd-2023-67},
+language = {English},
+urldate = {2023-07-24},
+journal = {Geoscientific Model Development Discussions},
+author = {Boateng, Daniel and Mutz, Sebastian G.},
+month = apr,
+year = {2023},
+note = {Publisher: Copernicus GmbH},
+pages = {1--58},
+file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
 }
