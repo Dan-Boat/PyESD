@@ -48,12 +48,9 @@
 <li class="toctree-l1"><a class="reference internal" href="methods.html">Methods</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Using pyESD for Downscaling Climate Information</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#preprocessing-data-for-pyesd">Preprocessing Data for pyESD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-does-the-used-datasets-look-like">How does the used datasets look like?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#what-do-the-datasets-look-like">What Do the Datasets Look Like?</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#selecting-predictors-for-esd">Selecting Predictors for ESD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#including-large-scale-teleconnection-indices">Including Large-Scale Teleconnection Indices</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-preprocess-data-used-by-pyesd">How to preprocess data used by pyESD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-select-predictors-for-esd">How to select predictors for ESD</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#including-large-scale-teleconnection-indices-predictors">Including large-scale teleconnection indices predictors</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#how-to-select-the-optimal-model-for-esd">How to select the optimal model for ESD</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#coupling-esd-to-gcms-for-future-prediction">Coupling ESD to GCMs for future prediction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#visualization-and-data-analysis">Visualization and Data Analysis</a></li>
@@ -62,6 +59,7 @@
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 </ul>
 
         </div>
@@ -127,9 +125,22 @@ instructions and explanations to assist users in adapting to pyESD’s modeling 
 </pre></div>
 </div>
 </section>
-<section id="how-does-the-used-datasets-look-like">
-<h2>How does the used datasets look like?<a class="headerlink" href="#how-does-the-used-datasets-look-like" title="Permalink to this heading"></a></h2>
-<p><a class="reference external" href="https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_structure.ipynb">Its simple, check it out</a></p>
+<section id="what-do-the-datasets-look-like">
+<h2>What Do the Datasets Look Like?<a class="headerlink" href="#what-do-the-datasets-look-like" title="Permalink to this heading"></a></h2>
+<p>Let’s take a closer look at the simple data structure that pyESD loads as a station object. For the station datasets,
+the initial rows contain station attributes such as longitude, latitude, station name, and elevation.
+Starting from the sixth row onwards, you’ll find the date and the corresponding predictand value.
+This means that datasets from sources outside the DWD climate data center can be easily formatted into this
+structured format, making them compatible with pyESD.</p>
+<p>Regarding predictors, any reanalysis dataset that covers the weather station and the defined domain,
+typically within a 200km radius, can be used. In our example, we utilized the locally available ERA5 datasets,
+which can be conveniently downloaded from the Copernicus data center. We opted for the global datasets,
+although it’s not mandatory. To load these datasets, you only need to provide the paths to the datasets from
+the <cite>pyESD.utils</cite> module (refer to <cite>read_data.py</cite>). Importing predictions is as simple as specifying the variable
+name defined in the datasets, as illustrated in the example for total precipitation (tp).</p>
+<p><a class="reference external" href="https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_structure.ipynb">Notebook that shows the predictand and predictors data structure</a></p>
+<p>Throughout this tutorials, we use one script to read all the required datasets and import it in all the
+various examples demonstrated.</p>
 </section>
 <section id="selecting-predictors-for-esd">
 <h2>Selecting Predictors for ESD<a class="headerlink" href="#selecting-predictors-for-esd" title="Permalink to this heading"></a></h2>
@@ -140,7 +151,8 @@ The methods for predictor selection are not always straightforward and can be
 technique-dependent. In pyESD, we demonstrate how to utilize available methods to
 choose informative predictors for each station. Additionally, we compare the performance
 of different selection methods against a baseline training model (RidgeCV) to
-identify sets of predictors with the highest predictive skill based on the chosen method.</p>
+identify sets of predictors with the highest predictive skill based on the chosen method.
+<a class="reference external" href="https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Predictor_selection.ipynb">Predictors selection methods example</a></p>
 </section>
 <section id="including-large-scale-teleconnection-indices">
 <h2>Including Large-Scale Teleconnection Indices<a class="headerlink" href="#including-large-scale-teleconnection-indices" title="Permalink to this heading"></a></h2>
@@ -150,24 +162,20 @@ We showcase how to include teleconnection indices as predictors to enhance the
 downscaling model’s capabilities.</p>
 <p>For further details and practical implementation, refer to the complete documentation
 and examples provided by pyESD.</p>
-</section>
-<section id="how-to-preprocess-data-used-by-pyesd">
-<h2>How to preprocess data used by pyESD<a class="headerlink" href="#how-to-preprocess-data-used-by-pyesd" title="Permalink to this heading"></a></h2>
-</section>
-<section id="how-to-select-predictors-for-esd">
-<h2>How to select predictors for ESD<a class="headerlink" href="#how-to-select-predictors-for-esd" title="Permalink to this heading"></a></h2>
-</section>
-<section id="including-large-scale-teleconnection-indices-predictors">
-<h2>Including large-scale teleconnection indices predictors<a class="headerlink" href="#including-large-scale-teleconnection-indices-predictors" title="Permalink to this heading"></a></h2>
+<p><a href="#id1"><span class="problematic" id="id2">`Using large-scale teleconnections as predictors example &lt;&gt;`_</span></a></p>
 </section>
 <section id="how-to-select-the-optimal-model-for-esd">
 <h2>How to select the optimal model for ESD<a class="headerlink" href="#how-to-select-the-optimal-model-for-esd" title="Permalink to this heading"></a></h2>
+<p><a href="#id3"><span class="problematic" id="id4">`model selection experiment example &lt;&gt;`_</span></a></p>
 </section>
 <section id="coupling-esd-to-gcms-for-future-prediction">
 <h2>Coupling ESD to GCMs for future prediction<a class="headerlink" href="#coupling-esd-to-gcms-for-future-prediction" title="Permalink to this heading"></a></h2>
+<p><a href="#id5"><span class="problematic" id="id6">`making future prediction example &lt;&gt;`_</span></a></p>
 </section>
 <section id="visualization-and-data-analysis">
 <h2>Visualization and Data Analysis<a class="headerlink" href="#visualization-and-data-analysis" title="Permalink to this heading"></a></h2>
+<p><a href="#id7"><span class="problematic" id="id8">`example of some cool visualization pyESD can do &lt;&gt;`_</span></a></p>
+<p>🚨 This should help get you started, let us know if you have issues</p>
 </section>
 </section>
 

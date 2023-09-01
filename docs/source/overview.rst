@@ -131,7 +131,7 @@ in Ghana using Machine Learning Empirical Statistical Downscaling, 2022, H25A-04
 
 **Citing pyESD**
 
-BibTeX
+```BibTeX
 
 @article{boateng_pyesdv101_2023,
 title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
@@ -148,3 +148,4 @@ note = {Publisher: Copernicus GmbH},
 pages = {1--58},
 file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
 }
+```
