@@ -7,6 +7,11 @@ The main specialties of the pyESD include:
 * PyESD features many machine learning algorithms and predictor selection techniques that can be experimented with toward the selection and design of robust transfer functions that can be coupled with GCM to generate future estimates of climate change
 * And many other functionalities that are highlighted in the paper description of the package (to be submitted). 
 
+## Documentation :blue_book:
+
+The package documentation is accessible at [https://dan-boat.github.io/PyESD/](https://dan-boat.github.io/PyESD/)
+
+
 The main component and the work flow of the package are summarised in the modeling outline:
 
 ![Model outline](./img/Model%20outline-model%20outline%20presentation.drawio.png)
@@ -20,9 +25,7 @@ The main component and the work flow of the package are summarised in the modeli
    `pip install -e pyESD` or `pip install -e .` in the package base folder clone from github
 The installation might require some dependencies that must be installed if not successful from the distribution from PyPI: [cartopy](https://scitools.org.uk/cartopy/docs/latest/), [xarray](https://docs.xarray.dev/en/stable/), [sciki-learn](https://scikit-learn.org/stable/), [scipy](https://scipy.org/) and the other scientific frameworks such as NumPy, pandas, [Matplotlib](https://matplotlib.org/), and [seaborn](https://seaborn.pydata.org/)
 3. Alternatively, to ensure the installation in an isolated environment, virtual python environment using `conda` or `virtualenv` can be used to create a separate env for the package installation
-## Documentation :blue_book:
 
-The package documentation is still in progress. The initial structure is accessible at [github-pages](https://dan-boat.github.io/PyESD/)
 
 ## Examples
 The package has been used for downscaling precipitation and temperature for a catchment located in southwestern Germnany. We have also used it for generating future rainfall products for all the synoptic weather stations in Ghana. Their respective control scripts are located in the [examples folder](./pyESD/examples/). Generally, the control scripts follow the modeling workflow as shown in:
@@ -118,14 +121,12 @@ plt.show()
 The package is tested using the `unittest` framework with synthetic generated data. The testing scripts are located in the [test](./test) folder. Running  the various scripts with -v flag (higher level of verbose), would validate the modified version of the package. 
 
 ## Publications
-The package description and application paper is currently under preparation (to be submitted to GMD)
+The package description and application paper is currently under review in GCM ([Boateng & Mutz 2023](https://gmd.copernicus.org/preprints/gmd-2023-67/))
 Its application for weather station in Ghana was presented at the AGU22 [Link](http://dx.doi.org/10.22541/essoar.167458059.91056213/v1) and the paper is under preparation
 
 Citation:
 Upload on zenodo: https://doi.org/10.5281/zenodo.7748769
 
-## Future versions
-The pacakage is still in planing stage (v.0.0.1) (The stable version would be uploaded on pypi with the version number v.1.0.1)
 
 ## *Collaborators are welcomed: interms of model application, model improvement, documentation and expansion of the package!*
 @ Daniel Boateng ([linkedin](https://www.linkedin.com/in/daniel-boateng-3892311b4/)) : **University of Tuebingen** :incoming_envelope: dannboateng@gmail.com
