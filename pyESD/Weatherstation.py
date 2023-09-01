@@ -107,6 +107,10 @@ def read_station_csv(filename, varname, return_all=False):
         assert not np.any(t > 80)
         
         data = {varname:t}
+        
+    elif varname == "O18":
+        d18O = data[varname]
+        d18O[d18O == -9999] = np.nan
     else:
         raise ValueError("The model does not recognize the variable name")
 

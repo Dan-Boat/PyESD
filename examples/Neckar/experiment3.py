@@ -22,6 +22,8 @@ from read_data import *
 from predictor_settings import *
 
 """
+The downscaling routines used in this final script are based on the results from experiment 1
+(predictor selection) and experiment 2 (estimator selection)
 
 This script runs all the necessary routines for statistical downscaling of 
 precipitation and temperature for the Elb-neckar subcatachment. 

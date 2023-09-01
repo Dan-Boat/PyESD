@@ -57,7 +57,9 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         scoring = ["neg_root_mean_squared_error",
                    "r2", "neg_mean_absolute_error"]
         
-        cv = TimeSeriesSplit(n_splits=10,test_size=12)
+        #cv = TimeSeriesSplit(n_splits=10,test_size=12)
+        #cv = LeaveOneOut()
+        cv=KFold(n_splits=10)
         
         if estimator == "Stacking":
             
@@ -68,7 +70,7 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         else:
             
             
-            SO.set_model(variable, method=estimator, daterange=from1961to2017, 
+            SO.set_model(variable, method=estimator, daterange=from1981to2017, 
                          predictor_dataset=ERA5Data, cv=cv, 
                                        scoring=scoring)
         
@@ -78,36 +80,34 @@ def run_experiment2(variable, estimator, cachedir, stationnames,
         
         SO.fit(variable,  from1961to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
                 selector_method=selector_method , selector_regressor="RandomForest",
-                cal_relative_importance=False, impute=False, impute_method="spline", impute_order=5)
+                cal_relative_importance=False, impute=True, impute_method="spline", impute_order=5)
         
         
-        if estimator == "RandomForest":
-            importance = SO.tree_based_feature_permutation_importance(variable, from1961to2017, ERA5Data, fit_predictors=True, 
-                                                                      plot=False)
             
         
-        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1961to2017, ERA5Data, return_cv_scores=True)
+        score_fit, ypred_fit, scores_all = SO.cross_validate_and_predict(variable,  from1961to2017, ERA5Data, 
+                                                                         return_cv_scores=True)
         
         climate_score = SO.climate_score(variable, from1961to2017, from1961to2017, ERA5Data)
         
-        ypred_train = SO.predict(variable, from1961to2017, ERA5Data)
+        #ypred_train = SO.predict(variable, from1981to2017, ERA5Data)
         
-        y_obs_train = SO.get_var(variable, from1961to2017, anomalies=True)
+        #y_obs_train = SO.get_var(variable, from1981to2017, anomalies=True)
         
         
-        predictions = pd.DataFrame({
-            "obs_train" : y_obs_train,
-            "ERA5 1961-2017" : ypred_train})
+        # predictions = pd.DataFrame({
+        #     "obs_train" : y_obs_train,
+        #     "ERA5 1981-2017" : ypred_train})
         
         
         #storing of results
         
         store_pickle(stationname, "validation_score_" + estimator, score_fit, cachedir)
         store_pickle(stationname, "CV_scores_" + estimator, scores_all, cachedir)
-        store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
+        #store_csv(stationname, "predictions_" + estimator, predictions, cachedir)
         
-        if estimator == "RandomForest":
-            store_pickle(stationname, "importance_", importance, cachedir)
+        # if estimator == "RandomForest":
+        #     store_pickle(stationname, "importance_", importance, cachedir)
 
 
 
@@ -123,13 +123,12 @@ if __name__ == "__main__":
        
     station_datadir = station_prec_datadir
     
-    final_estimator = "LassoLarsCV"
+    final_estimator = "ExtraTree"
     
     base_estimators = ["ARD", "RandomForest", "Bagging"]
     
-
-    #estimators = ["LassoLarsCV", "ARD", "MLP", "RandomForest", "XGBoost", "Bagging", "Stacking"]
-    estimators = ["Stacking"]
+    estimators = ["LassoLarsCV", "ARD", "RandomForest", "XGBoost", "Bagging", "AdaBoost", "RidgeCV"]
+    #estimators = ["Stacking"]
     
     
         

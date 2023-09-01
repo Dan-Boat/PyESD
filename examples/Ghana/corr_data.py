@@ -49,34 +49,36 @@ def generate_correlation():
         # set standardizer 
         SO.set_standardizer(variable, standardizer= MonthlyStandardizer(detrending=False,scaling=False))
         
-        corr = SO.predictor_correlation(variable, from1961to2017, ERA5Data, fit_predictor=True, 
-                                 fit_predictand=True, method="pearson")
+        corr = SO.predictor_correlation(variable, from1981to2017, ERA5Data, fit_predictor=True, 
+                                 fit_predictand=True, method="pearson", use_scipy=True)
         # get the time series
         
-        y_obs = SO.get_var(variable, from1961to2017, anomalies=False)
+        y_obs = SO.get_var(variable, from1981to2017, anomalies=False)
         
-        predictors_obs = SO._get_predictor_data(variable, from1961to2017, ERA5Data, fit_predictors=True,)
+        predictors_obs = SO._get_predictor_data(variable, from1981to2017, ERA5Data, fit_predictors=True,)
         
         predictors_obs["Precipitation"] = y_obs
         
         #save values
        
-        store_csv(stationname, varname="corrwith_predictors", var=corr, cachedir=corr_dir)
-        store_csv(stationname, varname="predictors_data", var=predictors_obs, cachedir=corr_dir)
+        store_csv(stationname, varname="corrwith_predictors_scipy", var=corr, cachedir=corr_dir)
+        #store_csv(stationname, varname="predictors_data", var=predictors_obs, cachedir=corr_dir)
           
     
 # ploting of correlations
 def plot_correlation():
-    df = correlation_data(stationnames_prec, corr_dir, "corrwith_predictors", predictors)
+    df, df_pval = correlation_data(stationnames_prec, corr_dir, "corrwith_predictors_scipy",
+                          predictors, use_scipy=True)
     
+    df_pval.to_csv("pearson_corr_pval_predictors.csv")
     apply_style(fontsize=22, style=None) 
     
     fig, ax = plt.subplots(1,1, figsize=(20,15))
                             
-    correlation_heatmap(data=df, cmap="RdBu", ax=ax, vmax=1, vmin=-1, center=0, cbar_ax=None, fig=fig,
+    correlation_heatmap(data=df, cmap="RdBu", ax=ax, vmax=0.5, vmin=-0.5, center=0, cbar_ax=None, fig=fig,
                             add_cbar=True, title=None, label= "Pearson Correlation Coefficinet", fig_path=path_to_store,
                             xlabel="Predictors", ylabel="Stations", fig_name="correlation_prec.svg",)
     
 if __name__ == "__main__":
-    generate_correlation()
+    #generate_correlation()
     plot_correlation()

@@ -97,13 +97,13 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
             varname="test_r2", varname_std="test_r2_std", filename="validation_score_", legend=True,
-            fig_path=None, fig_name=None, show_error=False, width=0.5, rot=0):
+            fig_path=None, fig_name=None, show_error=False, width=0.5, rot=0, use_id=True):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(18, 15))
         
     df, df_std = barplot_data(methods, stationnames, path_to_data, varname=varname, varname_std=varname_std, 
-                     filename=filename, use_id=True)
+                     filename=filename, use_id=use_id)
     
     colors = [selector_method_colors[m] for m in methods]
     mpl.rcParams["axes.prop_cycle"] = cycler("color", colors)

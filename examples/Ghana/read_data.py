@@ -29,9 +29,9 @@ cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
 cmip5_45_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP45"
 cmip5_85_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP85"
 
-cordex_26_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP26"
-cordex_45_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP45"
-cordex_85_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/RCP85"
+#add cordex africa!
+cordex_26_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/Africa/RCP26"
+cordex_85_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/Africa/RCP85"
 
 HadGEM2_26_datadir = "D:/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP26" 
 HadGEM2_45_datadir = "D:/Datasets/CMIP5/Monthly/HadGEM2-ES/RCP45" 
@@ -251,27 +251,19 @@ CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
 
 
 CORDEX_RCP26 = Dataset("CORDEX_RCP26", {
-    "t2m": os.path.join(cordex_26_datadir, "t2m_monthly.nc"), 
     "tp": os.path.join(cordex_26_datadir, "tp_monthly.nc")}, 
     domain_name= "Africa")
 
-CORDEX_RCP45 = Dataset("CORDEX_RCP45", {
-    "t2m": os.path.join(cordex_45_datadir, "t2m_monthly.nc"), 
-    "tp": os.path.join(cordex_45_datadir, "tp_monthly.nc")}, 
-    domain_name= "Africa")
 
-CORDEX_RCP85 = Dataset("CORDEX_RCP85", {
-    "t2m": os.path.join(cordex_85_datadir, "t2m_monthly.nc"), 
+CORDEX_RCP85 = Dataset("CORDEX_RCP85", { 
     "tp": os.path.join(cordex_85_datadir, "tp_monthly.nc")}, 
     domain_name= "Africa")
 
 CESM_RCP26 = Dataset("CESM_RCP26", {
-    "t2m":os.path.join(CESM_26_datadir, "t2m_monthly.nc"),
     "tp": os.path.join(CESM_26_datadir, "tp_monthly.nc")}, 
     domain_name= "Africa")
 
 CESM_RCP45 = Dataset("CESM_RCP45", {
-    "t2m":os.path.join(CESM_45_datadir, "t2m_monthly.nc"),
     "tp": os.path.join(CESM_45_datadir, "tp_monthly.nc")},
     domain_name= "Africa")
 

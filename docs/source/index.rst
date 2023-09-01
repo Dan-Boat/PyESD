@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Akwaaba! Welcome to PyESD Documentation!
+Akwaaba! Welcome to PyESD Documentation 👋!
 ==============================================================
 **Python framwork for Empirical Statistical Downscaling**
 
@@ -22,15 +22,18 @@ specialties of the pyESD include:
 - PyESD features many machine learning algorithms and predictor selection techniques that can 
   be experimented with toward the selection and design of robust transfer functions that can be coupled with GCM to generate future estimates of climate change.
 
-- And many other functionalities that are highlighted in the paper description of the package (submitted to GMD)
+- And many other functionalities that are highlighted in the paper description of the package 
+(under review in Geoscience Model Development (GMD): `Boateng & Mutz 2023 <https://gmd.copernicus.org/preprints/gmd-2023-67/>`_.
+
+
 
 .. image:: ./imgs/outline.png
    :width: 600
    :alt: Model Outline
 
 
-Why is downscaling important?
-------------------------------
+Why is downscaling important ⛈?
+---------------------------------
 
 Downscaling of climate information is crucial because of the widespread and diverse effects of 
 human-caused climate change. To better understand climate change impacts, it is essential to generate 
@@ -43,8 +46,8 @@ and certain climate variables, due to their coarse resolution. Additionally, the
 and regional climate variations. To overcome these limitations, GCM simulations need to be downscaled, 
 allowing us to predict regional climates more accurately.
 
-What is the Perfect Prognosis?
-------------------------------
+What is the Perfect Prognosis 🌏💫☔️?
+---------------------------------------
 
 Empirical Statistical Downscaling models fall into two categories: Model Output Statistics (MOS)
 and Perfect Prognosis (PP). MOS uses GCM data directly to create a model with bias correction 
@@ -55,8 +58,8 @@ for predicting downscaled future climates. PP establishes a relationship between
 patterns and local data, acting as a transfer function for predictions. While PP is more complex
 to design and requires substantial modeling, it offers flexibility to work with various data sources.
 
-What can PyESD do?
-------------------
+What can PyESD do 😎 💪?
+--------------------------
 
 PyESD is an open-source Python package designed to perform Perfect Prognosis-based Empirical Statistical 
 Downscaling. This package includes various modeling tools and processes. It can preprocess diverse datasets,
@@ -81,8 +84,8 @@ setting a model:
    :alt: Model Outline
 
 
-What pyESD can't do?
----------------------
+What pyESD can't do 👎?
+-------------------------
 
 The current version of pyESD doesn't include Model Output Statistics models, can't work with spatial
 predictand datasets like gridded weather stations, lacks spatial learning capabilities, and can't 
@@ -93,8 +96,8 @@ before the model learning to improve performance on rainfall occurrence and extr
 The pre-processing in the package can handle various weather station data formats and can be easily adapted.
 The developers of pyESD welcome suggestions for improvement of the software and the documentation as well.
 
-Who developed pyESD?
---------------------
+Who developed pyESD 👩🏿‍💻?
+---------------------------
 
 PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the 
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
@@ -108,8 +111,8 @@ Daniel believes in “Trusting The Process” (TTP) in all aspects of life.
    :width: 600
    :alt: Picture
 
-Getting in touch with us
--------------------------
+Getting in touch with us ✍🏽
+-----------------------------
 
 If you're interested in using pyESD for your weather station analysis, we've made sure that the modelling steps 
 are user-friendly and applicable to weather stations worldwide. Whether you're new to pyESD and need help getting 
@@ -123,8 +126,8 @@ that might not be fully documented? You can initiate a _discussion on our GitHub
 
 2. **Report an Issue**: If you encounter bugs in the source code, feel that certain features are missing, 
 or have suggestions for techniques to improve, you can open an issue on our 
-GitHub repository: `[Open an Issue]<https://github.com/Dan-Boat/PyESD/issues>. 
-We're also interested in contributions to enhance our documentation.
+GitHub repository: `Open an Issue <https://github.com/Dan-Boat/PyESD/issues>`_. 
+We're also interested in your contributions to enhance our documentation.
 
 3. **Email Us**: Feel free to reach out to us via email at dannboateng@gmail.com.
 
@@ -148,9 +151,7 @@ in Ghana using Machine Learning Empirical Statistical Downscaling, 2022, H25A-04
 
 **Citing pyESD**
 
-```BibTeX
-
-@article{boateng_pyesdv101_2023,
+*@article{boateng_pyesdv101_2023,
 title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
 shorttitle = {{pyESDv1}.0.1},
 url = {https://gmd.copernicus.org/preprints/gmd-2023-67/},
@@ -164,18 +165,17 @@ year = {2023},
 note = {Publisher: Copernicus GmbH},
 pages = {1--58},
 file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
-}
-```
+}*
+
 
 
 Documentation
 --------------
 
-* :doc:`overview`
 * :doc:`installation`
 * :doc:`methods`
 * :doc:`tutorials`
-* :doc: `gallery`
+* :doc:`gallery`
 
 
 .. toctree::
@@ -183,14 +183,14 @@ Documentation
    :hidden:
    :caption: Getting Started:
 
-   overview
    installation
    methods
    tutorials
    examples
+   gallery
    testing
    modules
-   gallery
+   
 
 
 License

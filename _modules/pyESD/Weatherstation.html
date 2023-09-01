@@ -40,14 +40,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Using pyESD for Downscaling Climate Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
 </ul>
 
         </div>
@@ -184,6 +183,10 @@
         <span class="k">assert</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">t</span> <span class="o">&gt;</span> <span class="mi">80</span><span class="p">)</span>
         
         <span class="n">data</span> <span class="o">=</span> <span class="p">{</span><span class="n">varname</span><span class="p">:</span><span class="n">t</span><span class="p">}</span>
+        
+    <span class="k">elif</span> <span class="n">varname</span> <span class="o">==</span> <span class="s2">&quot;O18&quot;</span><span class="p">:</span>
+        <span class="n">d18O</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span>
+        <span class="n">d18O</span><span class="p">[</span><span class="n">d18O</span> <span class="o">==</span> <span class="o">-</span><span class="mi">9999</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The model does not recognize the variable name&quot;</span><span class="p">)</span>
 

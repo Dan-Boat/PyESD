@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Akwaaba! Welcome to PyESD Documentation! &mdash; pyESD 1.0.1 documentation</title>
+  <title>Akwaaba! Welcome to PyESD Documentation 👋! &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,7 +18,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Overview" href="overview.html" /> 
+    <link rel="next" title="Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,14 +42,13 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="methods.html">Methods</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Using pyESD for Downscaling Climate Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 <li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
-<li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
 </ul>
 
         </div>
@@ -66,7 +65,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Akwaaba! Welcome to PyESD Documentation!</li>
+      <li class="breadcrumb-item active">Akwaaba! Welcome to PyESD Documentation 👋!</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,7 +76,7 @@
            <div itemprop="articleBody">
              
   <section id="akwaaba-welcome-to-pyesd-documentation">
-<h1>Akwaaba! Welcome to PyESD Documentation!<a class="headerlink" href="#akwaaba-welcome-to-pyesd-documentation" title="Permalink to this heading"></a></h1>
+<h1>Akwaaba! Welcome to PyESD Documentation 👋!<a class="headerlink" href="#akwaaba-welcome-to-pyesd-documentation" title="Permalink to this heading"></a></h1>
 <p><strong>Python framwork for Empirical Statistical Downscaling</strong></p>
 <p>PyESD is an open-source framework of the Perfect Prognosis approach of statistical downscaling of
 any climate-related variable such as precipitation, temperature, and wind speed using reanalysis
@@ -92,11 +91,12 @@ specialties of the pyESD include:</p>
 downscaling routines as attributes. This ensures fewer lines of code that cover the end-to-end downscaling of climate change variable products.</p></li>
 <li><p>PyESD features many machine learning algorithms and predictor selection techniques that can
 be experimented with toward the selection and design of robust transfer functions that can be coupled with GCM to generate future estimates of climate change.</p></li>
-<li><p>And many other functionalities that are highlighted in the paper description of the package (submitted to GMD)</p></li>
+<li><p>And many other functionalities that are highlighted in the paper description of the package</p></li>
 </ul>
+<p>(under review in Geoscience Model Development (GMD): <a class="reference external" href="https://gmd.copernicus.org/preprints/gmd-2023-67/">Boateng &amp; Mutz 2023</a>.</p>
 <a class="reference internal image-reference" href="_images/outline.png"><img alt="Model Outline" src="_images/outline.png" style="width: 600px;" /></a>
 <section id="why-is-downscaling-important">
-<h2>Why is downscaling important?<a class="headerlink" href="#why-is-downscaling-important" title="Permalink to this heading"></a></h2>
+<h2>Why is downscaling important ⛈?<a class="headerlink" href="#why-is-downscaling-important" title="Permalink to this heading"></a></h2>
 <p>Downscaling of climate information is crucial because of the widespread and diverse effects of
 human-caused climate change. To better understand climate change impacts, it is essential to generate
 accurate predictions about future climate conditions at a relevant scale for studying its effects and
@@ -109,7 +109,7 @@ and regional climate variations. To overcome these limitations, GCM simulations 
 allowing us to predict regional climates more accurately.</p>
 </section>
 <section id="what-is-the-perfect-prognosis">
-<h2>What is the Perfect Prognosis?<a class="headerlink" href="#what-is-the-perfect-prognosis" title="Permalink to this heading"></a></h2>
+<h2>What is the Perfect Prognosis 🌏💫☔️?<a class="headerlink" href="#what-is-the-perfect-prognosis" title="Permalink to this heading"></a></h2>
 <p>Empirical Statistical Downscaling models fall into two categories: Model Output Statistics (MOS)
 and Perfect Prognosis (PP). MOS uses GCM data directly to create a model with bias correction
 techniques for downscaling. However, it’s inflexible because it’s tied to specific GCM products.
@@ -120,7 +120,7 @@ patterns and local data, acting as a transfer function for predictions. While PP
 to design and requires substantial modeling, it offers flexibility to work with various data sources.</p>
 </section>
 <section id="what-can-pyesd-do">
-<h2>What can PyESD do?<a class="headerlink" href="#what-can-pyesd-do" title="Permalink to this heading"></a></h2>
+<h2>What can PyESD do 😎 💪?<a class="headerlink" href="#what-can-pyesd-do" title="Permalink to this heading"></a></h2>
 <p>PyESD is an open-source Python package designed to perform Perfect Prognosis-based Empirical Statistical
 Downscaling. This package includes various modeling tools and processes. It can preprocess diverse datasets,
 such as weather station data (from, e.g., German weather service, Ghana Met Agency), ERA5 analysis, CMIP5,
@@ -141,7 +141,7 @@ setting a model:</p>
 <a class="reference internal image-reference" href="_images/outline1.png"><img alt="Model Outline" src="_images/outline1.png" style="width: 600px;" /></a>
 </section>
 <section id="what-pyesd-can-t-do">
-<h2>What pyESD can’t do?<a class="headerlink" href="#what-pyesd-can-t-do" title="Permalink to this heading"></a></h2>
+<h2>What pyESD can’t do 👎?<a class="headerlink" href="#what-pyesd-can-t-do" title="Permalink to this heading"></a></h2>
 <p>The current version of pyESD doesn’t include Model Output Statistics models, can’t work with spatial
 predictand datasets like gridded weather stations, lacks spatial learning capabilities, and can’t
 directly assess impacts. It heavily relies on machine learning algorithms and simple deep learning
@@ -152,7 +152,7 @@ The pre-processing in the package can handle various weather station data format
 The developers of pyESD welcome suggestions for improvement of the software and the documentation as well.</p>
 </section>
 <section id="who-developed-pyesd">
-<h2>Who developed pyESD?<a class="headerlink" href="#who-developed-pyesd" title="Permalink to this heading"></a></h2>
+<h2>Who developed pyESD 👩🏿‍💻?<a class="headerlink" href="#who-developed-pyesd" title="Permalink to this heading"></a></h2>
 <p>PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
 dynamics. He’s dedicated to open-source scientific software development and aims to enhance the
@@ -163,7 +163,7 @@ Daniel believes in “Trusting The Process” (TTP) in all aspects of life.</p>
 <a class="reference internal image-reference" href="_images/myself.jpg"><img alt="Picture" src="_images/myself.jpg" style="width: 600px;" /></a>
 </section>
 <section id="getting-in-touch-with-us">
-<h2>Getting in touch with us<a class="headerlink" href="#getting-in-touch-with-us" title="Permalink to this heading"></a></h2>
+<h2>Getting in touch with us ✍🏽<a class="headerlink" href="#getting-in-touch-with-us" title="Permalink to this heading"></a></h2>
 <p>If you’re interested in using pyESD for your weather station analysis, we’ve made sure that the modelling steps
 are user-friendly and applicable to weather stations worldwide. Whether you’re new to pyESD and need help getting
 started, want to enhance or add new components, have found a bug, or simply want to discuss potential collaborations,
@@ -173,8 +173,8 @@ Need assistance with setting up experiments using pyESD? Looking for more inform
 that might not be fully documented? You can initiate a _discussion on our GitHub page: <a class="reference external" href="https://github.com/Dan-Boat/PyESD/discussions">Start a Discussion</a>.</p>
 <p>2. <strong>Report an Issue</strong>: If you encounter bugs in the source code, feel that certain features are missing,
 or have suggestions for techniques to improve, you can open an issue on our
-GitHub repository: <a href="#id1"><span class="problematic" id="id2">`</span></a>[Open an Issue]&lt;<a class="reference external" href="https://github.com/Dan-Boat/PyESD/issues">https://github.com/Dan-Boat/PyESD/issues</a>&gt;.
-We’re also interested in contributions to enhance our documentation.</p>
+GitHub repository: <a class="reference external" href="https://github.com/Dan-Boat/PyESD/issues">Open an Issue</a>.
+We’re also interested in your contributions to enhance our documentation.</p>
 <ol class="arabic simple" start="3">
 <li><p><strong>Email Us</strong>: Feel free to reach out to us via email at <a class="reference external" href="mailto:dannboateng&#37;&#52;&#48;gmail&#46;com">dannboateng<span>&#64;</span>gmail<span>&#46;</span>com</a>.</p></li>
 </ol>
@@ -192,11 +192,10 @@ downscaling of climate information, Geoscientific Model Development Discussions,
 <p>2. Arthur, F., Boateng, D., and Baidu, M.: Prediction of Rainfall Response to the 21st-century Climate Change
 in Ghana using Machine Learning Empirical Statistical Downscaling, 2022, H25A-04, 2022.</p>
 <p><strong>Citing pyESD</strong></p>
-<p><a href="#id3"><span class="problematic" id="id4">``</span></a><a href="#id5"><span class="problematic" id="id6">`</span></a>BibTeX</p>
-<p>&#64;article{boateng_pyesdv101_2023,
+<p><em>&#64;article{boateng_pyesdv101_2023,
 title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
 shorttitle = {{pyESDv1}.0.1},
-url = {<a class="reference external" href="https://gmd.copernicus.org/preprints/gmd-2023-67/">https://gmd.copernicus.org/preprints/gmd-2023-67/</a>},
+url = {https://gmd.copernicus.org/preprints/gmd-2023-67/},
 doi = {10.5194/gmd-2023-67},
 language = {English},
 urldate = {2023-07-24},
@@ -207,22 +206,15 @@ year = {2023},
 note = {Publisher: Copernicus GmbH},
 pages = {1–58},
 file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
-}
-<a href="#id7"><span class="problematic" id="id8">``</span></a><a href="#id9"><span class="problematic" id="id10">`</span></a></p>
+}</em></p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="overview.html"><span class="doc">Overview</span></a></p></li>
 <li><p><a class="reference internal" href="installation.html"><span class="doc">Installation</span></a></p></li>
 <li><p><a class="reference internal" href="methods.html"><span class="doc">Methods</span></a></p></li>
-<li><p><a class="reference internal" href="tutorials.html"><span class="doc">Using pyESD for Downscaling Climate Information</span></a></p></li>
-<li><dl class="field-list simple">
-<dt class="field-odd">doc<span class="colon">:</span></dt>
-<dd class="field-odd"><p><cite>gallery</cite></p>
-</dd>
-</dl>
-</li>
+<li><p><a class="reference internal" href="tutorials.html"><span class="doc">tutorials</span></a></p></li>
+<li><p><a class="reference internal" href="gallery.html"><span class="doc">Gallery</span></a></p></li>
 </ul>
 <div class="toctree-wrapper compound">
 </div>
@@ -245,7 +237,7 @@ file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and M
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="overview.html" class="btn btn-neutral float-right" title="Overview" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

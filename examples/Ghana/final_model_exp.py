@@ -57,7 +57,7 @@ def run_main(variable, cachedir,
                       predictor_dataset=ERA5Data, scoring=scoring, cv=KFold(n_splits=10))
         
         
-        # MODEL TRAINING (1961-2017)
+        # MODEL TRAINING (1981-2017)
         # ==========================
         
         SO.fit(variable, from1981to2017, ERA5Data, fit_predictors=True, predictor_selector=True, 
@@ -71,7 +71,7 @@ def run_main(variable, cachedir,
                                                                          return_cv_scores=True)
         
         
-        climate_score_13to17 = SO.climate_score(variable, from1981to2012, from2013to2017, ERA5Data) 
+        climate_score_13to17 = SO.climate_score(variable, from1981to2017, from2013to2017, ERA5Data) 
         
         
         score_2013to2017 = SO.evaluate(variable, from2013to2017, ERA5Data)
@@ -178,7 +178,9 @@ def run_main(variable, cachedir,
     
     
 if __name__ == "__main__":
-    cachedir = cachedir_prec
+    selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/final_experiment"
+    cachedir = selector_dir
+    #cachedir = cachedir_prec
        
     variable = "Precipitation"
        
@@ -189,7 +191,7 @@ if __name__ == "__main__":
     
     ensemble_method = "Stacking"
  
-    base_estimators = ["ARD", "RandomForest", "Bagging"]
+    base_estimators = ["ARD", "RandomForest", "Bagging", "RidgeCV"]
 
     final_estimator = "LassoLarsCV"
 

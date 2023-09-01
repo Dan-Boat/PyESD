@@ -3,17 +3,32 @@ Installation
 
 Install from PyPI
 -----------------
-- The standard version can be intalled with::
-    ``pip install pyESD``
+- The standard version can be intalled with:
 
-- The same version can be installed in editable mode with the e flag::
-    ``pip install -e pyESD``
+.. code-block:: bash
+
+    pip install pyESD
+
+- The same version can be installed in editable mode with the e flag:
+
+.. code-block:: bash
+
+    pip install -e pyESD
 
 Install from Github
 -------------------
 The updated version (in development) can be clone from github:
-    ``git clone git@github.com:Dan-Boat/PyESD.git``
-    ``pip install .`` (in the clone folder)
+
+.. code-block:: bash
+
+    git clone git@github.com:Dan-Boat/PyESD.git
+
+
+and use pip to install (in the clone folder) . 
+
+.. code-block:: bash
+    
+    pip install 
 
 It is recommended to install the package in an isolated environment.
 Virtualenv or conda can be used to create a new environment. 

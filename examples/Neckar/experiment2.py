@@ -3,6 +3,8 @@
 Created on Wed Apr  6 13:31:10 2022
 
 @author: dboateng
+This script experiment the performance of the different estimators in downscaling prec and temp
+in the catchament. The predictor selection method is based on the results of experiment 1.
 """
 import os 
 import sys 

@@ -70,7 +70,7 @@ for csv in p(path_to_data).glob(glob_name):
     df_month_data.to_csv(os.path.join(path_to_processed_monthly, save_name + ".csv"), index=False,
                          header=False)
     
-data_info = data_info.sort_values(by=["Name"], ascending=True)
+data_info = data_info.sort_values(by=["Latitude"], ascending=False)
 
 data_info = data_info.reset_index(drop=False)
 
