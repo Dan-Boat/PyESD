@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pyESD.StationOperator &mdash; pyESD 1.0.1 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            pyESD
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Getting Started:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../overview.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../methods.html">Methods</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">Using pyESD for Downscaling Climate Information</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pyESD</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pyESD.StationOperator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pyESD.StationOperator</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python3</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Created on Sun Nov 21 00:55:37 2021</span>
+
+<span class="sd">@author: dboateng</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">os</span> 
+
+
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">.Predictor_Generator</span> <span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">.standardizer</span> <span class="kn">import</span> <span class="n">MonthlyStandardizer</span>
+    <span class="kn">from</span> <span class="nn">.predictand</span> <span class="kn">import</span> <span class="n">PredictandTimeseries</span>
+    <span class="kn">from</span> <span class="nn">.teleconnections</span> <span class="kn">import</span> <span class="n">NAO</span><span class="p">,</span> <span class="n">SCAN</span><span class="p">,</span> <span class="n">EA</span><span class="p">,</span> <span class="n">EAWR</span><span class="p">,</span> <span class="n">MEI</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">Predictor_Generator</span> <span class="kn">import</span> <span class="o">*</span>
+    <span class="kn">from</span> <span class="nn">standardizer</span> <span class="kn">import</span> <span class="n">MonthlyStandardizer</span>
+    <span class="kn">from</span> <span class="nn">predictand</span> <span class="kn">import</span> <span class="n">PredictandTimeseries</span>
+    <span class="kn">from</span> <span class="nn">teleconnections</span> <span class="kn">import</span> <span class="n">NAO</span><span class="p">,</span> <span class="n">SCAN</span><span class="p">,</span> <span class="n">EA</span><span class="p">,</span> <span class="n">EAWR</span><span class="p">,</span> <span class="n">MEI</span>
+    
+    
+<div class="viewcode-block" id="StationOperator"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator">[docs]</a><span class="k">class</span> <span class="nc">StationOperator</span><span class="p">():</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">varname</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">varname</span><span class="p">]</span> <span class="o">=</span> <span class="n">PredictandTimeseries</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">varname</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span> <span class="o">=</span> <span class="n">elevation</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="StationOperator.get_var"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.get_var">[docs]</a>    <span class="k">def</span> <span class="nf">get_var</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">anomalies</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">anomalies</span><span class="o">=</span><span class="n">anomalies</span><span class="p">)</span>
+       
+        <span class="k">return</span> <span class="n">y</span></div>
+    
+<div class="viewcode-block" id="StationOperator.set_predictors"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.set_predictors">[docs]</a>    <span class="k">def</span> <span class="nf">set_predictors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">predictors</span><span class="p">,</span> <span class="n">cachedir</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="mi">250</span><span class="p">,</span> <span class="n">detrending</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                       <span class="n">standardizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">predictor_list</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">predictors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;NAO&quot;</span><span class="p">:</span>
+                <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">NAO</span><span class="p">(</span><span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">))</span>
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;EA&quot;</span><span class="p">:</span>
+                <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EA</span><span class="p">(</span><span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">))</span>
+            
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;SCAN&quot;</span><span class="p">:</span>
+                <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SCAN</span><span class="p">(</span><span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">))</span>
+            
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;EAWR&quot;</span><span class="p">:</span>
+                <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">EAWR</span><span class="p">(</span><span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">))</span>
+                
+            <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;MEI&quot;</span><span class="p">:</span>
+                <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">MEI</span><span class="p">(</span><span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                
+                <span class="k">if</span> <span class="n">standardizer</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> 
+                    <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RegionalAverage</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">,</span>
+                                                      <span class="n">standardizer_constructor</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span>
+                                                          <span class="n">MonthlyStandardizer</span><span class="p">(</span><span class="n">detrending</span><span class="o">=</span><span class="n">detrending</span><span class="p">,</span> <span class="n">scaling</span><span class="o">=</span><span class="n">scaling</span><span class="p">)))</span>
+                <span class="k">else</span><span class="p">:</span> 
+                    <span class="n">predictor_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">RegionalAverage</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">lon</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">radius</span><span class="p">,</span> <span class="n">cachedir</span><span class="o">=</span><span class="n">cachedir</span><span class="p">,</span>
+                                                      <span class="n">standardizer_constructor</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span>
+                                                          <span class="n">standardizer</span><span class="p">))</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">set_predictors</span><span class="p">(</span><span class="n">predictor_list</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="StationOperator.set_transform"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.set_transform">[docs]</a>    <span class="k">def</span> <span class="nf">set_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">set_transform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="StationOperator.set_standardizer"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.set_standardizer">[docs]</a>    <span class="k">def</span> <span class="nf">set_standardizer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">standardizer</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">set_standardizer</span><span class="p">(</span><span class="n">standardizer</span><span class="p">)</span></div>
+        
+        
+        
+<div class="viewcode-block" id="StationOperator.set_model"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.set_model">[docs]</a>    <span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">method</span><span class="p">,</span> <span class="n">ensemble_learning</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">estimators</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">final_estimator_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                  <span class="n">daterange</span> <span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                  <span class="n">scoring</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;r2&quot;</span><span class="p">,</span> <span class="s2">&quot;neg_root_mean_squared_error&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">set_model</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">ensemble_learning</span><span class="o">=</span><span class="n">ensemble_learning</span><span class="p">,</span> <span class="n">estimators</span><span class="o">=</span><span class="n">estimators</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="n">cv</span><span class="p">,</span> <span class="n">final_estimator_name</span><span class="o">=</span><span class="n">final_estimator_name</span><span class="p">,</span> 
+                                           <span class="n">daterange</span> <span class="o">=</span><span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="o">=</span><span class="n">predictor_dataset</span><span class="p">,</span> 
+                                           <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span> <span class="n">scoring</span><span class="o">=</span><span class="n">scoring</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+        
+        
+    
+    <span class="k">def</span> <span class="nf">_get_predictor_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span> <span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+       
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">_get_predictor_data</span><span class="p">(</span><span class="n">daterange</span> <span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span>
+    
+    
+    
+<div class="viewcode-block" id="StationOperator.predictor_correlation"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.predictor_correlation">[docs]</a>    <span class="k">def</span> <span class="nf">predictor_correlation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                              <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">predictor_correlation</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span> 
+                                                              <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span> 
+                                  <span class="n">method</span><span class="o">=</span> <span class="n">method</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="n">use_scipy</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+    
+<div class="viewcode-block" id="StationOperator.fit_predictor"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.fit_predictor">[docs]</a>    <span class="k">def</span> <span class="nf">fit_predictor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">fit_predictor</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">)</span></div>
+        
+        
+        
+<div class="viewcode-block" id="StationOperator.fit"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.fit">[docs]</a>    <span class="k">def</span> <span class="nf">fit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span> <span class="p">,</span> <span class="n">predictor_selector</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">selector_method</span><span class="o">=</span><span class="s2">&quot;Recursive&quot;</span><span class="p">,</span>
+            
+            <span class="n">selector_regressor</span><span class="o">=</span><span class="s2">&quot;Ridge&quot;</span><span class="p">,</span> <span class="n">num_predictors</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selector_direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cal_relative_importance</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> 
+            <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">impute</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">impute_method</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+            <span class="n">impute_order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span> <span class="p">,</span> <span class="n">predictor_selector</span><span class="o">=</span><span class="n">predictor_selector</span><span class="p">,</span> 
+                                            <span class="n">selector_method</span><span class="o">=</span><span class="n">selector_method</span><span class="p">,</span>
+                <span class="n">selector_regressor</span><span class="o">=</span> <span class="n">selector_regressor</span><span class="p">,</span>
+                <span class="n">num_predictors</span><span class="o">=</span><span class="n">num_predictors</span><span class="p">,</span>
+                <span class="n">selector_direction</span><span class="o">=</span> <span class="n">selector_direction</span><span class="p">,</span>
+                <span class="n">cal_relative_importance</span> <span class="o">=</span> <span class="n">cal_relative_importance</span><span class="p">,</span> 
+                <span class="n">fit_predictand</span> <span class="o">=</span> <span class="n">fit_predictand</span><span class="p">,</span>
+                <span class="n">impute</span><span class="o">=</span><span class="n">impute</span><span class="p">,</span> <span class="n">impute_method</span><span class="o">=</span><span class="n">impute_method</span><span class="p">,</span> 
+                <span class="n">impute_order</span><span class="o">=</span> <span class="n">impute_order</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.predict"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.predict">[docs]</a>    <span class="k">def</span> <span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span>
+                                                <span class="n">fit_predictors</span><span class="o">=</span><span class="n">fit_predictors</span><span class="p">,</span>
+                                                <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.cross_validate_and_predict"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.cross_validate_and_predict">[docs]</a>    <span class="k">def</span> <span class="nf">cross_validate_and_predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                   <span class="n">return_cv_scores</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">cross_validate_and_predict</span><span class="p">(</span><span class="n">daterange</span> <span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> 
+                                                                   <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span>
+                                                                   <span class="n">return_cv_scores</span><span class="o">=</span><span class="n">return_cv_scores</span><span class="p">,</span> 
+                                                                    <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="StationOperator.evaluate"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.evaluate">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span>  <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span>  <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.ensemble_transform"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.ensemble_transform">[docs]</a>    <span class="k">def</span> <span class="nf">ensemble_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">ensemble_transform</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="StationOperator.relative_predictor_importance"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.relative_predictor_importance">[docs]</a>    <span class="k">def</span> <span class="nf">relative_predictor_importance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">relative_predictor_importance</span><span class="p">()</span></div>
+    
+<div class="viewcode-block" id="StationOperator.selected_names"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.selected_names">[docs]</a>    <span class="k">def</span> <span class="nf">selected_names</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">selected_names</span><span class="p">()</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.tree_based_feature_importance"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.tree_based_feature_importance">[docs]</a>    <span class="k">def</span> <span class="nf">tree_based_feature_importance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                      <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">tree_based_feature_importance</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span>
+                                                                      <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.tree_based_feature_permutation_importance"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.tree_based_feature_permutation_importance">[docs]</a>    <span class="k">def</span> <span class="nf">tree_based_feature_permutation_importance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> 
+                                                  <span class="n">plot</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">tree_based_feature_permutation_importance</span><span class="p">(</span><span class="n">daterange</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="n">fit_predictand</span><span class="p">,</span>
+                                                                                  <span class="n">plot</span><span class="o">=</span><span class="n">plot</span><span class="p">,</span> <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+    
+<div class="viewcode-block" id="StationOperator.climate_score"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.climate_score">[docs]</a>    <span class="k">def</span> <span class="nf">climate_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">fit_period</span><span class="p">,</span> <span class="n">score_period</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span>
+              <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculate the climate score of a fitted model for the given variable.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        variable : string</span>
+<span class="sd">            Variable name. &quot;Temperature&quot; or &quot;Precipitation&quot;</span>
+<span class="sd">        fit_period : pd.DatetimeIndex</span>
+<span class="sd">            Range of data that should will be used for creating the reference prediction.</span>
+<span class="sd">        score_period : pd.DatetimeIndex</span>
+<span class="sd">            Range of data for that the prediction score is evaluated</span>
+<span class="sd">        predictor_dataset : stat_downscaling_tools.Dataset</span>
+<span class="sd">            The dataset that should be used to calculate the predictors</span>
+<span class="sd">        predictor_kwargs : keyword arguments</span>
+<span class="sd">            These arguments are passed to the predictor&#39;s get function</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cscore : double</span>
+<span class="sd">            Climate score (similar to rho squared). 1 for perfect fit, 0 for no</span>
+<span class="sd">            skill, negative for even worse skill than mean prediction.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">climate_score</span><span class="p">(</span><span class="n">fit_period</span><span class="p">,</span> <span class="n">score_period</span><span class="p">,</span> <span class="n">predictor_dataset</span><span class="p">,</span>
+                                                      <span class="o">**</span><span class="n">predictor_kwargs</span><span class="p">)</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.get_explained_variance"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.get_explained_variance">[docs]</a>    <span class="k">def</span> <span class="nf">get_explained_variance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the model is fitted and has the attribute ``explained_variance``,</span>
+<span class="sd">        returns it, otherwise returns an array of zeros.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="n">variable</span><span class="p">]</span><span class="o">.</span><span class="n">explained_variance_predictors</span></div>
+    
+    
+<div class="viewcode-block" id="StationOperator.save"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.StationOperator.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fname</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Saves the weatherstation object to a file (pickle).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        directory : str, optional (default : None)</span>
+<span class="sd">            Directory name where the pickle-file should be stored. Defaults to</span>
+<span class="sd">            the current directory.</span>
+<span class="sd">        fname : str, optional (default: None)</span>
+<span class="sd">            Filename of the file where the station should be stored. Defaults</span>
+<span class="sd">            to ``self.name.replace(&#39; &#39;, &#39;_&#39;) + &#39;.pickle&#39;``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">directory</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="s1">&#39;./&#39;</span>
+        <span class="k">if</span> <span class="n">fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;.pickle&#39;</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">fname</span><span class="p">)</span>
+        
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div></div>
+            
+            
+<div class="viewcode-block" id="load_station"><a class="viewcode-back" href="../../pyESD.html#pyESD.StationOperator.load_station">[docs]</a><span class="k">def</span> <span class="nf">load_station</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads a pickled station from the given file</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">so</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">so</span></div>
+        
+        
+        
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Daniel Boateng.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

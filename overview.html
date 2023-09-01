@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" >
 <head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Overview &mdash; pyESD 1.0.1 documentation</title>
@@ -12,10 +12,9 @@
   <![endif]-->
   
         <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -28,11 +27,15 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> pyESD
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyESD
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
   </form>
@@ -71,8 +74,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Overview</li>
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/overview.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -86,7 +89,7 @@
 <h1>Overview<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
 <section id="why-is-downscaling-important">
 <h2>Why is downscaling important?<a class="headerlink" href="#why-is-downscaling-important" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-18">Downscaling of climate information is crucial because of the widespread and diverse effects of
+<p>Downscaling of climate information is crucial because of the widespread and diverse effects of
 human-caused climate change. To better understand climate change impacts, it is essential to generate
 accurate predictions about future climate conditions at a relevant scale for studying its effects and
 creating strategies to address them. General Circulation Models (GCMs) are physics-based numerical models
@@ -99,7 +102,7 @@ allowing us to predict regional climates more accurately.</p>
 </section>
 <section id="what-is-the-perfect-prognosis">
 <h2>What is the Perfect Prognosis?<a class="headerlink" href="#what-is-the-perfect-prognosis" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-32">Empirical Statistical Downscaling models fall into two categories: Model Output Statistics (MOS)
+<p>Empirical Statistical Downscaling models fall into two categories: Model Output Statistics (MOS)
 and Perfect Prognosis (PP). MOS uses GCM data directly to create a model with bias correction
 techniques for downscaling. However, it’s inflexible because it’s tied to specific GCM products.
 On the other hand, PP-ESD trains the downscaling model using weather stations and large-scale
@@ -110,7 +113,7 @@ to design and requires substantial modeling, it offers flexibility to work with 
 </section>
 <section id="what-can-pyesd-do">
 <h2>What can PyESD do?<a class="headerlink" href="#what-can-pyesd-do" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-44">PyESD is an open-source Python package designed to perform Perfect Prognosis-based Empirical Statistical
+<p>PyESD is an open-source Python package designed to perform Perfect Prognosis-based Empirical Statistical
 Downscaling. This package includes various modeling tools and processes. It can preprocess diverse datasets,
 such as weather station data (from, e.g., German weather service, Ghana Met Agency), ERA5 analysis, CMIP5,
 and CMIP6. PyESD constructs predictors and predictands (e.g., transformation and extracting teleconnection
@@ -126,12 +129,12 @@ setting a model:</p>
 <span class="go">                     cv=TimeSeriesSplit(n_splits=10))</span>
 </pre></div>
 </div>
-<p class="linemarker linemarker-60"><em>Details about the modeling framework</em></p>
+<p><em>Details about the modeling framework</em></p>
 <a class="reference internal image-reference" href="_images/outline1.png"><img alt="Model Outline" src="_images/outline1.png" style="width: 600px;" /></a>
 </section>
 <section id="what-pyesd-can-t-do">
 <h2>What pyESD can’t do?<a class="headerlink" href="#what-pyesd-can-t-do" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-70">The current version of pyESD doesn’t include Model Output Statistics models, can’t work with spatial
+<p>The current version of pyESD doesn’t include Model Output Statistics models, can’t work with spatial
 predictand datasets like gridded weather stations, lacks spatial learning capabilities, and can’t
 directly assess impacts. It heavily relies on machine learning algorithms and simple deep learning
 architectures. While pyESD can be used with daily datasets, this capability is still experimental.
@@ -142,7 +145,7 @@ The developers of pyESD welcome suggestions for improvement of the software and 
 </section>
 <section id="who-developed-pyesd">
 <h2>Who developed pyESD?<a class="headerlink" href="#who-developed-pyesd" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-82">PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the
+<p>PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
 dynamics. He’s dedicated to open-source scientific software development and aims to enhance the
 reproducibility of research outcomes. He believes that science would be more fun if all research outputs
@@ -153,36 +156,36 @@ Daniel believes in “Trusting The Process” (TTP) in all aspects of life.</p>
 </section>
 <section id="getting-in-touch-with-us">
 <h2>Getting in touch with us<a class="headerlink" href="#getting-in-touch-with-us" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-97">If you’re interested in using pyESD for your weather station analysis, we’ve made sure that the modelling steps
+<p>If you’re interested in using pyESD for your weather station analysis, we’ve made sure that the modelling steps
 are user-friendly and applicable to weather stations worldwide. Whether you’re new to pyESD and need help getting
 started, want to enhance or add new components, have found a bug, or simply want to discuss potential collaborations,
 you have several ways to reach out to us:</p>
-<p class="linemarker linemarker-102">1. <strong>Start a Discussion</strong>: Have general questions about the scientific methods behind our tools?
+<p>1. <strong>Start a Discussion</strong>: Have general questions about the scientific methods behind our tools?
 Need assistance with setting up experiments using pyESD? Looking for more information about features
 that might not be fully documented? You can initiate a _discussion on our GitHub page: <a class="reference external" href="https://github.com/Dan-Boat/PyESD/discussions">Start a Discussion</a>.</p>
-<p class="linemarker linemarker-107">2. <strong>Report an Issue</strong>: If you encounter bugs in the source code, feel that certain features are missing,
+<p>2. <strong>Report an Issue</strong>: If you encounter bugs in the source code, feel that certain features are missing,
 or have suggestions for techniques to improve, you can open an issue on our
 GitHub repository: <a href="#id2"><span class="problematic" id="id3">`</span></a>[Open an Issue]&lt;<a class="reference external" href="https://github.com/Dan-Boat/PyESD/issues">https://github.com/Dan-Boat/PyESD/issues</a>&gt;.
 We’re also interested in contributions to enhance our documentation.</p>
 <ol class="arabic simple" start="3">
-<li><p class="linemarker linemarker-112"><strong>Email Us</strong>: Feel free to reach out to us via email at <a class="reference external" href="mailto:dannboateng&#37;&#52;&#48;gmail&#46;com">dannboateng<span>&#64;</span>gmail<span>&#46;</span>com</a>.</p></li>
+<li><p><strong>Email Us</strong>: Feel free to reach out to us via email at <a class="reference external" href="mailto:dannboateng&#37;&#52;&#48;gmail&#46;com">dannboateng<span>&#64;</span>gmail<span>&#46;</span>com</a>.</p></li>
 </ol>
-<p class="linemarker linemarker-114">We’re always thrilled to hear about the ways in which pyESD is being utilized.
+<p>We’re always thrilled to hear about the ways in which pyESD is being utilized.
 If you’ve incorporated pyESD into your research, activities, or teaching, please consider
 submitting a pull request to let us know. This helps us keep track of the various applications of pyESD.</p>
-<p class="linemarker linemarker-118">Thank you for considering pyESD for your endeavors!</p>
+<p>Thank you for considering pyESD for your endeavors!</p>
 </section>
 <section id="some-papers-and-preprints-that-have-used-pyesd">
 <h2>Some papers and preprints that have used pyESD<a class="headerlink" href="#some-papers-and-preprints-that-have-used-pyesd" title="Permalink to this heading"></a></h2>
-<p class="linemarker linemarker-123"><strong>Kindly make a pull request to let us know if you’ve used pyESD in your research, activities or teaching:</strong></p>
-<p class="linemarker linemarker-125">1. Boateng, D. and Mutz, S. G.: pyESDv1.0.1: An open-source Python framework for empirical-statistical
+<p><strong>Kindly make a pull request to let us know if you’ve used pyESD in your research, activities or teaching:</strong></p>
+<p>1. Boateng, D. and Mutz, S. G.: pyESDv1.0.1: An open-source Python framework for empirical-statistical
 downscaling of climate information, Geoscientific Model Development Discussions,
 1–58, <a class="reference external" href="https://doi.org/10.5194/gmd-2023-67">https://doi.org/10.5194/gmd-2023-67</a>, 2023.</p>
-<p class="linemarker linemarker-129">2. Arthur, F., Boateng, D., and Baidu, M.: Prediction of Rainfall Response to the 21st-century Climate Change
+<p>2. Arthur, F., Boateng, D., and Baidu, M.: Prediction of Rainfall Response to the 21st-century Climate Change
 in Ghana using Machine Learning Empirical Statistical Downscaling, 2022, H25A-04, 2022.</p>
-<p class="linemarker linemarker-132"><strong>Citing pyESD</strong></p>
-<p class="linemarker linemarker-134">BibTeX</p>
-<p class="linemarker linemarker-136">&#64;article{boateng_pyesdv101_2023,
+<p><strong>Citing pyESD</strong></p>
+<p>BibTeX</p>
+<p>&#64;article{boateng_pyesdv101_2023,
 title = {{pyESDv1}.0.1: {An} open-source {Python} framework for empirical-statistical downscaling of climate information},
 shorttitle = {{pyESDv1}.0.1},
 url = {<a class="reference external" href="https://gmd.copernicus.org/preprints/gmd-2023-67/">https://gmd.copernicus.org/preprints/gmd-2023-67/</a>},

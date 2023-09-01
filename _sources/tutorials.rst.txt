@@ -44,7 +44,7 @@ To preprocess the data downloaded from the DWD CDC for use with pyESD, we use th
 
 How does the used datasets look like?
 -------------------------------------
-
+`Its simple, check it out <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_structure.ipynb>`_
 
 Selecting Predictors for ESD
 -----------------------------

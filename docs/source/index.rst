@@ -35,7 +35,6 @@ Documentation
 * :doc:`overview`
 * :doc:`installation`
 * :doc:`methods`
-* :doc:`notebooks/data_structure`
 
 .. toctree::
    :maxdepth: 2
@@ -49,7 +48,6 @@ Documentation
    examples
    testing
    modules
-   notebooks/data_structure
 
 
 License
