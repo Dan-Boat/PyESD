@@ -1,8 +1,24 @@
-pyESD package
-=============
+pyESD Documentation
+=====================
+
+.. automodule:: pyESD
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+------
 
 Submodules
 ----------
+
+pyESD.StationOperator module
+----------------------------
+
+.. automodule:: pyESD.StationOperator
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 
 pyESD.ESD\_utils module
 ------------------------
@@ -28,15 +44,8 @@ pyESD.Predictor\_Generator module
    :undoc-members:
    :show-inheritance:
 
-pyESD.StationOperator module
-----------------------------
 
-.. automodule:: pyESD.StationOperator
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pyESD.WeatherstationPreprocessing module
+pyESD.Weatherstation module
 ----------------------------------------
 
 .. automodule:: pyESD.Weatherstation
@@ -147,10 +156,4 @@ pyESD.MLR module
    :members:
    :undoc-members:
    :show-inheritance:
-Module contents
----------------
 
-.. automodule:: pyESD
-   :members:
-   :undoc-members:
-   :show-inheritance:

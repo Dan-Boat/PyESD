@@ -270,9 +270,6 @@ various examples demonstrated.
 
 
 
-
-
-
 Selecting Predictors for ESD
 -----------------------------
 
@@ -300,25 +297,45 @@ predictive skills of including these indices. These indices are constructed with
 functions using sea level pressure or atmospheric geopotential data. Details about their implementation 
 can be found in the ``pyESD.teleconnection module``.
 
-`Jupyter Notebook: Using large-scale teleconnections as predictors example <>`_
+**`Jupyter Notebook: Using large-scale teleconnections as predictors example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Large-scale%20teleconnections%20as%20predictors.ipynb>`_**
 
 
 
 How to select the optimal model for ESD 👩🏼‍🔧
 --------------------------------------------
 
-`Jupyter Notebook: model selection experiment example <>`_
+One important component of pyESD is the ability to experiment with many ML modules before 
+deciding on the best optimal learning module for your catchment or stations. Here, we show how 
+a model selection experiment can be done before selecting the best module. We use different models 
+included in the package, ranging from simple regularized models to Neural Networks and their ensembles, 
+to evaluate their inter-model performance. After the model selection experiment, we show how the final 
+model performs and also evaluate its performance on the data independent of the training data. We also 
+highlight how the pyESD.plots module can be used to visualize the model performance."
+
+**`Jupyter Notebook: model selection experiment example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/model_selection.ipynb>`_**
 
 Coupling ESD to GCMs for future prediction
 --------------------------------------------
 
-`Jupyter Notebook: making future prediction example <>`_
+After training the learning model, the established PP-ESD transfer function is combined with 
+simulated predictors under an assumed emission scenario to predict future projections. Here, 
+we demonstrate how the GCMs dataset can be coupled with the trained model to generate future 
+projections. We showcase this using CMIP5 MPI-ESM datasets. However, the notebooks can be 
+combined with any GCM outputs. We will update the notebook to include CMIP6 projections in 
+the updated version.
+
+**`Jupyter Notebook: making future prediction example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/furture_prediction.ipynb>`_**
 
 
 Visualization and Data Analysis 
 --------------------------------
 
-`Jupyter Notebook: example of some cool visualization pyESD can do <>`_
+After generating the downscaled climate information, pyESD consists of many 
+utility tools that can be used for post-processing and visualization. Here, we 
+demonstrate some of the analyses that can be useful in gaining insight into the 
+projected downscaled datasets."
+
+**`Jupyter Notebook: example of some cool visualization pyESD can do <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_analysis_and_visualisation.ipynb>`_**
 
 
-🚨 This should help get you started, let us know if you have issues
+🚨 This should help get you started, let us know if you have issues (Enjoy!)

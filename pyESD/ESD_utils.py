@@ -353,23 +353,29 @@ def ComputeStat(i,sx,y,sy,test, return_score=True):
 
 
 def StatTest(x,y,test,dim=None,parallel=False):
-	'''Compute statistical test for significance between
-	   two xr.DataArrays. Testing will be done along dimension with name `dim`
-	   and the output p-value will have all dimensions except `dim`.
-	   INPUTS:
-	      x	 : xr.DataArray for testing.
-	      y	 : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.
-	      dim: dimension name along which to perform the test.
-	      test:which test to use:
-		    'KS' -> Kolmogorov-Smirnov
-		    'MW' -> Mann-Whitney
-		    'WC' -> Wilcoxon
-		    'T'  -> T-test 1 sample with y=mean
-                    'sign'->test against sign only.
-		  parallel: Run the test in parallel? Requires the parmap package.
-	   OUTPUTS:
-	      pvalx: xr.DataArray containing the p-values.
-		     Same dimension as x,y except `dim`.
+	'''
+    Compute statistical test for significance between
+    two xr.DataArrays. Testing will be done along dimension with name `dim`
+    and the output p-value will have all dimensions except `dim`.
+    INPUTS:
+    x	 : xr.DataArray for testing.
+
+    y	 : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.
+    dim: dimension name along which to perform the test.
+    test:which test to use:
+
+    'KS' -> Kolmogorov-Smirnov
+
+    'MW' -> Mann-Whitney
+
+    'WC' -> Wilcoxon
+            
+    'T'  -> T-test 1 sample with y=mean
+            'sign'->test against sign only.
+    parallel: Run the test in parallel? Requires the parmap package.
+    OUTPUTS:
+    pvalx: xr.DataArray containing the p-values.
+    Same dimension as x,y except `dim`.
 	'''
 	from xarray import DataArray
 	if dim is None or len(x.dims) == 1:

@@ -35,7 +35,9 @@ You can find these methods in the ``pyESD.feature_selection`` module under the n
 
 The predictor selection method is applied before training the model in the ``fit`` method by setting the predictor selector_parameter to True. The cal_relative_importance is set to True if the feature 
 importance or explained variance of each predictor is computed (e.g.):
+
 .. code-block:: python
+
    SO.fit(variable, date_range, predictor_data, fit_predictors=True, predictor_selector=True, 
                     selector_method=’Recursive’, selector_regressor="ARD", 
                     cal_relative_importance=False)
@@ -46,6 +48,7 @@ However, if users find merit in replacing the missing values, the impute paramet
 the method should be specified (e.g., linear):
 
 .. code-block:: python
+
    SO.fit(variable, date_range, predictor_data, fit_predictors=True, predictor_selector=True,
                             selector_method='Recursive', selector_regressor='ARD', impute=True, 
                             impute_method='linear')
@@ -56,6 +59,7 @@ Additionally, the pyESD package includes classical filter feature selection tech
 The predictor_correlation method of the station object is used for the correlation analysis:
 
 .. code-block:: python
+
    corr = SO.predictor_correlation(variable, predictor_data, predictor_data, fit_predictor=True, 
                                  fit_predictand=True, method="pearson", use_scipy=True)
 
@@ -183,6 +187,7 @@ This integration bridges the gap between large-scale climate models and fine-sca
 The future predictions are generated using the predict method with the simulated predictors as input data:
 
 .. code-block:: python
+   
    #print("predicting based on the RCP 2.6 predictors")
    yhat_CMIP5_RCP26_R1_anomalies = SO.predict(variable, fullCMIP5, 
                                         CMIP5_RCP26_R1, fit_predictors=True, fit_predictand=True,
