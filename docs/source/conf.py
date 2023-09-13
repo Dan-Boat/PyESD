@@ -39,7 +39,8 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.duration',
               'sphinx.ext.doctest',
               'myst_parser',
-              'nbsphinx']
+              'nbsphinx',
+              'sphinx.ext.autosummary']
 
 # Add any paths that contain templates here, relative to this directory.
 # installing nbsphinx require some dependencies: jinja2==3.0.3 and nbconvert==6.4.4

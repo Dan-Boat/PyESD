@@ -23,6 +23,9 @@ from cartopy.mpl.ticker import (LongitudeFormatter, LatitudeFormatter,
 
 
 class Dataset():
+    """
+    Testing if the docstring works
+    """
     def __init__(self, name, variables, domain_name):
         self.name = name 
         self.variables = variables 

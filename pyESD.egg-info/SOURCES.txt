@@ -14,3 +14,10 @@ pyESD.egg-info/PKG-INFO
 pyESD.egg-info/SOURCES.txt
 pyESD.egg-info/dependency_links.txt
 pyESD.egg-info/top_level.txt
+tests/test_ensemble.py
+tests/test_models.py
+tests/test_pyESD.py
+tests/test_pyESD_utils.py
+tests/test_standardizer.py
+tests/test_syn_data.py
+tests/test_utils.py
