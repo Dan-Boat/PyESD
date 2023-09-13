@@ -284,18 +284,21 @@ technique-dependent. In pyESD, we demonstrate how to utilize available methods t
 choose informative predictors for each station. Additionally, we compare the performance 
 of different selection methods against a baseline training model (RidgeCV) to 
 identify sets of predictors with the highest predictive skill based on the chosen method.
+
 `Jupyter Notebook: Predictors selection methods example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Predictor_selection.ipynb>`_
 
 Including Large-Scale Teleconnection Indices🌏
 ----------------------------------------------
 
-One notable advantage of pyESD is its ability to incorporate atmospheric 
-circulation indices, which play a role in explaining climate variability. 
-We showcase how to include teleconnection indices as predictors to enhance the 
-downscaling model's capabilities.
-
-For further details and practical implementation, refer to the complete documentation 
-and examples provided by pyESD.
+One advantage of pyESD is the possibility of including atmospheric circulation indices that are useful in 
+explaining the variability of the climate information of interest. Here, we demonstrate how to include some 
+of these teleconnection indices as predictors in generating the downscaling model. Since the weather 
+stations used are located in Germany, the predominant Northern Hemisphere teleconnection indices such 
+as NAO, EA, and SCAN are added as predictors and then evaluated for their correlation with station 
+precipitation. The models with or without large-scale atmospheric indices are evaluated to indicate the 
+predictive skills of including these indices. These indices are constructed with empirical orthogonal 
+functions using sea level pressure or atmospheric geopotential data. Details about their implementation 
+can be found in the ``pyESD.teleconnection module``.
 
 `Jupyter Notebook: Using large-scale teleconnections as predictors example <>`_
 
