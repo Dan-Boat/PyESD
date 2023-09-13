@@ -47,7 +47,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
@@ -153,7 +152,9 @@ The developers of pyESD welcome suggestions for improvement of the software and 
 </section>
 <section id="who-developed-pyesd">
 <h2>Who developed pyESD 👩🏿‍💻?<a class="headerlink" href="#who-developed-pyesd" title="Permalink to this heading"></a></h2>
-<p>PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the
+<p>PyESD was developed by Daniel Boateng (<a class="reference external" href="https://dan-boat.github.io/">website</a>), a Ph.D. student at the
+University of Tübingen, under the supervision of Dr. rer. nat Sebastian G. Mutz (<a class="reference external" href="http://mutz.science/">website</a>),
+who made immense contributions to the ideas behind the pyESD modelling framework. Daniel developed the
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
 dynamics. He’s dedicated to open-source scientific software development and aims to enhance the
 reproducibility of research outcomes. He believes that science would be more fun if all research outputs
@@ -207,6 +208,22 @@ note = {Publisher: Copernicus GmbH},
 pages = {1–58},
 file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
 }</em></p>
+<p><strong>List of Modules and Functionalities Planned for the Upcoming Package Versions</strong></p>
+<p>1. <strong>Precipitation Classification:</strong> Implement functionality to classify daily precipitation datasets
+into wet or dry days before training the wet days with a regressor. This enhancement aims to improve the
+model’s performance on wet-occurrence days and optimize predictor sets for predicting dry days.</p>
+<p>2. <strong>Spatial Data Compatibility:</strong> Extend compatibility of the predictand_base model with spatial data.
+This will enhance the spatio-temporal learning capabilities of the PP-ESD model and improve the accuracy of
+downscaled climate information.</p>
+<p>3. <strong>Storage Format Enhancement:</strong> Change the storage format of constructed time series of predictors from
+pickle files to Zarr files. This change offers advantages in handling NaN data and enhances compatibility
+with various ML and Deep Learning models.</p>
+<p>4. <strong>Southern Hemisphere Indices:</strong> Expand the range of teleconnection indices to include several Southern
+Hemisphere atmospheric variability indices, such as the ESNO cycle, Madden/Julian Oscillation (MJO), and PNA.
+This inclusion broadens the model’s applicability to regions in the Southern Hemisphere.</p>
+<p>5. <strong>Benchmark Bias Correction:</strong> Include a simple bias correction model as a benchmark for users.
+This addition will be valuable for users who require a reference point for their downscaling modeling
+or as a starting point for further customization.”</p>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Permalink to this heading"></a></h2>

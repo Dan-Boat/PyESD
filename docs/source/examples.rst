@@ -8,9 +8,13 @@ The package has been used in these projects (involving actual weather stations).
 
 This illustrative case study of downscaling temperature and precipitation in a 
 catchment located in southwestern Germany was described in the package description 
-paper of pyESD `(Boateng and Mutz, 2023 <https://gmd.copernicus.org/preprints/gmd-2023-67/>)`_. All the modeling and analysis scripts are 
-available on GitHub (`PyESD/example/Neckar <https://github.com/Dan-Boat/PyESD/tree/main/examples/Neckar>`_) and also on Zenodo (`supporting material <https://doi.org/10.5281/zenodo.7767681>`). For more details about the findings, 
-kindly refer to `(Boateng and Mutz, 2023 <https://gmd.copernicus.org/preprints/gmd-2023-67/>)`_."
+paper of pyESD (`Boateng and Mutz, 2023 <https://gmd.copernicus.org/preprints/gmd-2023-67/>`_). All the modeling and analysis scripts are 
+available on GitHub (`PyESD/example/Neckar <https://github.com/Dan-Boat/PyESD/tree/main/examples/Neckar>`_) and also on Zenodo (`supporting material <https://doi.org/10.5281/zenodo.7767681>`_). For more details about the findings, 
+kindly refer to (`Boateng and Mutz, 2023 <https://gmd.copernicus.org/preprints/gmd-2023-67/>`_)."
+
+.. image:: ./imgs/neckar.png
+   :width: 600
+   :alt: Picture
 
 
 2. Downscaling of precipitation for synoptic weather stations in Ghana 🌍 using Stacked Generalization
@@ -25,6 +29,11 @@ project highlights the importance of ensemble learning included in the pyESD pac
  modeling scripts are available on GitHub (`PyESD/example/Ghana <https://github.com/Dan-Boat/PyESD/tree/main/examples/Ghana>`_). Details about the results are under preparation 
  but were presented at last year’s AGU (`link <https://ui.adsabs.harvard.edu/abs/2022AGUFM.H25A..04A/abstract>`_):
 
+
+.. image:: ./imgs/ghana.png
+   :width: 600
+   :alt: Picture
+
 *Opportunities and challenges of empirical statistical downscaling in Ghana 
 (under preparation to be submitted to AGU Earth’s future).*
 
@@ -37,5 +46,6 @@ project plans to use pyESD as a statistical emulator to predict the oxygen isoto
 and compare its performance to iso-GCM simulation. All the modeling scripts will be 
 publicly available.
 
-.. warning::
-    Please note that this page is under active delopement and would benefit from its extension! Thanks for the understanding
+.. image:: ./imgs/isotope.png
+   :width: 600
+   :alt: Picture

@@ -99,7 +99,9 @@ The developers of pyESD welcome suggestions for improvement of the software and 
 Who developed pyESD 👩🏿‍💻?
 ---------------------------
 
-PyESD was developed by Daniel Boateng, a Ph.D. student at the University of Tübingen. Daniel developed the 
+PyESD was developed by Daniel Boateng (`website <https://dan-boat.github.io/>`_), a Ph.D. student at the 
+University of Tübingen, under the supervision of Dr. rer. nat Sebastian G. Mutz (`website <http://mutz.science/>`_), 
+who made immense contributions to the ideas behind the pyESD modelling framework. Daniel developed the 
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
 dynamics. He's dedicated to open-source scientific software development and aims to enhance the 
 reproducibility of research outcomes. He believes that science would be more fun if all research outputs 
@@ -167,6 +169,27 @@ pages = {1--58},
 file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and Mutz - 2023 - pyESDv1.0.1 An open-source Python framework for e.pdf:application/pdf},
 }*
 
+**List of Modules and Functionalities Planned for the Upcoming Package Versions**
+
+1. **Precipitation Classification:** Implement functionality to classify daily precipitation datasets 
+into wet or dry days before training the wet days with a regressor. This enhancement aims to improve the 
+model's performance on wet-occurrence days and optimize predictor sets for predicting dry days.
+
+2. **Spatial Data Compatibility:** Extend compatibility of the predictand_base model with spatial data. 
+This will enhance the spatio-temporal learning capabilities of the PP-ESD model and improve the accuracy of 
+downscaled climate information.
+
+3. **Storage Format Enhancement:** Change the storage format of constructed time series of predictors from 
+pickle files to Zarr files. This change offers advantages in handling NaN data and enhances compatibility 
+with various ML and Deep Learning models.
+
+4. **Southern Hemisphere Indices:** Expand the range of teleconnection indices to include several Southern 
+Hemisphere atmospheric variability indices, such as the ESNO cycle, Madden/Julian Oscillation (MJO), and PNA. 
+This inclusion broadens the model's applicability to regions in the Southern Hemisphere.
+
+5. **Benchmark Bias Correction:** Include a simple bias correction model as a benchmark for users. 
+This addition will be valuable for users who require a reference point for their downscaling modeling 
+or as a starting point for further customization."
 
 
 Documentation
@@ -188,7 +211,6 @@ Documentation
    tutorials
    examples
    gallery
-   testing
    modules
    
 

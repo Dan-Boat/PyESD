@@ -297,7 +297,7 @@ predictive skills of including these indices. These indices are constructed with
 functions using sea level pressure or atmospheric geopotential data. Details about their implementation 
 can be found in the ``pyESD.teleconnection module``.
 
-**`Jupyter Notebook: Using large-scale teleconnections as predictors example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Large-scale%20teleconnections%20as%20predictors.ipynb>`_**
+`Jupyter Notebook: Using large-scale teleconnections as predictors example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Large-scale%20teleconnections%20as%20predictors.ipynb>`_
 
 
 
@@ -312,7 +312,7 @@ to evaluate their inter-model performance. After the model selection experiment,
 model performs and also evaluate its performance on the data independent of the training data. We also 
 highlight how the pyESD.plots module can be used to visualize the model performance."
 
-**`Jupyter Notebook: model selection experiment example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/model_selection.ipynb>`_**
+`Jupyter Notebook: model selection experiment example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/model_selection.ipynb>`_
 
 Coupling ESD to GCMs for future prediction
 --------------------------------------------
@@ -324,7 +324,7 @@ projections. We showcase this using CMIP5 MPI-ESM datasets. However, the noteboo
 combined with any GCM outputs. We will update the notebook to include CMIP6 projections in 
 the updated version.
 
-**`Jupyter Notebook: making future prediction example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/furture_prediction.ipynb>`_**
+`Jupyter Notebook: making future prediction example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/furture_prediction.ipynb>`_
 
 
 Visualization and Data Analysis 
@@ -335,7 +335,7 @@ utility tools that can be used for post-processing and visualization. Here, we
 demonstrate some of the analyses that can be useful in gaining insight into the 
 projected downscaled datasets."
 
-**`Jupyter Notebook: example of some cool visualization pyESD can do <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_analysis_and_visualisation.ipynb>`_**
+`Jupyter Notebook: example of some cool visualization pyESD can do <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_analysis_and_visualisation.ipynb>`_
 
 
 🚨 This should help get you started, let us know if you have issues (Enjoy!)

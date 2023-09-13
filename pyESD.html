@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pyESD package &mdash; pyESD 1.0.1 documentation</title>
+  <title>pyESD Documentation &mdash; pyESD 1.0.1 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -47,10 +47,14 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="modules.html">API Reference</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">pyESD package</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pyESD Documentation</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyESD.StationOperator">pyESD.StationOperator module</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pyESD.StationOperator.StationOperator"><code class="docutils literal notranslate"><span class="pre">StationOperator</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pyESD.StationOperator.load_station"><code class="docutils literal notranslate"><span class="pre">load_station()</span></code></a></li>
+</ul>
+</li>
 <li class="toctree-l3"><a class="reference internal" href="#module-pyESD.ESD_utils">pyESD.ESD_utils module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.ESD_utils.ComputeStat"><code class="docutils literal notranslate"><span class="pre">ComputeStat()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.ESD_utils.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a></li>
@@ -81,12 +85,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.Predictor_Generator.RegionalAverage"><code class="docutils literal notranslate"><span class="pre">RegionalAverage</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyESD.StationOperator">pyESD.StationOperator module</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pyESD.StationOperator.StationOperator"><code class="docutils literal notranslate"><span class="pre">StationOperator</span></code></a></li>
-<li class="toctree-l4"><a class="reference internal" href="#pyESD.StationOperator.load_station"><code class="docutils literal notranslate"><span class="pre">load_station()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyESD.Weatherstation">pyESD.WeatherstationPreprocessing module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-pyESD.Weatherstation">pyESD.Weatherstation module</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.Weatherstation.read_station_csv"><code class="docutils literal notranslate"><span class="pre">read_station_csv()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.Weatherstation.read_weatherstationnames"><code class="docutils literal notranslate"><span class="pre">read_weatherstationnames()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.Weatherstation.read_weatherstations"><code class="docutils literal notranslate"><span class="pre">read_weatherstations()</span></code></a></li>
@@ -184,7 +183,6 @@
 <li class="toctree-l4"><a class="reference internal" href="#pyESD.MLR_model._get_active"><code class="docutils literal notranslate"><span class="pre">_get_active()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#module-pyESD">Module contents</a></li>
 </ul>
 </li>
 </ul>
@@ -206,7 +204,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="modules.html">API Reference</a></li>
-      <li class="breadcrumb-item active">pyESD package</li>
+      <li class="breadcrumb-item active">pyESD Documentation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/pyESD.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -216,253 +214,12 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="pyesd-package">
-<h1>pyESD package<a class="headerlink" href="#pyesd-package" title="Permalink to this heading"></a></h1>
+  <section id="module-pyESD">
+<span id="pyesd-documentation"></span><h1>pyESD Documentation<a class="headerlink" href="#module-pyESD" title="Permalink to this heading"></a></h1>
+<p>PyESD: More information abou the package that would be part of the metadata</p>
+<hr class="docutils" />
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
-</section>
-<section id="module-pyESD.ESD_utils">
-<span id="pyesd-esd-utils-module"></span><h2>pyESD.ESD_utils module<a class="headerlink" href="#module-pyESD.ESD_utils" title="Permalink to this heading"></a></h2>
-<p>Created on Fri Nov 12 14:02:28 2021</p>
-<p>&#64;author: dboateng
-This routine contians all the utility classes and functions required for ESD functions</p>
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.ComputeStat">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">ComputeStat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#ComputeStat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.ComputeStat" title="Permalink to this definition"></a></dt>
-<dd><p>This is part of StatTest, but for parmap.map to work, it has to be an
-independent function.</p>
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.Dataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.Dataset" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.Dataset.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_Dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#Dataset.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.Dataset.get" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.MidpointNormalize">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">MidpointNormalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#MidpointNormalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.MidpointNormalize" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Normalize</span></code></p>
-<p>At the moment its a bug to use divergence colormap and set the colorbar range midpoint
-to zero if both vmax and vmin has different magnitude. This might be possible in
-future development in matplotlib through colors.offsetNorm(). This class was original developed
-by Joe Kingto and modified by Daniel Boateng. It sets the divergence color bar to a scale of 0-1 by dividing the midpoint to 0.5
-Use this class at your own risk since its non-standard practice for quantitative data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vmin</strong> (<em>float</em><em> or </em><em>None</em>) – If <em>vmin</em> and/or <em>vmax</em> is not given, they are initialized from the
-minimum and maximum value, respectively, of the first input
-processed; i.e., <code class="docutils literal notranslate"><span class="pre">__call__(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">autoscale_None(A)</span></code>.</p></li>
-<li><p><strong>vmax</strong> (<em>float</em><em> or </em><em>None</em>) – If <em>vmin</em> and/or <em>vmax</em> is not given, they are initialized from the
-minimum and maximum value, respectively, of the first input
-processed; i.e., <code class="docutils literal notranslate"><span class="pre">__call__(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">autoscale_None(A)</span></code>.</p></li>
-<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>default: False</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> values falling outside the range <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code>,
-are mapped to 0 or 1, whichever is closer, and masked values are
-set to 1.  If <code class="docutils literal notranslate"><span class="pre">False</span></code> masked values remain masked.</p>
-<p>Clipping silently defeats the purpose of setting the over, under,
-and masked colors in a colormap, so it is likely to lead to
-surprises; therefore the default is <code class="docutils literal notranslate"><span class="pre">clip=False</span></code>.</p>
-</p></li>
-</ul>
-</dd>
-</dl>
-<p class="rubric">Notes</p>
-<p>Returns 0 if <code class="docutils literal notranslate"><span class="pre">vmin</span> <span class="pre">==</span> <span class="pre">vmax</span></code>.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.StackArray">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">StackArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#StackArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.StackArray" title="Permalink to this definition"></a></dt>
-<dd><p>return stacked array with only one dimension left
-INPUTS:</p>
-<blockquote>
-<div><p>x  : xarray.DataArray or Dataset to be stacked
-dim: sole dimension to remain after stacking</p>
-</div></blockquote>
-<dl class="simple">
-<dt>OUTPUTS:</dt><dd><p>stacked: same as x, but stacked</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.StatTest">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">StatTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#StatTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.StatTest" title="Permalink to this definition"></a></dt>
-<dd><p>Compute statistical test for significance between
-two xr.DataArrays. Testing will be done along dimension with name <cite>dim</cite>
-and the output p-value will have all dimensions except <cite>dim</cite>.
-INPUTS:</p>
-<blockquote>
-<div><p>x  : xr.DataArray for testing.
-y  : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.
-dim: dimension name along which to perform the test.
-test:which test to use:</p>
-<blockquote>
-<div><blockquote>
-<div><p>‘KS’ -&gt; Kolmogorov-Smirnov
-‘MW’ -&gt; Mann-Whitney
-‘WC’ -&gt; Wilcoxon
-‘T’  -&gt; T-test 1 sample with y=mean
-‘sign’-&gt;test against sign only.</p>
-</div></blockquote>
-<p>parallel: Run the test in parallel? Requires the parmap package.</p>
-</div></blockquote>
-</div></blockquote>
-<dl class="simple">
-<dt>OUTPUTS:</dt><dd><dl class="simple">
-<dt>pvalx: xr.DataArray containing the p-values.</dt><dd><p>Same dimension as x,y except <cite>dim</cite>.</p>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils._get_month">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">_get_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">npdatetime64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#_get_month"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils._get_month" title="Permalink to this definition"></a></dt>
-<dd><p>Returns the month for a given npdatetime64 object, 1 for January, 2 for
-February, …</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.extract_indices_around">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">extract_indices_around</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#extract_indices_around"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.extract_indices_around" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.extract_region">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">extract_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datarange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#extract_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.extract_region" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.haversine">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">haversine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#haversine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.haversine" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.levene_test">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">levene_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#levene_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.levene_test" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.load_all_stations">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_all_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationnames</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_all_stations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_all_stations" title="Permalink to this definition"></a></dt>
-<dd><p>This assumes that the stored quantity is a dictionary</p>
-<p>Returns a dictionary</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.load_csv">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_csv" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.load_pickle">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_pickle" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.map_to_xarray">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">map_to_xarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#map_to_xarray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.map_to_xarray" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.plot_background">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">plot_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_coastlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_borders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#plot_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.plot_background" title="Permalink to this definition"></a></dt>
-<dd><p>This funtion defines the plotting domain and also specifies the background. It requires
-the plot handle from xarray.plot.imshow and other optional arguments
-:param p:
-:type p: TYPE: plot handle
-:param DESCRIPTION:
-:type DESCRIPTION: the plot handle after plotting with xarray.plot.imshow
-:param domian = TYPE:
-:type domian = TYPE: str
-:param DESCRIPTION: “South America”, “Alaska”, “Tibet Plateau” or “Himalaya”, “Eurosia”,</p>
-<blockquote>
-<div><p>“New Zealand”, default: global</p>
-</div></blockquote>
-<dl class="field-list simple">
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.plot_ks_stats">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">plot_ks_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hatches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_colorbar_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'horizontal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats_results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#plot_ks_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.plot_ks_stats" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.ranksums_test">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">ranksums_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#ranksums_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.ranksums_test" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.store_csv">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">store_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#store_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.store_csv" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pyESD.ESD_utils.store_pickle">
-<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">store_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#store_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.store_pickle" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</section>
-<section id="module-pyESD.Predictor_Base">
-<span id="pyesd-predictor-base-module"></span><h2>pyESD.Predictor_Base module<a class="headerlink" href="#module-pyESD.Predictor_Base" title="Permalink to this heading"></a></h2>
-<p>Created on Fri Nov 12 14:02:45 2021</p>
-<p>&#64;author: dboateng</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.Predictor_Base.</span></span><span class="sig-name descname"><span class="pre">Predictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.fit">
-<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.fit" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.get">
-<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regenerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.get" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.load" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regenerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">plot_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.plot" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.save" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pyESD.Predictor_Generator">
-<span id="pyesd-predictor-generator-module"></span><h2>pyESD.Predictor_Generator module<a class="headerlink" href="#module-pyESD.Predictor_Generator" title="Permalink to this heading"></a></h2>
-<p>Created on Fri Nov 12 14:03:09 2021</p>
-<p>&#64;author: dboateng</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pyESD.Predictor_Generator.RegionalAverage">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.Predictor_Generator.</span></span><span class="sig-name descname"><span class="pre">RegionalAverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardizer_constructor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Generator.html#RegionalAverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Generator.RegionalAverage" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pyESD.Predictor_Base.Predictor" title="pyESD.Predictor_Base.Predictor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Predictor</span></code></a></p>
-</dd></dl>
-
 </section>
 <section id="module-pyESD.StationOperator">
 <span id="pyesd-stationoperator-module"></span><h2>pyESD.StationOperator module<a class="headerlink" href="#module-pyESD.StationOperator" title="Permalink to this heading"></a></h2>
@@ -608,8 +365,244 @@ to <code class="docutils literal notranslate"><span class="pre">self.name.replac
 </dd></dl>
 
 </section>
+<section id="module-pyESD.ESD_utils">
+<span id="pyesd-esd-utils-module"></span><h2>pyESD.ESD_utils module<a class="headerlink" href="#module-pyESD.ESD_utils" title="Permalink to this heading"></a></h2>
+<p>Created on Fri Nov 12 14:02:28 2021</p>
+<p>&#64;author: dboateng
+This routine contians all the utility classes and functions required for ESD functions</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.ComputeStat">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">ComputeStat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">i</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#ComputeStat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.ComputeStat" title="Permalink to this definition"></a></dt>
+<dd><p>This is part of StatTest, but for parmap.map to work, it has to be an
+independent function.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">variables</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.Dataset" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Testing if the docstring works</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.Dataset.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">select_domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_Dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#Dataset.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.Dataset.get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.MidpointNormalize">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">MidpointNormalize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">midpoint</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#MidpointNormalize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.MidpointNormalize" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Normalize</span></code></p>
+<p>At the moment its a bug to use divergence colormap and set the colorbar range midpoint
+to zero if both vmax and vmin has different magnitude. This might be possible in
+future development in matplotlib through colors.offsetNorm(). This class was original developed
+by Joe Kingto and modified by Daniel Boateng. It sets the divergence color bar to a scale of 0-1 by dividing the midpoint to 0.5
+Use this class at your own risk since its non-standard practice for quantitative data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vmin</strong> (<em>float</em><em> or </em><em>None</em>) – If <em>vmin</em> and/or <em>vmax</em> is not given, they are initialized from the
+minimum and maximum value, respectively, of the first input
+processed; i.e., <code class="docutils literal notranslate"><span class="pre">__call__(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">autoscale_None(A)</span></code>.</p></li>
+<li><p><strong>vmax</strong> (<em>float</em><em> or </em><em>None</em>) – If <em>vmin</em> and/or <em>vmax</em> is not given, they are initialized from the
+minimum and maximum value, respectively, of the first input
+processed; i.e., <code class="docutils literal notranslate"><span class="pre">__call__(A)</span></code> calls <code class="docutils literal notranslate"><span class="pre">autoscale_None(A)</span></code>.</p></li>
+<li><p><strong>clip</strong> (<em>bool</em><em>, </em><em>default: False</em>) – <p>If <code class="docutils literal notranslate"><span class="pre">True</span></code> values falling outside the range <code class="docutils literal notranslate"><span class="pre">[vmin,</span> <span class="pre">vmax]</span></code>,
+are mapped to 0 or 1, whichever is closer, and masked values are
+set to 1.  If <code class="docutils literal notranslate"><span class="pre">False</span></code> masked values remain masked.</p>
+<p>Clipping silently defeats the purpose of setting the over, under,
+and masked colors in a colormap, so it is likely to lead to
+surprises; therefore the default is <code class="docutils literal notranslate"><span class="pre">clip=False</span></code>.</p>
+</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Returns 0 if <code class="docutils literal notranslate"><span class="pre">vmin</span> <span class="pre">==</span> <span class="pre">vmax</span></code>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.StackArray">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">StackArray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#StackArray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.StackArray" title="Permalink to this definition"></a></dt>
+<dd><p>return stacked array with only one dimension left
+INPUTS:</p>
+<blockquote>
+<div><p>x  : xarray.DataArray or Dataset to be stacked
+dim: sole dimension to remain after stacking</p>
+</div></blockquote>
+<dl class="simple">
+<dt>OUTPUTS:</dt><dd><p>stacked: same as x, but stacked</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.StatTest">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">StatTest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parallel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#StatTest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.StatTest" title="Permalink to this definition"></a></dt>
+<dd><p>Compute statistical test for significance between
+two xr.DataArrays. Testing will be done along dimension with name <cite>dim</cite>
+and the output p-value will have all dimensions except <cite>dim</cite>.
+INPUTS:
+x    : xr.DataArray for testing.</p>
+<p>y    : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.
+dim: dimension name along which to perform the test.
+test:which test to use:</p>
+<p>‘KS’ -&gt; Kolmogorov-Smirnov</p>
+<p>‘MW’ -&gt; Mann-Whitney</p>
+<p>‘WC’ -&gt; Wilcoxon</p>
+<dl class="simple">
+<dt>‘T’  -&gt; T-test 1 sample with y=mean</dt><dd><p>‘sign’-&gt;test against sign only.</p>
+</dd>
+</dl>
+<p>parallel: Run the test in parallel? Requires the parmap package.
+OUTPUTS:
+pvalx: xr.DataArray containing the p-values.
+Same dimension as x,y except <cite>dim</cite>.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils._get_month">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">_get_month</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">npdatetime64</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#_get_month"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils._get_month" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the month for a given npdatetime64 object, 1 for January, 2 for
+February, …</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.extract_indices_around">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">extract_indices_around</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#extract_indices_around"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.extract_indices_around" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.extract_region">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">extract_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datarange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minlon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxlon</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#extract_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.extract_region" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.haversine">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">haversine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lon1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat2</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#haversine"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.haversine" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.levene_test">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">levene_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#levene_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.levene_test" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.load_all_stations">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_all_stations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationnames</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_all_stations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_all_stations" title="Permalink to this definition"></a></dt>
+<dd><p>This assumes that the stored quantity is a dictionary</p>
+<p>Returns a dictionary</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.load_csv">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_csv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.load_pickle">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">load_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#load_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.load_pickle" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.map_to_xarray">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">map_to_xarray</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datarray</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#map_to_xarray"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.map_to_xarray" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.plot_background">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">plot_background</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_coastlines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_borders</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#plot_background"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.plot_background" title="Permalink to this definition"></a></dt>
+<dd><p>This funtion defines the plotting domain and also specifies the background. It requires
+the plot handle from xarray.plot.imshow and other optional arguments
+:param p:
+:type p: TYPE: plot handle
+:param DESCRIPTION:
+:type DESCRIPTION: the plot handle after plotting with xarray.plot.imshow
+:param domian = TYPE:
+:type domian = TYPE: str
+:param DESCRIPTION: “South America”, “Alaska”, “Tibet Plateau” or “Himalaya”, “Eurosia”,</p>
+<blockquote>
+<div><p>“New Zealand”, default: global</p>
+</div></blockquote>
+<dl class="field-list simple">
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.plot_ks_stats">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">plot_ks_stats</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">levels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level_ticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_store</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">left_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hatches</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cbar_pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_colorbar_default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'horizontal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plot_stats</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stats_results</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#plot_ks_stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.plot_ks_stats" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.ranksums_test">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">ranksums_test</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#ranksums_test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.ranksums_test" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.store_csv">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">store_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#store_csv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.store_csv" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pyESD.ESD_utils.store_pickle">
+<span class="sig-prename descclassname"><span class="pre">pyESD.ESD_utils.</span></span><span class="sig-name descname"><span class="pre">store_pickle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stationname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">varname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/ESD_utils.html#store_pickle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.ESD_utils.store_pickle" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pyESD.Predictor_Base">
+<span id="pyesd-predictor-base-module"></span><h2>pyESD.Predictor_Base module<a class="headerlink" href="#module-pyESD.Predictor_Base" title="Permalink to this heading"></a></h2>
+<p>Created on Fri Nov 12 14:02:45 2021</p>
+<p>&#64;author: dboateng</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.Predictor_Base.</span></span><span class="sig-name descname"><span class="pre">Predictor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cachedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.fit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.fit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regenerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.get"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.get" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.load" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">daterange</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regenerate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patterns_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params_from</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">plot_kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.plot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyESD.Predictor_Base.Predictor.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Base.html#Predictor.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Base.Predictor.save" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pyESD.Predictor_Generator">
+<span id="pyesd-predictor-generator-module"></span><h2>pyESD.Predictor_Generator module<a class="headerlink" href="#module-pyESD.Predictor_Generator" title="Permalink to this heading"></a></h2>
+<p>Created on Fri Nov 12 14:03:09 2021</p>
+<p>&#64;author: dboateng</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyESD.Predictor_Generator.RegionalAverage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyESD.Predictor_Generator.</span></span><span class="sig-name descname"><span class="pre">RegionalAverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">standardizer_constructor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/Predictor_Generator.html#RegionalAverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.Predictor_Generator.RegionalAverage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyESD.Predictor_Base.Predictor" title="pyESD.Predictor_Base.Predictor"><code class="xref py py-class docutils literal notranslate"><span class="pre">Predictor</span></code></a></p>
+</dd></dl>
+
+</section>
 <section id="module-pyESD.Weatherstation">
-<span id="pyesd-weatherstationpreprocessing-module"></span><h2>pyESD.WeatherstationPreprocessing module<a class="headerlink" href="#module-pyESD.Weatherstation" title="Permalink to this heading"></a></h2>
+<span id="pyesd-weatherstation-module"></span><h2>pyESD.Weatherstation module<a class="headerlink" href="#module-pyESD.Weatherstation" title="Permalink to this heading"></a></h2>
 <p>Created on Fri Nov 12 14:01:43 2021</p>
 <p>This routine handles the preprocessing of data downloaded directly from DWD. The default time series is monthly, others frequency must be pass to the function
 1. Extracting only stations with required number of years
@@ -1095,7 +1088,7 @@ to <code class="docutils literal notranslate"><span class="pre">self.name.replac
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pyESD.plot.scatterplot">
-<span class="sig-prename descclassname"><span class="pre">pyESD.plot.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_train_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs</span> <span class="pre">1958-2010'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs</span> <span class="pre">2011-2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_predict_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERA5</span> <span class="pre">1958-2010'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_predict_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERA5</span> <span class="pre">2011-2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Stacking'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/plot.html#scatterplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.plot.scatterplot" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyESD.plot.</span></span><span class="sig-name descname"><span class="pre">scatterplot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">station_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stationnames</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path_to_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_train_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs</span> <span class="pre">1958-2010'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obs_test_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'obs</span> <span class="pre">2011-2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">val_predict_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERA5</span> <span class="pre">1958-2010'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_predict_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ERA5</span> <span class="pre">2011-2020'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Stacking'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xlabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fig_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'*'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_marker</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'o'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'black'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'blue'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyESD/plot.html#scatterplot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyESD.plot.scatterplot" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </section>
@@ -1944,10 +1937,6 @@ predictors. This expands the current coefficients and expands them in a way such
 <dd><p>Returns a new matrix X_active with only the columns of X whose index is in <code class="docutils literal notranslate"><span class="pre">active</span></code>.</p>
 </dd></dl>
 
-</section>
-<section id="module-pyESD">
-<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pyESD" title="Permalink to this heading"></a></h2>
-<p>PyESD: More information abou the package that would be part of the metadata</p>
 </section>
 </section>
 

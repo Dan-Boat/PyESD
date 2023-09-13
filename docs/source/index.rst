@@ -170,6 +170,7 @@ file = {Full Text PDF:/Users/danielboateng/Zotero/storage/89JHU897/Boateng and M
 }*
 
 **List of Modules and Functionalities Planned for the Upcoming Package Versions**
+
 1. **Precipitation Classification:** Implement functionality to classify daily precipitation datasets 
 into wet or dry days before training the wet days with a regressor. This enhancement aims to improve the 
 model's performance on wet-occurrence days and optimize predictor sets for predicting dry days.
@@ -210,7 +211,6 @@ Documentation
    tutorials
    examples
    gallery
-   testing
    modules
    
 

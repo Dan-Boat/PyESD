@@ -45,7 +45,6 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../gallery.html">Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../modules.html">API Reference</a></li>
 </ul>
 
@@ -99,6 +98,9 @@
 
 
 <div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../pyESD.html#pyESD.ESD_utils.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Testing if the docstring works</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">domain_name</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span> 
         <span class="bp">self</span><span class="o">.</span><span class="n">variables</span> <span class="o">=</span> <span class="n">variables</span> 
@@ -426,23 +428,29 @@
 
 
 <div class="viewcode-block" id="StatTest"><a class="viewcode-back" href="../../pyESD.html#pyESD.ESD_utils.StatTest">[docs]</a><span class="k">def</span> <span class="nf">StatTest</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">test</span><span class="p">,</span><span class="n">dim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">	</span><span class="sd">&#39;&#39;&#39;Compute statistical test for significance between</span>
-<span class="sd">	   two xr.DataArrays. Testing will be done along dimension with name `dim`</span>
-<span class="sd">	   and the output p-value will have all dimensions except `dim`.</span>
-<span class="sd">	   INPUTS:</span>
-<span class="sd">	      x	 : xr.DataArray for testing.</span>
-<span class="sd">	      y	 : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.</span>
-<span class="sd">	      dim: dimension name along which to perform the test.</span>
-<span class="sd">	      test:which test to use:</span>
-<span class="sd">		    &#39;KS&#39; -&gt; Kolmogorov-Smirnov</span>
-<span class="sd">		    &#39;MW&#39; -&gt; Mann-Whitney</span>
-<span class="sd">		    &#39;WC&#39; -&gt; Wilcoxon</span>
-<span class="sd">		    &#39;T&#39;  -&gt; T-test 1 sample with y=mean</span>
-<span class="sd">                    &#39;sign&#39;-&gt;test against sign only.</span>
-<span class="sd">		  parallel: Run the test in parallel? Requires the parmap package.</span>
-<span class="sd">	   OUTPUTS:</span>
-<span class="sd">	      pvalx: xr.DataArray containing the p-values.</span>
-<span class="sd">		     Same dimension as x,y except `dim`.</span>
+<span class="w">	</span><span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Compute statistical test for significance between</span>
+<span class="sd">    two xr.DataArrays. Testing will be done along dimension with name `dim`</span>
+<span class="sd">    and the output p-value will have all dimensions except `dim`.</span>
+<span class="sd">    INPUTS:</span>
+<span class="sd">    x	 : xr.DataArray for testing.</span>
+
+<span class="sd">    y	 : xr.DataArray or scalar for testing against. Or None for single-ensemble sign test.</span>
+<span class="sd">    dim: dimension name along which to perform the test.</span>
+<span class="sd">    test:which test to use:</span>
+
+<span class="sd">    &#39;KS&#39; -&gt; Kolmogorov-Smirnov</span>
+
+<span class="sd">    &#39;MW&#39; -&gt; Mann-Whitney</span>
+
+<span class="sd">    &#39;WC&#39; -&gt; Wilcoxon</span>
+<span class="sd">            </span>
+<span class="sd">    &#39;T&#39;  -&gt; T-test 1 sample with y=mean</span>
+<span class="sd">            &#39;sign&#39;-&gt;test against sign only.</span>
+<span class="sd">    parallel: Run the test in parallel? Requires the parmap package.</span>
+<span class="sd">    OUTPUTS:</span>
+<span class="sd">    pvalx: xr.DataArray containing the p-values.</span>
+<span class="sd">    Same dimension as x,y except `dim`.</span>
 <span class="sd">	&#39;&#39;&#39;</span>
 	<span class="kn">from</span> <span class="nn">xarray</span> <span class="kn">import</span> <span class="n">DataArray</span>
 	<span class="k">if</span> <span class="n">dim</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dims</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>

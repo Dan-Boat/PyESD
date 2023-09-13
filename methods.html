@@ -51,7 +51,6 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials.html">tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="examples.html">Practical examples</a></li>
 <li class="toctree-l1"><a class="reference internal" href="gallery.html">Gallery</a></li>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">API Reference</a></li>
 </ul>
 
@@ -105,7 +104,28 @@ fits the training data too closely).</p>
 <li><p><strong>Sequential Feature Selection:</strong> As described by Ferri et al. (1994), this method explores different combinations of predictors to find the most informative subset.</p></li>
 </ol>
 <p>You can find these methods in the <code class="docutils literal notranslate"><span class="pre">pyESD.feature_selection</span></code> module under the names <code class="docutils literal notranslate"><span class="pre">RecursiveFeatureElimination</span></code>, <code class="docutils literal notranslate"><span class="pre">TreeBasedSelection</span></code>, and <code class="docutils literal notranslate"><span class="pre">SequentialFeatureSelection</span></code>, respectively.</p>
-<p>Additionally, the pyESD package includes classical filter feature selection techniques, like correlation analyses, as part of the weather station object. These techniques help you identify predictors that correlate well with your predictand.</p>
+<p>The predictor selection method is applied before training the model in the <code class="docutils literal notranslate"><span class="pre">fit</span></code> method by setting the predictor selector_parameter to True. The cal_relative_importance is set to True if the feature
+importance or explained variance of each predictor is computed (e.g.):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>SO.fit(variable, date_range, predictor_data, fit_predictors=True, predictor_selector=True,
+                 selector_method=’Recursive’, selector_regressor=&quot;ARD&quot;,
+                 cal_relative_importance=False)
+</pre></div>
+</div>
+<p>Note that the default fit method drops missing values and does not incorporate the information at
+these timestamps when calibrating the model due to their potential implications in interpreting the model.
+However, if users find merit in replacing the missing values, the impute parameter must be set to True, and
+the method should be specified (e.g., linear):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">SO</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">date_range</span><span class="p">,</span> <span class="n">predictor_data</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">predictor_selector</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">selector_method</span><span class="o">=</span><span class="s1">&#39;Recursive&#39;</span><span class="p">,</span> <span class="n">selector_regressor</span><span class="o">=</span><span class="s1">&#39;ARD&#39;</span><span class="p">,</span> <span class="n">impute</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                         <span class="n">impute_method</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Additionally, the pyESD package includes classical filter feature selection techniques, like correlation analyses, as part of the weather station object. These techniques help you identify predictors that correlate well with your predictand.
+The predictor_correlation method of the station object is used for the correlation analysis:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">corr</span> <span class="o">=</span> <span class="n">SO</span><span class="o">.</span><span class="n">predictor_correlation</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">predictor_data</span><span class="p">,</span> <span class="n">predictor_data</span><span class="p">,</span> <span class="n">fit_predictor</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                              <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;pearson&quot;</span><span class="p">,</span> <span class="n">use_scipy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 <p>In practice, predictors are often created by either computing regional averages of relevant climate variables or constructing time series indices for significant large-scale climate phenomena.</p>
 <ul class="simple">
 <li><p><strong>Learning model selection</strong></p></li>
@@ -149,7 +169,7 @@ pyESD are built upon the open-source scikit-learn framework.</p>
 <p>These models cover a wide range of regression techniques, from traditional linear models to advanced ensemble methods and neural networks.</p>
 <a class="reference internal image-reference" href="_images/outline2.png"><img alt="Picture" src="_images/outline2.png" style="width: 600px;" /></a>
 <ul class="simple">
-<li><p>Learning model training and evaluation</p></li>
+<li><p><strong>Learning model training and evaluation</strong></p></li>
 </ul>
 <hr class="docutils" />
 <p>The stage of training and testing PP-ESD models stands as a critical juncture in the downscaling process. It significantly
@@ -157,7 +177,7 @@ influences the robustness of the final models and the accuracy of their predicti
 <ol class="arabic simple">
 <li><p><strong>Data Splitting</strong>: The observational records are divided into two sets - training and testing datasets.</p></li>
 <li><p><strong>Training Transfer Functions</strong>: The training datasets are used to create the transfer functions that constitute the PP-ESD models.</p></li>
-<li><p><strong>Model Evaluation</strong>: The models are then assessed using independent testing datasets (Section 2.5).</p></li>
+<li><p><strong>Model Evaluation</strong>: The models are then assessed using independent testing datasets.</p></li>
 </ol>
 <p>In the model training phase, techniques like hyperparameter optimization (e.g., GridSearchCV) are employed to fine-tune parameters like
 regression coefficients. This optimization aims to enhance the model’s performance. Cross-validation (CV) techniques come into play to break down
@@ -170,10 +190,13 @@ in ESD model development.</p>
 of past samples. However, this assumption may not hold for time series data due to seasonal effects, for instance. To address
 this, the pyESD package incorporates monthly-bootstrapped resampling and time-series splitters.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">pyESD.splitter</span></code> module includes various CV frameworks for model training, such as k-fold, leave-one-out, and others. Validation metrics, like the coefficient of determination (R2),
-Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and more detailed in Section 2.5, are used to optimize model parameters. The final values for these metrics, reflecting the model’s
-performance during training, are the arithmetic means across all iterations. In this paper, we refer to them as CV performance metrics (i.e., CV R2, CV RMSE, and CV MAE).</p>
+Root Mean Squared Error (RMSE), Mean Absolute Error (MAE), and more, are used to optimize model parameters. The final values for these metrics, reflecting the model’s
+performance during training, are the arithmetic means across all iterations. In this paper, we refer to them as CV performance metrics (i.e., CV R2, CV RMSE, and CV MAE).
+The model is defined in the set_model method, with the method parameter as the model name listed above. The cost function for training
+the model is also defined in the scoring parameter, and the splitter to use for cross-validation is defined by the CV parameter. In case the regressor used is
+the ensemble method, then ensemble learning must be defined as True (e.g.):</p>
 <ul class="simple">
-<li><p>Coupling of the transfer function to GCMs</p></li>
+<li><p><strong>Coupling of the transfer function to GCMs</strong></p></li>
 </ul>
 <hr class="docutils" />
 <p>Once the PP-ESD model has been developed and tested, it can be integrated with coarse-scale climate information.
@@ -195,7 +218,14 @@ physical meaning of the index values is preserved.</p>
 </ol>
 <p>5. <strong>Applications</strong>: Utilize the high-resolution local-scale predictions to drive climate change impact assessment models. These predictions can inform various assessments,
 such as flood frequency prediction, agricultural impact assessments, changes in water resources, and more.</p>
-<p>This integration bridges the gap between large-scale climate models and fine-scale local predictions, enabling informed decision-making in various sectors impacted by climate change.</p>
+<p>This integration bridges the gap between large-scale climate models and fine-scale local predictions, enabling informed decision-making in various sectors impacted by climate change.
+The future predictions are generated using the predict method with the simulated predictors as input data:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#print(&quot;predicting based on the RCP 2.6 predictors&quot;)</span>
+<span class="n">yhat_CMIP5_RCP26_R1_anomalies</span> <span class="o">=</span> <span class="n">SO</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">variable</span><span class="p">,</span> <span class="n">fullCMIP5</span><span class="p">,</span>
+                                     <span class="n">CMIP5_RCP26_R1</span><span class="p">,</span> <span class="n">fit_predictors</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_predictand</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                     <span class="n">params_from</span><span class="o">=</span><span class="s2">&quot;CMIP5_AMIP_R1&quot;</span><span class="p">,</span> <span class="n">patterns_from</span><span class="o">=</span> <span class="s2">&quot;CMIP5_AMIP_R1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </section>
 </section>
 
