@@ -219,9 +219,9 @@ def plot_prediction_example(station_num_prec, station_num_temp):
           stationnames_temp[station_num_temp], "for temp----")
     
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    apply_style(fontsize=22, style=None, linewidth=3)
     
-    fig, ((ax1,ax2),(ax3,ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20,15), sharex=False)
+    fig, ((ax1,ax2),(ax3,ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(22,18), sharex=False)
     
     scatterplot(station_num=station_num_prec, stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
                 filename="predictions_", ax=ax1, xlabel="observed", ylabel="predicted",
@@ -611,14 +611,14 @@ if __name__ == "__main__":
     #plot_stations_monthly_mean()
     #plot_predictor_selector_metrics()
     #plot_estimators_metrics()
-    #plot_prediction_example(station_num_prec=6, station_num_temp=0)
+    plot_prediction_example(station_num_prec=6, station_num_temp=0)
     #plot_seasonal_climatologies()
     #plot_ensemble_timeseries()
     #plot_different_projections(variable="Precipitation")
     #plot_different_projections(variable="Temperature")
     #print("--plotting complete --")
     #plot_correlation()
-    save_count_predictors()
+    #save_count_predictors()
 
 
 
