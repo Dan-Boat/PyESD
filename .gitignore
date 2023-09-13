@@ -26,6 +26,8 @@ private/
 /examples/Human_Vs_Machines
 /examples/IsoPP
 /examples/VALUE
+/examples/tutorials/.predictors_200
+/examples/tutorials/final_cache_Precipitation
 *.pickel
 *.predictors_150
 *.predictors_50
