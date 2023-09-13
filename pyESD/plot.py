@@ -250,7 +250,8 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
                 val_predict_name="ERA5 1958-2010", 
                 test_predict_name="ERA5 2011-2020",
                 method = "Stacking", ylabel=None, xlabel=None,
-                fig_path=None, fig_name=None,
+                fig_path=None, fig_name=None, train_marker="*", test_marker="o",
+                train_color=black, test_color=blue,
                 ):
     
     if ax is None:
@@ -276,9 +277,11 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     r2 = regression_stats.rvalue 
     
-    ax.scatter(obs_train, ypred_train, alpha=0.3, c=black, s=100, label=val_predict_name)
+    ax.scatter(obs_train, ypred_train, alpha=0.3, c=train_color, s=100, label=val_predict_name, 
+               marker=train_marker)
     
-    ax.scatter(obs_test, ypred_test, alpha=0.3, c=red, s=100, label=test_predict_name)
+    ax.scatter(obs_test, ypred_test, alpha=0.3, c=test_color, s=100, label=test_predict_name,
+               marker=test_marker)
     
     ax.plot(obs, regression_slope, color=red, label="PCC = {:.2f}".format(r2))
     
