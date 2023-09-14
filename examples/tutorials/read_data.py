@@ -28,6 +28,7 @@ era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
 cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
 cmip5_45_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP45"
 cmip5_85_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP85"
+amip_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/AMIP"
 
 
 
@@ -87,7 +88,43 @@ ERA5Data = Dataset('ERA5', {
     'dtd1000':os.path.join(era5_datadir, 'dtd1000_monthly.nc'),},
     domain_name= "NH") # select domain for Northern Hemisphere
 
-
+CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
+    't2m':os.path.join(amip_datadir, 't2m_monthly.nc'),
+    'msl':os.path.join(amip_datadir, 'msl_monthly.nc'),
+    'u10':os.path.join(amip_datadir, 'u10_monthly.nc'),
+    'v10':os.path.join(amip_datadir, 'v10_monthly.nc'),
+    'z250':os.path.join(amip_datadir, 'z250_monthly.nc'),
+    'z500':os.path.join(amip_datadir, 'z500_monthly.nc'),
+    'z700':os.path.join(amip_datadir, 'z700_monthly.nc'),
+    'z850':os.path.join(amip_datadir, 'z850_monthly.nc'),
+    'z1000':os.path.join(amip_datadir, 'z1000_monthly.nc'),
+    'tp':os.path.join(amip_datadir, 'tp_monthly.nc'),
+    't250':os.path.join(amip_datadir, 't250_monthly.nc'),
+    't500':os.path.join(amip_datadir, 't500_monthly.nc'),
+    't700':os.path.join(amip_datadir, 't700_monthly.nc'),
+    't850':os.path.join(amip_datadir, 't850_monthly.nc'),
+    't1000':os.path.join(amip_datadir, 't1000_monthly.nc'),
+    'r250':os.path.join(amip_datadir, 'r250_monthly.nc'),
+    'r500':os.path.join(amip_datadir, 'r500_monthly.nc'),
+    'r700':os.path.join(amip_datadir, 'r700_monthly.nc'),
+    'r850':os.path.join(amip_datadir, 'r850_monthly.nc'),
+    'r1000':os.path.join(amip_datadir, 'r1000_monthly.nc'),
+    'u250':os.path.join(amip_datadir, 'u250_monthly.nc'),
+    'u500':os.path.join(amip_datadir, 'u500_monthly.nc'),
+    'u700':os.path.join(amip_datadir, 'u700_monthly.nc'),
+    'u850':os.path.join(amip_datadir, 'u850_monthly.nc'),
+    'u1000':os.path.join(amip_datadir, 'u1000_monthly.nc'),
+    'v250':os.path.join(amip_datadir, 'v250_monthly.nc'),
+    'v500':os.path.join(amip_datadir, 'v500_monthly.nc'),
+    'v700':os.path.join(amip_datadir, 'v700_monthly.nc'),
+    'v850':os.path.join(amip_datadir, 'v850_monthly.nc'),
+    'v1000':os.path.join(amip_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(amip_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(amip_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(amip_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(amip_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(amip_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
 
 CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
