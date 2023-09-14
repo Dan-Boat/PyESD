@@ -149,80 +149,42 @@ various examples demonstrated.
     # =======================
 
     CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
-        't2m': os.path.join(cmip5_26_datadir, 't2m_monthly.nc'),
-        'msl': os.path.join(cmip5_26_datadir, 'msl_monthly.nc'),
-        'u10': os.path.join(cmip5_26_datadir, 'u10_monthly.nc'),
-        'v10': os.path.join(cmip5_26_datadir, 'v10_monthly.nc'),
-        'z250': os.path.join(cmip5_26_datadir, 'z250_monthly.nc'),
-        'z500': os.path.join(cmip5_26_datadir, 'z500_monthly.nc'),
-        'z700': os.path.join(cmip5_26_datadir, 'z700_monthly.nc'),
-        'z850': os.path.join(cmip5_26_datadir, 'z850_monthly.nc'),
-        'z1000': os.path.join(cmip5_26_datadir, 'z1000_monthly.nc'),
-        'tp': os.path.join(cmip5_26_datadir, 'tp_monthly.nc'),
-        't250': os.path.join(cmip5_26_datadir, 't250_monthly.nc'),
-        't500': os.path.join(cmip5_26_datadir, 't500_monthly.nc'),
-        't700': os.path.join(cmip5_26_datadir, 't700_monthly.nc'),
-        't850': os.path.join(cmip5_26_datadir, 't850_monthly.nc'),
-        't1000': os.path.join(cmip5_26_datadir, 't1000_monthly.nc'),
-        'r250': os.path.join(cmip5_26_datadir, 'r250_monthly.nc'),
-        'r500': os.path.join(cmip5_26_datadir, 'r500_monthly.nc'),
-        'r700': os.path.join(cmip5_26_datadir, 'r700_monthly.nc'),
-        'r850': os.path.join(cmip5_26_datadir, 'r850_monthly.nc'),
-        'r1000': os.path.join(cmip5_26_datadir, 'r1000_monthly.nc'),
-        'u250': os.path.join(cmip5_26_datadir, 'u250_monthly.nc'),
-        'u500': os.path.join(cmip5_26_datadir, 'u500_monthly.nc'),
-        'u700': os.path.join(cmip5_26_datadir, 'u700_monthly.nc'),
-        'u850': os.path.join(cmip5_26_datadir, 'u850_monthly.nc'),
-        'u1000': os.path.join(cmip5_26_datadir, 'u1000_monthly.nc'),
-        'v250': os.path.join(cmip5_26_datadir, 'v250_monthly.nc'),
-        'v500': os.path.join(cmip5_26_datadir, 'v500_monthly.nc'),
-        'v700': os.path.join(cmip5_26_datadir, 'v700_monthly.nc'),
-        'v850': os.path.join(cmip5_26_datadir, 'v850_monthly.nc'),
-        'v1000': os.path.join(cmip5_26_datadir, 'v1000_monthly.nc'),
-        'dtd250': os.path.join(cmip5_26_datadir, 'dtd250_monthly.nc'),
-        'dtd500': os.path.join(cmip5_26_datadir, 'dtd500_monthly.nc'),
-        'dtd700': os.path.join(cmip5_26_datadir, 'dtd700_monthly.nc'),
-        'dtd850': os.path.join(cmip5_26_datadir, 'dtd850_monthly.nc'),
-        'dtd1000': os.path.join(cmip5_26_datadir, 'dtd1000_monthly.nc')
-    }, domain_name="NH")
-
-    CMIP5_RCP45_R1 = Dataset('CMIP5_RCP45_R1', {
-        't2m': os.path.join(cmip5_45_datadir, 't2m_monthly.nc'),
-        'msl': os.path.join(cmip5_45_datadir, 'msl_monthly.nc'),
-        'u10': os.path.join(cmip5_45_datadir, 'u10_monthly.nc'),
-        'v10': os.path.join(cmip5_45_datadir, 'v10_monthly.nc'),
-        'z250': os.path.join(cmip5_45_datadir, 'z250_monthly.nc'),
-        'z500': os.path.join(cmip5_45_datadir, 'z500_monthly.nc'),
-        'z700': os.path.join(cmip5_45_datadir, 'z700_monthly.nc'),
-        'z850': os.path.join(cmip5_45_datadir, 'z850_monthly.nc'),
-        'z1000': os.path.join(cmip5_45_datadir, 'z1000_monthly.nc'),
-        'tp': os.path.join(cmip5_45_datadir, 'tp_monthly.nc'),
-        't250': os.path.join(cmip5_45_datadir, 't250_monthly.nc'),
-        't500': os.path.join(cmip5_45_datadir, 't500_monthly.nc'),
-        't700': os.path.join(cmip5_45_datadir, 't700_monthly.nc'),
-        't850': os.path.join(cmip5_45_datadir, 't850_monthly.nc'),
-        't1000': os.path.join(cmip5_45_datadir, 't1000_monthly.nc'),
-        'r250': os.path.join(cmip5_45_datadir, 'r250_monthly.nc'),
-        'r500': os.path.join(cmip5_45_datadir, 'r500_monthly.nc'),
-        'r700': os.path.join(cmip5_45_datadir, 'r700_monthly.nc'),
-        'r850': os.path.join(cmip5_45_datadir, 'r850_monthly.nc'),
-        'r1000': os.path.join(cmip5_45_datadir, 'r1000_monthly.nc'),
-        'u250': os.path.join(cmip5_45_datadir, 'u250_monthly.nc'),
-        'u500': os.path.join(cmip5_45_datadir, 'u500_monthly.nc'),
-        'u700': os.path.join(cmip5_45_datadir, 'u700_monthly.nc'),
-        'u850': os.path.join(cmip5_45_datadir, 'u850_monthly.nc'),
-        'u1000': os.path.join(cmip5_45_datadir, 'u1000_monthly.nc'),
-        'v250': os.path.join(cmip5_45_datadir, 'v250_monthly.nc'),
-        'v500': os.path.join(cmip5_45_datadir, 'v500_monthly.nc'),
-        'v700': os.path.join(cmip5_45_datadir, 'v700_monthly.nc'),
-        'v850': os.path.join(cmip5_45_datadir, 'v850_monthly.nc'),
-        'v1000': os.path.join(cmip5_45_datadir, 'v1000_monthly.nc'),
-        'dtd250': os.path.join(cmip5_45_datadir, 'dtd250_monthly.nc'),
-        'dtd500': os.path.join(cmip5_45_datadir, 'dtd500_monthly.nc'),
-        'dtd700': os.path.join(cmip5_45_datadir, 'dtd700_monthly.nc'),
-        'dtd850': os.path.join(cmip5_45_datadir, 'dtd850_monthly.nc'),
-        'dtd1000': os.path.join(cmip5_45_datadir, 'dtd1000_monthly.nc')
-    }, domain_name="NH")
+        't2m':os.path.join(cmip5_26_datadir, 't2m_monthly.nc'),
+        'msl':os.path.join(cmip5_26_datadir, 'msl_monthly.nc'),
+        'u10':os.path.join(cmip5_26_datadir, 'u10_monthly.nc'),
+        'v10':os.path.join(cmip5_26_datadir, 'v10_monthly.nc'),
+        'z250':os.path.join(cmip5_26_datadir, 'z250_monthly.nc'),
+        'z500':os.path.join(cmip5_26_datadir, 'z500_monthly.nc'),
+        'z700':os.path.join(cmip5_26_datadir, 'z700_monthly.nc'),
+        'z850':os.path.join(cmip5_26_datadir, 'z850_monthly.nc'),
+        'z1000':os.path.join(cmip5_26_datadir, 'z1000_monthly.nc'),
+        'tp':os.path.join(cmip5_26_datadir, 'tp_monthly.nc'),
+        't250':os.path.join(cmip5_26_datadir, 't250_monthly.nc'),
+        't500':os.path.join(cmip5_26_datadir, 't500_monthly.nc'),
+        't700':os.path.join(cmip5_26_datadir, 't700_monthly.nc'),
+        't850':os.path.join(cmip5_26_datadir, 't850_monthly.nc'),
+        't1000':os.path.join(cmip5_26_datadir, 't1000_monthly.nc'),
+        'r250':os.path.join(cmip5_26_datadir, 'r250_monthly.nc'),
+        'r500':os.path.join(cmip5_26_datadir, 'r500_monthly.nc'),
+        'r700':os.path.join(cmip5_26_datadir, 'r700_monthly.nc'),
+        'r850':os.path.join(cmip5_26_datadir, 'r850_monthly.nc'),
+        'r1000':os.path.join(cmip5_26_datadir, 'r1000_monthly.nc'),
+        'u250':os.path.join(cmip5_26_datadir, 'u250_monthly.nc'),
+        'u500':os.path.join(cmip5_26_datadir, 'u500_monthly.nc'),
+        'u700':os.path.join(cmip5_26_datadir, 'u700_monthly.nc'),
+        'u850':os.path.join(cmip5_26_datadir, 'u850_monthly.nc'),
+        'u1000':os.path.join(cmip5_26_datadir, 'u1000_monthly.nc'),
+        'v250':os.path.join(cmip5_26_datadir, 'v250_monthly.nc'),
+        'v500':os.path.join(cmip5_26_datadir, 'v500_monthly.nc'),
+        'v700':os.path.join(cmip5_26_datadir, 'v700_monthly.nc'),
+        'v850':os.path.join(cmip5_26_datadir, 'v850_monthly.nc'),
+        'v1000':os.path.join(cmip5_26_datadir, 'v1000_monthly.nc'),
+        'dtd250':os.path.join(cmip5_26_datadir, 'dtd250_monthly.nc'), 
+        'dtd500':os.path.join(cmip5_26_datadir, 'dtd500_monthly.nc'),
+        'dtd700':os.path.join(cmip5_26_datadir, 'dtd700_monthly.nc'),
+        'dtd850':os.path.join(cmip5_26_datadir, 'dtd850_monthly.nc'),
+        'dtd1000':os.path.join(cmip5_26_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "NH")
 
     CMIP5_RCP85_R1 = Dataset('CMIP5_RCP85_R1', {
         't2m': os.path.join(cmip5_85_datadir, 't2m_monthly.nc'),
@@ -358,6 +320,11 @@ demonstrate some of the analyses that can be useful in gaining insight into the
 projected downscaled datasets."
 
 `Jupyter Notebook: example of some cool visualization pyESD can do <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/data_analysis_and_visualisation.ipynb>`_
+
+.. image:: ./imgs/future_prediction.png
+    :width: 600
+    :alt: Picture
+    :align: center
 
 
 🚨 This should help get you started, let us know if you have issues (Enjoy!)
