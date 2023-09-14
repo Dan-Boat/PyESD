@@ -249,6 +249,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
                 obs_test_name="obs 2011-2020", 
                 val_predict_name="ERA5 1958-2010", 
                 test_predict_name="ERA5 2011-2020",
+                obs_full_name="obs anomalies",
                 method = "Stacking", ylabel=None, xlabel=None,
                 fig_path=None, fig_name=None, train_marker="*", test_marker="o",
                 train_color=black, test_color=blue,
@@ -261,7 +262,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     station_info = prediction_example_data(station_num, stationnames, path_to_data, filename,
                                            obs_test_name=obs_test_name, obs_train_name=obs_train_name,
                                            val_predict_name=val_predict_name, test_predict_name=test_predict_name,
-                                           method=method)
+                                           method=method, obs_full_name=obs_full_name)
     
     obs_train = station_info["obs_train"]
     obs_test = station_info["obs_test"]
@@ -326,6 +327,7 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
                 obs_test_name="obs 2011-2020", 
                 val_predict_name="ERA5 1958-2010", 
                 test_predict_name="ERA5 2011-2020",
+                obs_full_name="obs anomalies",
                 method = "Stacking", ylabel=None, xlabel=None,
                 fig_path=None, fig_name=None,
                 ):
@@ -340,7 +342,7 @@ def lineplot(station_num, stationnames, path_to_data, filename, ax=None, fig=Non
     station_info = prediction_example_data(station_num, stationnames, path_to_data, filename,
                                            obs_test_name=obs_test_name, obs_train_name=obs_train_name,
                                            val_predict_name=val_predict_name, test_predict_name=test_predict_name,
-                                           method=method)
+                                           method=method, obs_full_name=obs_full_name)
     
 
     ypred_train = station_info["ypred_train"].rolling(3, min_periods=1, win_type="hann",
