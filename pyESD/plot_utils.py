@@ -342,7 +342,7 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
                             val_predict_name="ERA5 1958-2010", 
                             test_predict_name="ERA5 2011-2020",
                             method = "Stacking",
-                            use_cv_all=False):
+                            use_cv_all=False, obs_full_name="obs anomalies"):
     
     stationname = stationnames[station_num]
     print("extracting information for the station: ", stationname)
@@ -354,7 +354,7 @@ def prediction_example_data(station_num, stationnames, path_to_data, filename,
     obs_test = df[obs_test_name].dropna()
     ypred_validation = df[val_predict_name][~np.isnan(df[obs_train_name])]
     ypred_test = df[test_predict_name][~np.isnan(df[obs_test_name])]
-    obs_full = df["obs anomalies"].dropna()
+    obs_full = df[obs_full_name].dropna()
     
     
     # if use_cv_all == True:

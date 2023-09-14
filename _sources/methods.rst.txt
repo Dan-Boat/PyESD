@@ -149,6 +149,7 @@ the model is also defined in the scoring parameter, and the splitter to use for 
 the ensemble method, then ensemble learning must be defined as True (e.g.):
 
 .. code-block:: python
+
    SO.set_model(variable, method=”Stacking”, ensemble_learning=True, 
                      estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010, predictor_dataset=ERA5Data, cv=KFold(n_splits=10),
                      scoring = scoring)
@@ -157,8 +158,6 @@ the ensemble method, then ensemble learning must be defined as True (e.g.):
 
 - **Coupling of the transfer function to GCMs**
 ------------------------------------------------
-
-
 Once the PP-ESD model has been developed and tested, it can be integrated with coarse-scale climate information. 
 If the intention behind the PP-ESD model is to downscale predictions for future climate scenarios, the next logical step is coupling it with General 
 Circulation Model (GCM) simulations driven by different greenhouse gas concentration scenarios. PP-ESD, being a bias-free downscaling method, offers 
@@ -187,7 +186,7 @@ This integration bridges the gap between large-scale climate models and fine-sca
 The future predictions are generated using the predict method with the simulated predictors as input data:
 
 .. code-block:: python
-   
+
    #print("predicting based on the RCP 2.6 predictors")
    yhat_CMIP5_RCP26_R1_anomalies = SO.predict(variable, fullCMIP5, 
                                         CMIP5_RCP26_R1, fit_predictors=True, fit_predictand=True,

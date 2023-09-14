@@ -324,6 +324,7 @@
                 <span class="n">obs_test_name</span><span class="o">=</span><span class="s2">&quot;obs 2011-2020&quot;</span><span class="p">,</span> 
                 <span class="n">val_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 1958-2010&quot;</span><span class="p">,</span> 
                 <span class="n">test_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 2011-2020&quot;</span><span class="p">,</span>
+                <span class="n">obs_full_name</span><span class="o">=</span><span class="s2">&quot;obs anomalies&quot;</span><span class="p">,</span>
                 <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Stacking&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">train_marker</span><span class="o">=</span><span class="s2">&quot;*&quot;</span><span class="p">,</span> <span class="n">test_marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span>
                 <span class="n">train_color</span><span class="o">=</span><span class="n">black</span><span class="p">,</span> <span class="n">test_color</span><span class="o">=</span><span class="n">blue</span><span class="p">,</span>
@@ -336,7 +337,7 @@
     <span class="n">station_info</span> <span class="o">=</span> <span class="n">prediction_example_data</span><span class="p">(</span><span class="n">station_num</span><span class="p">,</span> <span class="n">stationnames</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
                                            <span class="n">obs_test_name</span><span class="o">=</span><span class="n">obs_test_name</span><span class="p">,</span> <span class="n">obs_train_name</span><span class="o">=</span><span class="n">obs_train_name</span><span class="p">,</span>
                                            <span class="n">val_predict_name</span><span class="o">=</span><span class="n">val_predict_name</span><span class="p">,</span> <span class="n">test_predict_name</span><span class="o">=</span><span class="n">test_predict_name</span><span class="p">,</span>
-                                           <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+                                           <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">obs_full_name</span><span class="o">=</span><span class="n">obs_full_name</span><span class="p">)</span>
     
     <span class="n">obs_train</span> <span class="o">=</span> <span class="n">station_info</span><span class="p">[</span><span class="s2">&quot;obs_train&quot;</span><span class="p">]</span>
     <span class="n">obs_test</span> <span class="o">=</span> <span class="n">station_info</span><span class="p">[</span><span class="s2">&quot;obs_test&quot;</span><span class="p">]</span>
@@ -401,6 +402,7 @@
                 <span class="n">obs_test_name</span><span class="o">=</span><span class="s2">&quot;obs 2011-2020&quot;</span><span class="p">,</span> 
                 <span class="n">val_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 1958-2010&quot;</span><span class="p">,</span> 
                 <span class="n">test_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 2011-2020&quot;</span><span class="p">,</span>
+                <span class="n">obs_full_name</span><span class="o">=</span><span class="s2">&quot;obs anomalies&quot;</span><span class="p">,</span>
                 <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Stacking&quot;</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">xlabel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="n">fig_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                 <span class="p">):</span>
@@ -415,7 +417,7 @@
     <span class="n">station_info</span> <span class="o">=</span> <span class="n">prediction_example_data</span><span class="p">(</span><span class="n">station_num</span><span class="p">,</span> <span class="n">stationnames</span><span class="p">,</span> <span class="n">path_to_data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span>
                                            <span class="n">obs_test_name</span><span class="o">=</span><span class="n">obs_test_name</span><span class="p">,</span> <span class="n">obs_train_name</span><span class="o">=</span><span class="n">obs_train_name</span><span class="p">,</span>
                                            <span class="n">val_predict_name</span><span class="o">=</span><span class="n">val_predict_name</span><span class="p">,</span> <span class="n">test_predict_name</span><span class="o">=</span><span class="n">test_predict_name</span><span class="p">,</span>
-                                           <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span>
+                                           <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">,</span> <span class="n">obs_full_name</span><span class="o">=</span><span class="n">obs_full_name</span><span class="p">)</span>
     
 
     <span class="n">ypred_train</span> <span class="o">=</span> <span class="n">station_info</span><span class="p">[</span><span class="s2">&quot;ypred_train&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">min_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">win_type</span><span class="o">=</span><span class="s2">&quot;hann&quot;</span><span class="p">,</span>

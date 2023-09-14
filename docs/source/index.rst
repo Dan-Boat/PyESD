@@ -105,7 +105,7 @@ who made immense contributions to the ideas behind the pyESD modelling framework
 package alongside his Ph.D. project involving paleoclimate modeling using isotope-enabled GCMs and climate
 dynamics. He's dedicated to open-source scientific software development and aims to enhance the 
 reproducibility of research outcomes. He believes that science would be more fun if all research outputs 
-were easily reproducible. He also created "pyClimat," another open-source package for analyzing and 
+were easily reproducible. He also created "`pyClimat <https://github.com/Dan-Boat/pyClimat>`_," another open-source package for analyzing and 
 visualizing GCM model output, which has been open-source since the first day of his Ph.D. program.
 Daniel believes in “Trusting The Process” (TTP) in all aspects of life.
 

@@ -417,7 +417,7 @@
                             <span class="n">val_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 1958-2010&quot;</span><span class="p">,</span> 
                             <span class="n">test_predict_name</span><span class="o">=</span><span class="s2">&quot;ERA5 2011-2020&quot;</span><span class="p">,</span>
                             <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;Stacking&quot;</span><span class="p">,</span>
-                            <span class="n">use_cv_all</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                            <span class="n">use_cv_all</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">obs_full_name</span><span class="o">=</span><span class="s2">&quot;obs anomalies&quot;</span><span class="p">):</span>
     
     <span class="n">stationname</span> <span class="o">=</span> <span class="n">stationnames</span><span class="p">[</span><span class="n">station_num</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;extracting information for the station: &quot;</span><span class="p">,</span> <span class="n">stationname</span><span class="p">)</span>
@@ -429,7 +429,7 @@
     <span class="n">obs_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">obs_test_name</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
     <span class="n">ypred_validation</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">val_predict_name</span><span class="p">][</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">obs_train_name</span><span class="p">])]</span>
     <span class="n">ypred_test</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">test_predict_name</span><span class="p">][</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="n">obs_test_name</span><span class="p">])]</span>
-    <span class="n">obs_full</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;obs anomalies&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">obs_full</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">obs_full_name</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
     
     
     <span class="c1"># if use_cv_all == True:</span>

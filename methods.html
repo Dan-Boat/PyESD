@@ -195,13 +195,15 @@ performance during training, are the arithmetic means across all iterations. In 
 The model is defined in the set_model method, with the method parameter as the model name listed above. The cost function for training
 the model is also defined in the scoring parameter, and the splitter to use for cross-validation is defined by the CV parameter. In case the regressor used is
 the ensemble method, then ensemble learning must be defined as True (e.g.):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>SO.set_model(variable, method=”Stacking”, ensemble_learning=True,
+                  estimators=base_estimators, final_estimator_name=final_estimator, daterange=from1958to2010, predictor_dataset=ERA5Data, cv=KFold(n_splits=10),
+                  scoring = scoring)
+</pre></div>
+</div>
 <ul class="simple">
 <li><p><strong>Coupling of the transfer function to GCMs</strong></p></li>
 </ul>
-<hr class="docutils" />
-<p>Once the PP-ESD model has been developed and tested, it can be integrated with coarse-scale climate information.
-If the intention behind the PP-ESD model is to downscale predictions for future climate scenarios, the next logical step is coupling it with General
-Circulation Model (GCM) simulations driven by different greenhouse gas concentration scenarios. PP-ESD, being a bias-free downscaling method, offers
+<p>Circulation Model (GCM) simulations driven by different greenhouse gas concentration scenarios. PP-ESD, being a bias-free downscaling method, offers
 flexibility by being compatible with various GCMs, provided that the GCMs adequately represent the predictors. To address this, standardizing the simulated
 predictors can help. An analysis can be performed to assess the similarity in the distribution of observed and simulated predictors. For
 instance, the Kolmogorov-Smirnov (KS) test, available as part of the pyESD package utilities, can be used to test the null hypothesis (H_0) that observation-based

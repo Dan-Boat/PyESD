@@ -284,6 +284,14 @@ identify sets of predictors with the highest predictive skill based on the chose
 
 `Jupyter Notebook: Predictors selection methods example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/Predictor_selection.ipynb>`_
 
+Inter predictor selection method performance metric
+
+.. image:: ./imgs/Predictor_selection.png
+    :width: 600
+    :alt: Picture
+    :align: center
+
+
 Including Large-Scale Teleconnection Indices🌏
 ----------------------------------------------
 
@@ -313,6 +321,20 @@ model performs and also evaluate its performance on the data independent of the 
 highlight how the pyESD.plots module can be used to visualize the model performance."
 
 `Jupyter Notebook: model selection experiment example <https://nbviewer.org/github/Dan-Boat/PyESD/blob/main/examples/tutorials/model_selection.ipynb>`_
+
+Inter-estimator performance (to decide which learning model works well for the stations) 
+
+.. image:: ./imgs/inter_model.png
+    :width: 600
+    :alt: Picture
+    :align: center
+
+Prediction examples of a weather station and its comparison with observed precipitation
+
+.. image:: ./imgs/prediction_eg.png
+    :width: 600
+    :alt: Picture
+    :align: center
 
 Coupling ESD to GCMs for future prediction
 --------------------------------------------
