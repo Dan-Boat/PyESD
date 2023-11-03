@@ -128,16 +128,21 @@ class MEI(Predictor):
             
         for v in self.variables:
             # load data and restrict to area of interest
+            
             da = dataset.get(v)
             da = da.sel(time=datarange)
-            da = da.where((da.latitude <= 30) & (da.latitude >= -30)
-                            & (da.longitude <= 100) & (da.longitude >= -70), drop=True)
-
-            # multiply by area weight (cos(lat)) -check if needed here
-            da *= np.sqrt(np.cos(da.latitude*np.pi/180))
             
             if hasattr(da, "longitude"):
                 da = da.rename({"longitude":"lon", "latitude":"lat"})
+                
+                
+            da = da.where((da.lat <= 30) & (da.lat >= -30)
+                            & (da.lon <= 100) & (da.lon >= -70), drop=True)
+
+            # multiply by area weight (cos(lat)) -check if needed here
+            da *= np.sqrt(np.cos(da.lat*np.pi/180))
+            
+           
             # stack into one vector
             stacked = da.stack(z=['lat', 'lon'])
 

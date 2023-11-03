@@ -94,7 +94,7 @@ def run_main(variable, cachedir,
         #====================================
         
         print("fitting the AMIP predictors based on the selected model---all from realisation 1")
-        SO.fit_predictor(variable, predictors, fullAMIP, CMIP5_AMIP_R1) 
+        SO.fit_predictor(variable, predictors, fullAMIP2, CMIP6_AMIP_R1) 
         
         print("predicting based on the AMIP predictors")
         yhat_CMIP5_AMIP_R1_anomalies = SO.predict(variable, fullAMIP, 

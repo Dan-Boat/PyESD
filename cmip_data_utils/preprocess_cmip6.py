@@ -10,9 +10,9 @@ import pandas as pd
 import os 
 
 
-path_to_save = "D:/Datasets/CMIP6/CMIP/SSP585/MPI-ESMI-2-LR/monthly"
+path_to_save = "/mnt/d/Datasets/CMIP6/CMIP/AMIP/MPI-ESMI-2-LR/postprocessed/monthly"
 
-path = "D:/Datasets/CMIP6/CMIP/SSP585/MPI-ESMI-2-LR/postprocessed"
+path = "/mnt/d/Datasets/CMIP6/CMIP/AMIP/MPI-ESMI-2-LR/postprocessed"
 
 
 #data = xr.open_dataset(os.path.join(path, "z250_monthly.nc"))

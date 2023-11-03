@@ -15,7 +15,7 @@ predictors = ["t2m", "tp","msl", "v10", "u10",
               "z250", "z500", "z700", "z850", "z1000", 
               "t250", "t850", "t500","t700", "t1000",
               "dtd250", "dtd850", "dtd500","dtd700", "dtd1000",
-              "NAO", "MEI"]
+              "NAO"]
 
 
 
@@ -31,6 +31,7 @@ from1961to2012 = pd.date_range(start="1961-01-01", end="2012-12-31", freq="MS")
 from1961to2017 = pd.date_range(start="1961-01-01", end="2017-12-31", freq="MS")
 
 fullAMIP = pd.date_range(start='1979-01-01', end='2008-12-31', freq='MS')
+fullAMIP2 = pd.date_range(start='1979-01-01', end='2014-12-31', freq='MS')
 
 fullCMIP5 = pd.date_range(start='2010-01-01', end='2100-12-31', freq='MS')
 

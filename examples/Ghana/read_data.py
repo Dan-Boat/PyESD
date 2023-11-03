@@ -24,10 +24,18 @@ radius = 150 #km
 era5_datadir = "C:/Users/dboateng/Desktop/Datasets/ERA5/monthly_1950_2021/"
 station_prec_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/Ghana/Update_datasets/processed/monthly"
 
+#cmip6 datasets
+cmip6_amip = "D:/Datasets/CMIP6/CMIP/AMIP/MPI-ESMI-2-LR/monthly"
+
 amip_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/AMIP"
 cmip5_26_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP26"
 cmip5_45_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP45"
 cmip5_85_datadir = "D:/Datasets/CMIP5/Monthly/MIPESM/RCP85"
+
+#cmip6 datasets
+cmip6_26_datadir = "D:/Datasets/CMIP6/CMIP/SSP126/MPI-ESMI-2-LR/monthly"
+cmip6_45_datadir = "D:/Datasets/CMIP6/CMIP/SSP245/MPI-ESMI-2-LR/monthly"
+cmip6_85_datadir = "D:/Datasets/CMIP6/CMIP/SSP585/MPI-ESMI-2-LR/monthly"
 
 #add cordex africa!
 cordex_26_datadir = "D:/Datasets/CMIP5/Monthly/CORDEX/Africa/RCP26"
@@ -133,7 +141,85 @@ CMIP5_AMIP_R1 = Dataset('CMIP5_AMIP_R1', {
     }, domain_name= "Africa")
 
 
+CMIP6_AMIP_R1 = Dataset('CMIP6_AMIP_R1', {
+    't2m':os.path.join(cmip6_amip, 't2m_monthly.nc'),
+    'msl':os.path.join(cmip6_amip, 'msl_monthly.nc'),
+    'u10':os.path.join(cmip6_amip, 'u10_monthly.nc'),
+    'v10':os.path.join(cmip6_amip, 'v10_monthly.nc'),
+    'z250':os.path.join(cmip6_amip, 'z250_monthly.nc'),
+    'z500':os.path.join(cmip6_amip, 'z500_monthly.nc'),
+    'z700':os.path.join(cmip6_amip, 'z700_monthly.nc'),
+    'z850':os.path.join(cmip6_amip, 'z850_monthly.nc'),
+    'z1000':os.path.join(cmip6_amip, 'z1000_monthly.nc'),
+    'tp':os.path.join(cmip6_amip, 'tp_monthly.nc'),
+    't250':os.path.join(cmip6_amip, 't250_monthly.nc'),
+    't500':os.path.join(cmip6_amip, 't500_monthly.nc'),
+    't700':os.path.join(cmip6_amip, 't700_monthly.nc'),
+    't850':os.path.join(cmip6_amip, 't850_monthly.nc'),
+    't1000':os.path.join(cmip6_amip, 't1000_monthly.nc'),
+    'r250':os.path.join(cmip6_amip, 'r250_monthly.nc'),
+    'r500':os.path.join(cmip6_amip, 'r500_monthly.nc'),
+    'r700':os.path.join(cmip6_amip, 'r700_monthly.nc'),
+    'r850':os.path.join(cmip6_amip, 'r850_monthly.nc'),
+    'r1000':os.path.join(cmip6_amip, 'r1000_monthly.nc'),
+    'u250':os.path.join(cmip6_amip, 'u250_monthly.nc'),
+    'u500':os.path.join(cmip6_amip, 'u500_monthly.nc'),
+    'u700':os.path.join(cmip6_amip, 'u700_monthly.nc'),
+    'u850':os.path.join(cmip6_amip, 'u850_monthly.nc'),
+    'u1000':os.path.join(cmip6_amip, 'u1000_monthly.nc'),
+    'v250':os.path.join(cmip6_amip, 'v250_monthly.nc'),
+    'v500':os.path.join(cmip6_amip, 'v500_monthly.nc'),
+    'v700':os.path.join(cmip6_amip, 'v700_monthly.nc'),
+    'v850':os.path.join(cmip6_amip, 'v850_monthly.nc'),
+    'v1000':os.path.join(cmip6_amip, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(cmip6_amip, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip6_amip, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip6_amip, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip6_amip, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip6_amip, 'dtd1000_monthly.nc')
+    }, domain_name= "Africa")
+
+
 CMIP5_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
+    't2m':os.path.join(cmip5_26_datadir, 't2m_monthly.nc'),
+    'msl':os.path.join(cmip5_26_datadir, 'msl_monthly.nc'),
+    'u10':os.path.join(cmip5_26_datadir, 'u10_monthly.nc'),
+    'v10':os.path.join(cmip5_26_datadir, 'v10_monthly.nc'),
+    'z250':os.path.join(cmip5_26_datadir, 'z250_monthly.nc'),
+    'z500':os.path.join(cmip5_26_datadir, 'z500_monthly.nc'),
+    'z700':os.path.join(cmip5_26_datadir, 'z700_monthly.nc'),
+    'z850':os.path.join(cmip5_26_datadir, 'z850_monthly.nc'),
+    'z1000':os.path.join(cmip5_26_datadir, 'z1000_monthly.nc'),
+    'tp':os.path.join(cmip5_26_datadir, 'tp_monthly.nc'),
+    't250':os.path.join(cmip5_26_datadir, 't250_monthly.nc'),
+    't500':os.path.join(cmip5_26_datadir, 't500_monthly.nc'),
+    't700':os.path.join(cmip5_26_datadir, 't700_monthly.nc'),
+    't850':os.path.join(cmip5_26_datadir, 't850_monthly.nc'),
+    't1000':os.path.join(cmip5_26_datadir, 't1000_monthly.nc'),
+    'r250':os.path.join(cmip5_26_datadir, 'r250_monthly.nc'),
+    'r500':os.path.join(cmip5_26_datadir, 'r500_monthly.nc'),
+    'r700':os.path.join(cmip5_26_datadir, 'r700_monthly.nc'),
+    'r850':os.path.join(cmip5_26_datadir, 'r850_monthly.nc'),
+    'r1000':os.path.join(cmip5_26_datadir, 'r1000_monthly.nc'),
+    'u250':os.path.join(cmip5_26_datadir, 'u250_monthly.nc'),
+    'u500':os.path.join(cmip5_26_datadir, 'u500_monthly.nc'),
+    'u700':os.path.join(cmip5_26_datadir, 'u700_monthly.nc'),
+    'u850':os.path.join(cmip5_26_datadir, 'u850_monthly.nc'),
+    'u1000':os.path.join(cmip5_26_datadir, 'u1000_monthly.nc'),
+    'v250':os.path.join(cmip5_26_datadir, 'v250_monthly.nc'),
+    'v500':os.path.join(cmip5_26_datadir, 'v500_monthly.nc'),
+    'v700':os.path.join(cmip5_26_datadir, 'v700_monthly.nc'),
+    'v850':os.path.join(cmip5_26_datadir, 'v850_monthly.nc'),
+    'v1000':os.path.join(cmip5_26_datadir, 'v1000_monthly.nc'),
+    'dtd250':os.path.join(cmip5_26_datadir, 'dtd250_monthly.nc'), 
+    'dtd500':os.path.join(cmip5_26_datadir, 'dtd500_monthly.nc'),
+    'dtd700':os.path.join(cmip5_26_datadir, 'dtd700_monthly.nc'),
+    'dtd850':os.path.join(cmip5_26_datadir, 'dtd850_monthly.nc'),
+    'dtd1000':os.path.join(cmip5_26_datadir, 'dtd1000_monthly.nc')
+    }, domain_name= "Africa")
+
+
+CMIP6_RCP26_R1 = Dataset('CMIP5_RCP26_R1', {
     't2m':os.path.join(cmip5_26_datadir, 't2m_monthly.nc'),
     'msl':os.path.join(cmip5_26_datadir, 'msl_monthly.nc'),
     'u10':os.path.join(cmip5_26_datadir, 'u10_monthly.nc'),
