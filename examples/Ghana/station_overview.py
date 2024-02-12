@@ -50,11 +50,11 @@ def plot_data_available(datarange, stationnames):
     
     fig, axes = plt.subplots(1, 1, figsize= (15,13))
     
-    sns.heatmap(ax = axes, data= df_obs, cmap= "Blues", cbar = False, linewidth = 0.2)
+    sns.heatmap(ax = axes, data= df_obs, cbar = False, linewidth = 0.2)
     
     #plt.tight_layout()
-    plt.savefig(os.path.join(path, "weather_station_overview" + variable +".svg"),
-                format = "svg", dpi = 1200)
+    plt.savefig(os.path.join(path_to_plot, "weather_station_overview.svg"),
+                format = "svg", dpi = 300)
     plt.close()
     plt.clf()
     

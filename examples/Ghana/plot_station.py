@@ -97,19 +97,72 @@ def plot_stations(stationnames, ax, save_fig=False):
     
 
 
+def plot_for_isaac(stationnames):
+    from2000to2005 = pd.date_range(start="2000-01-01", end="2005-12-31", freq="MS")
+    from2005to2010 = pd.date_range(start="2005-01-01", end="2010-12-31", freq="MS")
+    from2010to2015 = pd.date_range(start="2010-01-01", end="2015-12-31", freq="MS")
+    
+    df_prec_2005 = monthly_mean(stationnames, path_to_data, filename="predictions_", 
+                            daterange=from2000to2005 , id_name="obs", method= "Stacking")
+    df_prec_2010 = monthly_mean(stationnames, path_to_data, filename="predictions_", 
+                            daterange=from2005to2010 , id_name="obs", method= "Stacking")
+    df_prec_2015 = monthly_mean(stationnames, path_to_data, filename="predictions_", 
+                            daterange=from2010to2015 , id_name="obs", method= "Stacking")
+    
+    means_prec_2005, stds_prec_2005 = estimate_mean_std(df_prec_2005)
+    
+    means_prec_2010, stds_prec_2010 = estimate_mean_std(df_prec_2010)
+    
+    means_prec_2015, stds_prec_2015 = estimate_mean_std(df_prec_2015)
+    
+    apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)    
+    fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15, 20), sharex=True, sharey=True)
+    
+    plot_monthly_mean(means=means_prec_2005, stds=stds_prec_2005, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax1, title="2000-2005")
+    plot_monthly_mean(means=means_prec_2010, stds=stds_prec_2010, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax2, title="2005-2010")
+    plot_monthly_mean(means=means_prec_2015, stds=stds_prec_2015, color=seablue, ylabel="Precipitation [mm/month]", 
+                      ax=ax3, title="2010-2015")
+    
+    ax3.axes.tick_params(which="both", labelsize=25)
+    ax1.axes.tick_params(which="both", labelsize=25)
+    ax2.axes.tick_params(which="both", labelsize=25)
+    plt.setp(ax3.get_xticklabels(), rotation=45, ha="right",
+         rotation_mode="anchor")
+    
+
+    
+    plt.tight_layout()
+    
+    plt.savefig(os.path.join(path_to_plot, "isaac.png"), bbox_inches="tight", dpi=300)
+    
+    
+    
+    
+    
+    
+
 apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)    
 fig, (ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15, 20), sharex=True, sharey=True)
 
-stationnames_north= ["Navrongo", "Bolgatanga", "Wa","Bole"]
-stationnames_central = ["Wenchi", "Sunyani", "Dormaa-Ahenkro",] 
-stationnames_south = ["Kumasi", "Abetifi", "Dunkwa", "Tarkwa", "Axim", "Takoradi", 
+# stationnames_north= ["Navrongo", "Bolgatanga", "Wa","Bole"]
+# stationnames_central = ["Wenchi", "Sunyani", "Dormaa-Ahenkro",] 
+# stationnames_south = ["Kumasi", "Abetifi", "Dunkwa", "Tarkwa", "Axim", "Takoradi", 
+#                       "Saltpond", "Accra", "Tema", "Akuse", "Akim-Oda"]
+
+# plot_stations(stationnames_north, ax1)
+# plot_stations(stationnames_central, ax2)
+# plot_stations(stationnames_south, ax3)
+# plt.tight_layout()
+# plt.savefig(os.path.join(path_to_plot, "stations_months.svg"), bbox_inches="tight", dpi=600)
+
+
+
+stationnames_south = ["Dunkwa", "Tarkwa", "Axim", "Takoradi", 
                       "Saltpond", "Accra", "Tema", "Akuse", "Akim-Oda"]
 
-plot_stations(stationnames_north, ax1)
-plot_stations(stationnames_central, ax2)
-plot_stations(stationnames_south, ax3)
-plt.tight_layout()
-plt.savefig(os.path.join(path_to_plot, "stations_months.svg"), bbox_inches="tight", dpi=600)
+plot_for_isaac(stationnames_south)
 
     
 

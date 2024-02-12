@@ -25,13 +25,29 @@ class Evaluate():
          print("RMSE: {:2f}".format(score))
          
          return score 
-     
+    
+        
+
     def NSE(self):
-        score = (1-(np.sum((self.y_pred - self.y_true)**2))/np.sum((self.y_true - np.mean(self.y_true))**2))
+        numerator = np.sum((self.y_pred - self.y_true)**2)
+        denominator = np.sum((self.y_true - np.mean(self.y_true))**2)
+    
+        if denominator == 0:
+            # Handle division by zero, return a special value or raise an exception
+            return "Invalid NSE: Division by zero"
+    
+        score = 1 - (numerator / denominator)
         
         print("Nach-Sutcliffe Efficiency(NSE): {:2f}".format(score))
         
-        return score 
+        return score
+
+    # def NSE(self):
+    #     score = (1-(np.sum((self.y_pred - self.y_true)**2))/np.sum((self.y_true - np.mean(self.y_true))**2))
+        
+    #     print("Nach-Sutcliffe Efficiency(NSE): {:2f}".format(score))
+        
+    #     return score 
     
     def MSE(self):
         score = mean_squared_error(self.y_true, self.y_pred, squared=False)

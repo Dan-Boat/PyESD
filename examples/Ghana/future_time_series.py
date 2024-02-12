@@ -41,20 +41,20 @@ def plot_ensemble_timeseries():
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
                      color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )
@@ -74,20 +74,20 @@ def plot_ensemble_timeseries():
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
                      color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )
@@ -108,20 +108,20 @@ def plot_ensemble_timeseries():
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
                      color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )

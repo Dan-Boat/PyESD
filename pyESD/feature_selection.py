@@ -12,7 +12,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.feature_selection import RFECV, SelectFromModel, SequentialFeatureSelector
-from sklearn.linear_model import Lasso, LassoCV, Ridge, BayesianRidge, ARDRegression
+from sklearn.linear_model import Lasso, LassoCV, Ridge, BayesianRidge, ARDRegression, LassoLarsCV
 from sklearn.inspection import permutation_importance
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import TimeSeriesSplit, LeaveOneOut, LeaveOneGroupOut
@@ -36,6 +36,9 @@ class RecursiveFeatureElimination():
         
         if self.regressor_name == "ARD":
             self.estimator = ARDRegression()
+        
+        elif self.regressor_name == "LassoLarsCV":
+            self.estimator = LassoLarsCV()
         elif self.regressor_name == "BayesianRidge":
             self.estimator = BayesianRidge()
         elif self.regressor_name == "lasso":
@@ -84,7 +87,7 @@ class TreeBasedSelection():
         self.n_jobs = -1
         self.bootstrap = True
         self.criterion = "squared_error"
-        self.scoring = "r2"
+        self.scoring = "neg_mean_absolute_error"
         
         if self.regressor_name == "RandomForest":
             self.estimator = RandomForestRegressor(n_jobs=self.n_jobs, criterion=self.criterion, bootstrap=self.bootstrap, 
@@ -131,15 +134,23 @@ class TreeBasedSelection():
             
         return forest_importances
     
-    def permutation_importance_(self, X,y, plot=False, fig_path=None, fig_name=None, save_fig=False):
+    def permutation_importance_(self, X,y, plot=False, fig_path=None, fig_name=None, save_fig=False, 
+                                station_name=None):
         self.estimator.fit(X,y)
         importance = permutation_importance(estimator=self.estimator, X=X, y=y, scoring=self.scoring,
                                             n_repeats=10, n_jobs=self.n_jobs)
-        sorted_idx = importance.importance_mean.argsort()
+        sorted_idx = importance.importances_mean.argsort()
         if plot == True:
+            apply_style(fontsize=28, style="seaborn-talk", linewidth=3, usetex=False)
             fig,ax = plt.subplots(figsize=(15, 13))
             ax.boxplot(importance.importances[sorted_idx].T, vert=False, labels=X.columns[sorted_idx])
-            ax.set_title("Permutation Importances (On test data)")
+            
+            if station_name is not None:
+                ax.set_title("Permutation importances using tree regressor (" + station_name + ")",
+                             fontweight="bold", fontsize=24)
+            else:
+                ax.set_title("Permutation Importances")
+                
             ax.set_ylabel("Mean accuracy decrease", fontweight="bold", fontsize=20)
             fig.tight_layout()
             if save_fig:

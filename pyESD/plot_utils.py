@@ -123,7 +123,9 @@ def apply_style(fontsize=20, style=None, linewidth=2, usetex=True):
     if style is not None:
         plt.style.use(style)  
         
-    rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+    rc('font',**{'family':'sans-serif','sans-serif':['Arial'], 
+                 'size': 22, 'style': 'normal', 'weight': 'medium'})
+    
     mpl.rc('text', usetex=usetex)
     mpl.rc('xtick', labelsize=fontsize)
     mpl.rc('ytick', labelsize=fontsize)
@@ -131,7 +133,9 @@ def apply_style(fontsize=20, style=None, linewidth=2, usetex=True):
     mpl.rc('axes', labelsize=fontsize)
     mpl.rc('lines', linewidth=linewidth)
     mpl.rc("font", weight="bold")
-    
+    plt.rcParams['pdf.use14corefonts'] = True
+    plt.rcParams['svg.fonttype'] = 'none'
+
 
     
     
@@ -279,7 +283,7 @@ def resample_monthly(data, daterange):
 
 
 def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
-                  method, use_id=False):
+                  method, use_id=False, transpose=True):
 
     columns = ["DJF", "MAM", "JJA", "SON", "Annum"]
     
@@ -305,7 +309,11 @@ def seasonal_mean(stationnames, path_to_data, filename, daterange, id_name,
         df_stations.reset_index(drop=True, inplace=True)
         df_stations.index +=1
     
-    df_stations = df_stations.T.astype(float)
+    if transpose:
+        df_stations = df_stations.T.astype(float)
+    else:
+        df_stations = df_stations.astype(float)
+        
     
     return df_stations
              

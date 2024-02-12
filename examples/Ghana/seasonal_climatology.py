@@ -42,23 +42,23 @@ def plot_seasonal_climatologies():
     
     
     df_prec_26_from2040to2070 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2070 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+                            daterange=from2040to2070 , id_name="CMIP6 RCP2.6 anomalies", method= "Stacking",
                             use_id=False)
     
     
     df_prec_85_from2040to2070 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2070 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+                            daterange=from2040to2070 , id_name="CMIP6 RCP8.5 anomalies", method= "Stacking",
                             use_id=False)
     
     
     
     df_prec_26_from2070to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2070to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking",
+                            daterange=from2070to2100 , id_name="CMIP6 RCP2.6 anomalies", method= "Stacking",
                             use_id=False)
     
     
     df_prec_85_from2070to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2070to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking",
+                            daterange=from2070to2100 , id_name="CMIP6 RCP8.5 anomalies", method= "Stacking",
                             use_id=False)
     
     

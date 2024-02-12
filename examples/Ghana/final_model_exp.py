@@ -94,7 +94,7 @@ def run_main(variable, cachedir,
         #====================================
         
         print("fitting the AMIP predictors based on the selected model---all from realisation 1")
-        SO.fit_predictor(variable, predictors, fullAMIP2, CMIP6_AMIP_R1) 
+        SO.fit_predictor(variable, predictors, fullAMIP, CMIP5_AMIP_R1) 
         
         print("predicting based on the AMIP predictors")
         yhat_CMIP5_AMIP_R1_anomalies = SO.predict(variable, fullAMIP, 
@@ -178,7 +178,7 @@ def run_main(variable, cachedir,
     
     
 if __name__ == "__main__":
-    selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/final_experiment"
+    selector_dir = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/Ghana/final_experiment_cmip5"
     cachedir = selector_dir
     #cachedir = cachedir_prec
        
@@ -191,9 +191,9 @@ if __name__ == "__main__":
     
     ensemble_method = "Stacking"
  
-    base_estimators = ["ARD", "RandomForest", "Bagging", "RidgeCV"]
+    base_estimators = ["ARD", "RandomForest", "Bagging", "LassoLarsCV"]
 
-    final_estimator = "LassoLarsCV"
+    final_estimator = "ExtraTree"
 
     run_main(variable, cachedir, stationnames, station_datadir, method=ensemble_method,
              final_estimator=final_estimator,

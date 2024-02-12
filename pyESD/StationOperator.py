@@ -171,17 +171,25 @@ class StationOperator():
     
     
     def tree_based_feature_importance(self, variable, daterange, predictor_dataset, fit_predictand=True,
-                                      plot=False, **predictor_kwargs):
+                                      plot=False, fig_path=None, fig_name=None, station_name=None, save_fig=False,
+                                      **predictor_kwargs):
         
         return self.variables[variable].tree_based_feature_importance(daterange, predictor_dataset, fit_predictand=fit_predictand,
-                                                                      plot=plot, **predictor_kwargs)
+                                                                      plot=plot, fig_path=fig_path, fig_name=fig_name,
+                                                                      station_name=station_name, 
+                                                                      save_fig=save_fig,
+                                                                      **predictor_kwargs)
     
     
     def tree_based_feature_permutation_importance(self, variable, daterange, predictor_dataset, fit_predictand=True, 
-                                                  plot=False, **predictor_kwargs):
+                                                  plot=False, fig_path=None, fig_name=None, station_name=None, save_fig=False,
+                                                  **predictor_kwargs):
         
         return self.variables[variable].tree_based_feature_permutation_importance(daterange, predictor_dataset, fit_predictand=fit_predictand,
-                                                                                  plot=plot, **predictor_kwargs)
+                                                                                  plot=plot, fig_path=fig_path, fig_name=fig_name,
+                                                                                  station_name=station_name, 
+                                                                                  save_fig=save_fig,
+                                                                                  **predictor_kwargs)
     
     
     

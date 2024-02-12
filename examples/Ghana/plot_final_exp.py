@@ -114,27 +114,28 @@ def plot_prediction_example():
     
     
 def plot_seasonal_climatologies():
+    apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)
     
     
     df_prec_26_from2040to2060 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking")
+                            daterange=from2040to2060 , id_name="CMIP6 RCP2.6 anomalies", method= "Stacking")
     
     
     df_prec_85_from2040to2060 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2040to2060 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking")
+                            daterange=from2040to2060 , id_name="CMIP6 RCP8.5 anomalies", method= "Stacking")
     
     
     
     df_prec_26_from2080to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP2.6 anomalies", method= "Stacking")
+                            daterange=from2080to2100 , id_name="CMIP6 RCP2.6 anomalies", method= "Stacking")
     
     
     df_prec_85_from2080to2100 = seasonal_mean(stationnames_prec, path_to_data_prec, filename="predictions_", 
-                            daterange=from2080to2100 , id_name="CMIP5 RCP8.5 anomalies", method= "Stacking")
+                            daterange=from2080to2100 , id_name="CMIP6 RCP8.5 anomalies", method= "Stacking")
     
     
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    
     fig, ((ax1,ax2), (ax3, ax4)) = plt.subplots(nrows=2, ncols=2, figsize=(20,15), sharex=False)
     cbar_ax = fig.add_axes([0.90, 0.35, 0.02, 0.25])
     
@@ -157,31 +158,32 @@ def plot_seasonal_climatologies():
 
 
 def plot_ensemble_timeseries():
+    apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)
 
     stationnames = ["Navrongo", "Bolgatanga", "Wa","Bole"]
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    
     fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
                                        sharex=True, sharey=True)
     plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
-                     color=blue, label="RCP 8.5", ymax=30, ymin=-30,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
+                     color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )
     
@@ -193,27 +195,27 @@ def plot_ensemble_timeseries():
     
     stationnames = ["Wenchi", "Sunyani", "Dormaa-Ahenkro", "Kumasi", "Abetifi", "Dunkwa"]
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    
     fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
                                        sharex=True, sharey=True)
     plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
                      color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )
@@ -226,27 +228,27 @@ def plot_ensemble_timeseries():
     
     stationnames = ["Tarkwa", "Axim", "Takoradi", "Saltpond", "Accra", "Tema", "Akuse", "Akim-Oda"]
     
-    apply_style(fontsize=20, style=None, linewidth=2)
+    
     fig,(ax1, ax2, ax3) = plt.subplots(nrows=3, ncols=1, figsize=(15,20),
                                        sharex=True, sharey=True)
     plt.subplots_adjust(left=0.02, right=0.90, top=0.94, bottom=0.05,hspace=0.01)
     
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP2.6 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP2.6 anomalies", daterange=fullCMIP6,
                      color=black, label="RCP 2.6", ymax=40, ymin=-40, 
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax1,
                      window=12)
                      
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP4.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP4.5 anomalies", daterange=fullCMIP6,
                      color=red, label="RCP 4.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax2, 
                      )
     
     plot_time_series(stationnames, path_to_data_prec, filename="predictions_", 
-                     id_name="CMIP5 RCP8.5 anomalies", daterange=fullCMIP5,
+                     id_name="CMIP6 RCP8.5 anomalies", daterange=fullCMIP6,
                      color=blue, label="RCP 8.5", ymax=40, ymin=-40,
                      ylabel= "Precipitation anomalies [mm/month]", ax=ax3, 
                      )
@@ -256,10 +258,11 @@ def plot_ensemble_timeseries():
     plt.savefig(os.path.join(path_to_plot, "time_series_prec_south.svg"), bbox_inches="tight", dpi=300)
 
 def plot_different_projections(variable= "Precipitation"):
+    apply_style(fontsize=23, style="seaborn-talk", linewidth=3,)
     
     
-    datasets_26 = [CMIP5_RCP26_R1, CESM_RCP26, HadGEM2_RCP26]
-    datasets_85 = [CMIP5_RCP85_R1, CESM_RCP85, HadGEM2_RCP85]
+    datasets_26 = [CMIP6_RCP26_R1, CESM_RCP26, HadGEM2_RCP26]
+    datasets_85 = [CMIP6_RCP85_R1, CESM_RCP85, HadGEM2_RCP85]
     
     
     apply_style(fontsize=20, style=None, linewidth=2)
@@ -271,28 +274,28 @@ def plot_different_projections(variable= "Precipitation"):
         
         stationloc_dir_prec = os.path.join(station_prec_datadir , "stationloc.csv")
         plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
-                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            filename="predictions_", id_name="CMIP6 RCP2.6", method="Stacking", 
                                             stationloc_dir=stationloc_dir_prec, daterange=from2040to2060, 
                                             datasets=datasets_26, variable="Precipitation", 
                                             dataset_varname="tp", ax=ax1, legend=False, xlabel= "Precipitation stations",
                                             ylabel="Precipitation [mm/month]",width=0.7, title="RCP 2.6 [2040-2060]")
         
         plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
-                                            filename="predictions_", id_name="CMIP5 RCP2.6", method="Stacking", 
+                                            filename="predictions_", id_name="CMIP6 RCP2.6", method="Stacking", 
                                             stationloc_dir=stationloc_dir_prec, daterange=from2080to2100, 
                                             datasets=datasets_26, variable="Precipitation", 
                                             dataset_varname="tp", ax=ax2, legend=True, xlabel= "Precipitation stations",
                                             ylabel="Precipitation [mm/month]", width=0.7, title="RCP 2.6 [2080-2100]")
         
         plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
-                                            filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                            filename="predictions_", id_name="CMIP6 RCP8.5", method="Stacking", 
                                             stationloc_dir=stationloc_dir_prec, daterange=from2040to2060, 
                                             datasets=datasets_85, variable="Precipitation", 
                                             dataset_varname="tp", ax=ax3, legend=False, xlabel= "Precipitation stations",
                                             ylabel="Precipitation [mm/month]",width=0.7, title="RCP 8.5 [2040-2060]")
         
         plot_projection_comparison(stationnames=stationnames_prec, path_to_data=path_to_data_prec, 
-                                            filename="predictions_", id_name="CMIP5 RCP8.5", method="Stacking", 
+                                            filename="predictions_", id_name="CMIP6 RCP8.5", method="Stacking", 
                                             stationloc_dir=stationloc_dir_prec, daterange=from2080to2100, 
                                             datasets=datasets_85, variable="Precipitation", 
                                             dataset_varname="tp", ax=ax4, legend=False, xlabel= "Precipitation stations",
@@ -338,9 +341,9 @@ def write_metrics(path_to_data, method, stationnames, path_to_save, varname,
     
 if __name__ == "__main__":
     #plot_stations()
-    plot_prediction_example()
+    #plot_prediction_example()
     #plot_seasonal_climatologies()
     #plot_ensemble_timeseries()
     # plot_different_projections()
-    # write_metrics(path_to_data_prec, "Stacking", stationnames_prec, path_to_plot, 
-    #           "Precipitation")
+    write_metrics(path_to_data_prec, "Stacking", stationnames_prec, path_to_plot, 
+              "Precipitation")

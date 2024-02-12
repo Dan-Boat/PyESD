@@ -24,7 +24,7 @@ except:
     from .plot_utils import *
 
 def plot_monthly_mean(means, stds, color, ylabel=None, ax=None, 
-                      fig_path=None, fig_name=None, lolims=False):
+                      fig_path=None, fig_name=None, lolims=False, title=None):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(20, 15))
@@ -46,13 +46,16 @@ def plot_monthly_mean(means, stds, color, ylabel=None, ax=None,
         ax.grid(True, linestyle="--", color=gridline_color)
         ax.set_yticklabels([])
     
+    if title is not None:
+        ax.set_title(title, fontsize=20, fontweight="bold", loc="left")
+    
     plt.tight_layout()
     if fig_path is not None:
         plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
 
 def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cbar_ax=None, 
                         add_cbar=True, title=None, label= "Correlation Coefficinet", fig_path=None, fig_name=None,
-                        xlabel=None, ylabel=None, fig=None):
+                        xlabel=None, ylabel=None, fig=None, annot=None, fmt=None):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, sharex=False, figsize=(15, 13))
@@ -73,7 +76,7 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
     if all(parameter is not None for parameter in [vmin, vmax]):
         
         sns.heatmap(ax=ax, data=data, cmap=cmap, vmax=vmax, vmin=vmin, center=center, cbar=add_cbar,
-                    square=True, cbar_ax = cbar_ax, cbar_kws={"label": label, "shrink":0.5,
+                    square=True, cbar_ax = cbar_ax, annot=annot, fmt=fmt, cbar_kws={"label": label, "shrink":0.5,
                                                               "drawedges": False,},
                     linewidth=0.5, linecolor="black",)
     else:
@@ -92,7 +95,7 @@ def correlation_heatmap(data, cmap, ax=None, vmax=None, vmin=None, center=0, cba
     plt.subplots_adjust(left=0.15, right=0.88, top=0.97, bottom=0.05)
     
     if fig_path is not None:
-        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "svg")
+        plt.savefig(os.path.join(fig_path, fig_name), bbox_inches="tight", format= "pdf")
         
 
 def barplot(methods, stationnames, path_to_data, ax=None, xlabel=None, ylabel=None, 
@@ -193,7 +196,7 @@ def boxplot(regressors, stationnames, path_to_data, ax=None, xlabel=None, ylabel
 
 
 def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=None, ax=None,
-             cbar=True, cbar_ax=None, xlabel=None):
+             cbar=True, cbar_ax=None, xlabel=None, rot=45):
     
     if ax is None:
         fig,ax = plt.subplots(1,1, figsize=(20,15))
@@ -236,6 +239,8 @@ def heatmaps(data, cmap, label=None, title=None, vmax=None, vmin=None, center=No
     
     if xlabel is not None:
         ax.set_xlabel(xlabel, fontweight="bold", fontsize=20)
+        plt.setp(ax.get_xticklabels(), rotation=rot, ha="right",
+         rotation_mode="anchor")
         
     else:
         ax.set_xticklabels([])
