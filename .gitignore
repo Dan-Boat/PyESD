@@ -27,6 +27,7 @@ private/
 /examples/Human_Vs_Machines
 /examples/VALUE
 /examples/IsoPP
+/examples/isoPP
 *.pickel
 *.predictors_150
 *.predictors_50
