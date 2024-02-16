@@ -257,7 +257,7 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
                 obs_full_name="obs anomalies",
                 method = "Stacking", ylabel=None, xlabel=None,
                 fig_path=None, fig_name=None, train_marker="*", test_marker="o",
-                train_color=black, test_color=blue,
+                train_color=black, test_color=blue, show_mae=False,
                 ):
     
     if ax is None:
@@ -283,15 +283,26 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     
     r2 = regression_stats.rvalue 
     
-    ax.scatter(obs_train, ypred_train, alpha=0.3, c=train_color, s=100, label=val_predict_name, 
+    
+    
+    
+    ax.scatter(obs_train, ypred_train, alpha=0.6, c=train_color, s=120, label=val_predict_name, 
                marker=train_marker)
     
-    ax.scatter(obs_test, ypred_test, alpha=0.3, c=test_color, s=100, label=test_predict_name,
+    ax.scatter(obs_test, ypred_test, alpha=0.6, c=test_color, s=120, label=test_predict_name,
                marker=test_marker)
     
-    ax.plot(obs, regression_slope, color=red, label="PCC = {:.2f}".format(r2))
     
-    ax.legend(loc= "upper left", fontsize=20)
+    
+    if show_mae:
+        from sklearn.metrics import mean_absolute_error
+        mae = mean_absolute_error(y_true= obs_test, y_pred= ypred_test)
+        ax.plot(obs, regression_slope, color=test_color, label="PCC = {:.2f}, MAE = {:.2f}".format(r2, mae))
+        
+    else:
+        ax.plot(obs, regression_slope, color=test_color, label="PCC = {:.2f}".format(r2))
+    
+    ax.legend(loc= "upper left", fontsize=22)
     
     # Plot design 
     
@@ -299,8 +310,8 @@ def scatterplot(station_num, stationnames, path_to_data, filename, ax=None,
     ax.spines["right"].set_visible(False)
     ax.get_xaxis().tick_bottom()
     ax.get_yaxis().tick_left()
-    ax.spines["left"].set_position(("outward", 20))
-    ax.spines["bottom"].set_position(("outward", 20))
+    ax.spines["left"].set_position(("outward", 22))
+    ax.spines["bottom"].set_position(("outward", 22))
     
     
     
