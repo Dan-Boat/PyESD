@@ -26,8 +26,11 @@ private/
 /examples/Neckar/plots
 /examples/Human_Vs_Machines
 /examples/VALUE
-/examples/IsoPP
-/examples/isoPP
+/examples/isoPP/.predictors_200
+/examples/isoPP/final_cache_GNIP
+/examples/isoPP/final_exp
+/examples/isoPP/model_selection
+/examples/isoPP/plots
 *.pickel
 *.predictors_150
 *.predictors_50

@@ -1,0 +1,180 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Feb 22 12:50:10 2024
+
+@author: dboateng
+"""
+# Import modules 
+import os 
+import pandas as pd 
+import numpy as np
+import matplotlib.pyplot as plt 
+import seaborn as sns
+
+import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from matplotlib.dates import YearLocator
+import matplotlib.dates as mdates 
+
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from scipy import stats
+
+
+from pyClimat.plot_utils import *
+from pyClimat.plots import plot_annual_mean 
+from pyClimat.data import read_ERA_processed, read_ECHAM_processed, read_from_path
+from pyClimat.analysis import compute_lterm_mean, compute_lterm_diff
+from pyClimat.variables import extract_var
+
+from pyESD.plot_utils import apply_style
+from pyESD.plot import heatmaps
+from pyESD.plot_utils import seasonal_mean
+#from pyESD.plot_utils import *
+from read_data import *
+from predictor_setting import *
+from pyESD.ESD_utils import load_csv, haversine, extract_indices_around
+
+# Define paths 
+path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/isoPP/plots"
+main_path = "D:/Datasets/Model_output_pst/PD"
+station_datadir = "C:/Users/dboateng/Desktop/Datasets/Station/GNIP"
+station_data = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/isoPP/final_exp"
+
+
+def calculate_regional_means(ds, lon_target, lat_target, radius_deg,):
+    """
+    Calculate regional means around a specific longitude and latitude location
+    with a given radius for a NetCDF dataset using xarray.
+    """
+    # Find indices of the nearest grid point to the target location
+    
+    if hasattr(ds, "longitude"):
+        ds = ds.rename({"longitude":"lon", "latitude":"lat"})
+        
+    ds = ds.assign_coords({"lon": (((ds.lon + 180) % 360) - 180)})
+    
+    indices = extract_indices_around(ds, lat_target, lon_target, radius_deg)
+    
+    regional_mean = ds.isel(lat=indices[0], lon=indices[1]).mean(dim=("lon", "lat")).data
+        
+    return np.float64(regional_mean)
+
+def plot_example():
+    
+    df_mae = pd.DataFrame(index=stationnames, columns=["ECHAM5-wiso"])
+    
+    
+    from1980to2014 = pd.date_range(start="1979-01-01", end="2014-12-31", freq="MS")
+    
+    # load datasets 
+    PD_data = read_from_path(main_path, "PD_1980_2014_monthly.nc", decode=True)
+    PD_wiso = read_from_path(main_path, "PD_1980_2014_monthly_wiso.nc", decode=True)
+    d18Op = extract_var(Dataset=PD_data, varname="d18op", units="per mil", Dataset_wiso=PD_wiso,
+                        )
+    
+    for num, station in enumerate(stationnames):
+    
+        stationname = station.replace("_", " ")
+    
+    
+    
+   
+    
+        station_info = pd.read_csv(os.path.join(station_datadir, "stationnames_new.csv"), index_col=0)
+        lon = station_info.loc[num+1]["Longitude"]
+        lat = station_info.loc[num+1]["Latitude"]
+        
+        model = pd.DataFrame(columns=["echam"], index=from1980to2014)
+        
+        model["echam"] = calculate_regional_means(ds=d18Op, lon_target=lon, lat_target=lat, radius_deg=100)
+        
+       
+        
+        print("extracting information for the station: ", stationname)
+        
+        filename = "predictions_" + "Stacking"
+        
+        df = load_csv(stationname, filename, station_data)
+        
+        obs = df["obs"]
+        
+        # estimate metrics
+        y_pred = model.loc[~np.isnan(obs)]
+            
+        y_true = obs.dropna()
+        
+        mae = mean_absolute_error(y_true=y_true.loc[y_pred.index], y_pred=y_pred)
+       
+        
+        # regression_stats  = stats.linregress(y_true.loc[y_pred.index], y_pred["echam"])
+        
+        # regression_slope = regression_stats.slope * obs + regression_stats.intercept
+        
+        # r2 = regression_stats.rvalue
+        
+        
+        df_mae["ECHAM5-wiso"].loc[station] = mae
+        
+        #df_mae["r2"].loc[station] = r2
+    
+    df_mae = df_mae.reset_index(drop=True)
+    
+    
+    
+    apply_style(fontsize=22, style=None, linewidth=2)
+    
+    fig, ax = plt.subplots(1,1, figsize=(5,12)) 
+    
+    # sns.violinplot(x=' ', y='', data=df, palette='pastel', width=0.7, alpha=0.5, inner_kws=dict(box_width=18, whis_width=2),)
+    vio = sns.violinplot(data=df_mae, dodge=False,
+                        palette="pink", alpha=0.8,
+                        width=0.7, inner_kws=dict(box_width=14, whis_width=2, color="black"),
+                        bw_adjust=0.67, ax=ax)
+    
+    
+    ax.tick_params(axis='x', rotation=45)
+    
+    # Adjust the width of the violin plot to show only half
+    # for violin in vio.collections:
+    #     bbox = violin.get_paths()[0].get_extents()
+    #     x0, y0, width, height = bbox.bounds
+    #     violin.set_clip_path(plt.Rectangle((x0, y0), width / 2, height, transform=vio.transData))
+    
+    # Adjust the width of the violin plot to show only half
+    
+    for violin in vio.collections:
+        paths = violin.get_paths()
+        for path in paths:
+            vertices = path.vertices
+            vertices[:, 0] = np.clip(vertices[:, 0], min(vertices[:, 0]), np.mean(vertices[:, 0]))
+            path.vertices = vertices
+    
+    
+    
+    
+    
+            
+            
+    old_len_collections = len(vio.collections)
+    
+    sns.stripplot(data=df_mae, palette="pink", dodge=False, ax=ax, size=10, linewidth=1.5)
+    
+    
+    # Adjust the position of the stripplot
+    for dots in vio.collections[old_len_collections:]:
+        dots.set_offsets(dots.get_offsets() + np.array([0.17, 0]))
+    
+    
+    ax.set_ylabel("MAE", fontweight="bold", fontsize=20)
+    ax.grid(True, linestyle="--")
+    
+    # ax.legend_.remove()
+    plt.grid(True, which='major', axis='y')
+    plt.tight_layout()
+    plt.subplots_adjust(left=0.05, right=0.95, top=0.97, bottom=0.05)
+    plt.savefig(os.path.join(path_to_save, "echam_mae.pdf"), bbox_inches="tight", dpi=300, format="pdf")
+  
+    
+    
+plot_example()
