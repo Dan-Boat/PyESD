@@ -34,7 +34,7 @@ def process_station(data, d18Op, name):
     selected_rows = data[data["Sample Site Name"] == name].drop_duplicates()
     selected_rows = selected_rows[selected_rows["Measurand Symbol"] == "O18"]
     
-    if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 5:
+    if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 10:
         lat = selected_rows["Latitude"].iloc[0]
         lon = selected_rows["Longitude"].iloc[0]
         

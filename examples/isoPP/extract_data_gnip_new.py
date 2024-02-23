@@ -4,53 +4,74 @@ Created on Wed Feb 21 20:00:32 2024
 
 @author: dboateng
 """
-
-import pandas as pd 
-import os 
+import pandas as pd
 import numpy as np
+import os
+from joblib import Parallel, delayed  # For parallel processing
+import multiprocessing  # For determining number of CPU cores
 
+from pyESD.ESD_utils import load_csv, haversine, extract_indices_around
+from pyClimat.data import read_from_path
+from pyClimat.analysis import compute_lterm_mean
+from pyClimat.variables import extract_var
 
-#path to data 
-
-data_path = "D:/Datasets/GNIP_data/Africa/raw/file-702194037013507.csv"
-
-path_to_save = "D:/Datasets/GNIP_data/Africa/scratch/"
-
-use_cols = ["Sample Site Name", "Latitude", "Longitude", "Altitude", "Sample Date", 
-            "Measurand Symbol", "Measurand Amount", ]
-
-
-data = pd.read_csv(data_path, usecols=use_cols, parse_dates=["Sample Date"], index_col=False)
-
-df_info = pd.DataFrame(index=np.arange(200), columns=["Name", "lat", "lon", "elev","years", "d18op"])
-
-stationnames = list(data["Sample Site Name"].drop_duplicates().values)
-
-
-for i,name in enumerate(stationnames):
-    selected_rows = data[data["Sample Site Name"] == name]
-    selected_rows = selected_rows.drop_duplicates()
+# Function to calculate regional means
+def calculate_regional_means(ds, lon_target, lat_target, radius_deg):
+    if hasattr(ds, "longitude"):
+        ds = ds.rename({"longitude": "lon", "latitude": "lat"})
+        
+    ds = ds.assign_coords({"lon": (((ds.lon + 180) % 360) - 180)})
     
+    indices = extract_indices_around(ds, lat_target, lon_target, radius_deg)
     
-    # select only O18 variable
-    
+    regional_mean = ds.isel(lat=indices[0], lon=indices[1]).mean()
+        
+    return np.float64(regional_mean)
+
+# Function to process data for each station
+def process_station(data, d18Op, name):
+    selected_rows = data[data["Sample Site Name"] == name].drop_duplicates()
     selected_rows = selected_rows[selected_rows["Measurand Symbol"] == "O18"]
     
-    output_file = f"{name}_output.csv"
-    
-    selected_rows = selected_rows.reset_index(drop=True)
-    print(name)
-    if  len(selected_rows["Measurand Amount"].dropna())/12 >= 5:
+    if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 10:
+        lat = selected_rows["Latitude"].iloc[0]
+        lon = selected_rows["Longitude"].iloc[0]
         
-        df_info["Name"][i] = name
-        df_info["lat"][i] = selected_rows["Latitude"][0]
-        df_info["lon"][i] = selected_rows["Longitude"][0]
-        df_info["elev"][i] = selected_rows["Altitude"][0]
+        years = len(selected_rows["Measurand Amount"].dropna()) / 12
+        d18op_mean = selected_rows["Measurand Amount"].mean()
         
-        df_info["years"][i] = len(selected_rows["Measurand Amount"].dropna())/12
-        df_info["d18op"][i] = selected_rows["Measurand Amount"].mean()
+        echam = calculate_regional_means(ds=d18Op, lon_target=lon, lat_target=lat, radius_deg=50)
         
-        
-        #selected_rows.to_csv(os.path.join(path_to_save, output_file), index=False)
-df_info = df_info.dropna()        
-df_info.to_csv(os.path.join(path_to_save, "station_overview.csv"), index=False)
+        return [name, lat, lon, selected_rows["Altitude"].iloc[0], years, d18op_mean, echam]
+    else:
+        return None
+
+# Paths and configurations
+data_path = "D:/Datasets/GNIP_data/Africa/raw/file-702194037013507.csv"
+path_to_save = "D:/Datasets/GNIP_data/Africa/scratch/"
+main_path = "D:/Datasets/Model_output_pst/PD"
+use_cols = ["Sample Site Name", "Latitude", "Longitude", "Altitude", "Sample Date", "Measurand Symbol", "Measurand Amount"]
+
+# Load datasets
+PD_data = read_from_path(main_path, "PD_1980_2014_monthly.nc", decode=True)
+PD_wiso = read_from_path(main_path, "PD_1980_2014_monthly_wiso.nc", decode=True)
+d18Op = extract_var(Dataset=PD_data, varname="d18op", units="per mil", Dataset_wiso=PD_wiso)
+
+# Read data in chunks
+chunk_size = 10**6  # Experiment with different chunk sizes
+data_chunks = pd.read_csv(data_path, usecols=use_cols, parse_dates=["Sample Date"], index_col=False, chunksize=chunk_size)
+
+# Parallel processing
+num_cores = multiprocessing.cpu_count()
+results = Parallel(n_jobs=num_cores)(
+    delayed(process_station)(chunk, d18Op, name)
+    for chunk in data_chunks
+    for name in chunk["Sample Site Name"].drop_duplicates().values
+)
+
+# Concatenate results and drop NAs
+df_info = pd.DataFrame([res for res in results if res is not None], columns=["Name", "lat", "lon", "elev", "years", "d18op", "echam"])
+df_info = df_info.dropna()
+
+# Save results
+df_info.to_csv(os.path.join(path_to_save, "station_africa_overview.csv"), index=False)
