@@ -33,7 +33,7 @@ path_to_store = "C:/Users/dboateng/Desktop/Python_scripts/ClimatPackage_repogit/
 df = pd.read_csv(gnip_path)
 
 
-df = df.drop(df[df.echam > 5].index)
+#df = df.drop(df[df.echam > 5].index)  # what is the reason for this code?
 
 
 #load datasets 
@@ -53,10 +53,13 @@ d18Op_alt = compute_lterm_mean(data=d18Op, time="annual")
 apply_style(fontsize=25, style=None, linewidth=2) 
 
 projection = ccrs.Robinson(central_longitude=0, globe=None)
+#projection_p = ccrs.PlateCarree()
 fig, ax1 = plt.subplots(nrows=1, ncols=1, figsize=(13, 13), subplot_kw={"projection":  
                                                                         projection})
 
-# d18Op
+
+
+
 plot_annual_mean(ax=ax1, variable='$\delta^{18}$Op vs SMOW', data_alt=d18Op_alt, cmap="Spectral_r", 
                   units="‰", vmax=0, vmin=-20, domain=None, 
                   levels=22, level_ticks=10, GNIP_data=df, title=None, left_labels=False, bottom_labels=False, 

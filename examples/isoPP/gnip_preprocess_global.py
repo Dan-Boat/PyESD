@@ -34,21 +34,23 @@ def process_station(data, d18Op, name):
     selected_rows = data[data["Sample Site Name"] == name].drop_duplicates()
     selected_rows = selected_rows[selected_rows["Measurand Symbol"] == "O18"]
     
-    if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 10:
+    if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 30:
         lat = selected_rows["Latitude"].iloc[0]
         lon = selected_rows["Longitude"].iloc[0]
+        start = selected_rows["Sample Date"].iloc[0]
+        end = selected_rows["Sample Date"].iloc[-1]
         
         years = len(selected_rows["Measurand Amount"].dropna()) / 12
         d18op_mean = selected_rows["Measurand Amount"].mean()
         
         echam = calculate_regional_means(ds=d18Op, lon_target=lon, lat_target=lat, radius_deg=100)
         
-        return [name, lat, lon, selected_rows["Altitude"].iloc[0], years, d18op_mean, echam]
+        return [name, lat, lon, selected_rows["Altitude"].iloc[0], years, start, end, d18op_mean, echam]
     else:
         return None
 
 # Paths and configurations
-data_path = "D:/Datasets/GNIP_data/world/raw/file-703845600382738.csv"
+data_path = "D:/Datasets/GNIP_data/world/raw/raw_13_06_2024.csv"
 path_to_save = "D:/Datasets/GNIP_data/world/scratch/"
 main_path = "D:/Datasets/Model_output_pst/PD"
 use_cols = ["Sample Site Name", "Latitude", "Longitude", "Altitude", "Sample Date", "Measurand Symbol", "Measurand Amount"]
@@ -71,8 +73,8 @@ results = Parallel(n_jobs=num_cores)(
 )
 
 # Concatenate results and drop NAs
-df_info = pd.DataFrame([res for res in results if res is not None], columns=["Name", "lat", "lon", "elev", "years", "d18op", "echam"])
+df_info = pd.DataFrame([res for res in results if res is not None], columns=["Name", "lat", "lon", "elev", "years", "start", "end", "d18op", "echam"])
 df_info = df_info.dropna()
 
 # Save results
-df_info.to_csv(os.path.join(path_to_save, "station_world_overview.csv"), index=False)
+df_info.to_csv(os.path.join(path_to_save, "station_world_overview_30years.csv"), index=False)

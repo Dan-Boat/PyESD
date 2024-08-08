@@ -36,13 +36,15 @@ def process_station(data, d18Op, name):
     if len(selected_rows["Measurand Amount"].dropna()) / 12 >= 10:
         lat = selected_rows["Latitude"].iloc[0]
         lon = selected_rows["Longitude"].iloc[0]
+        start = selected_rows["Sample Date"].iloc[0]
+        end = selected_rows["Sample Date"].iloc[-1]
         
         years = len(selected_rows["Measurand Amount"].dropna()) / 12
         d18op_mean = selected_rows["Measurand Amount"].mean()
         
         echam = calculate_regional_means(ds=d18Op, lon_target=lon, lat_target=lat, radius_deg=50)
         
-        return [name, lat, lon, selected_rows["Altitude"].iloc[0], years, d18op_mean, echam]
+        return [name, lat, lon, selected_rows["Altitude"].iloc[0], years, start, end, d18op_mean, echam]
     else:
         return None
 
@@ -70,7 +72,7 @@ results = Parallel(n_jobs=num_cores)(
 )
 
 # Concatenate results and drop NAs
-df_info = pd.DataFrame([res for res in results if res is not None], columns=["Name", "lat", "lon", "elev", "years", "d18op", "echam"])
+df_info = pd.DataFrame([res for res in results if res is not None], columns=["Name", "lat", "lon", "elev", "years", "start", "end", "d18op", "echam"])
 df_info = df_info.dropna()
 
 # Save results
