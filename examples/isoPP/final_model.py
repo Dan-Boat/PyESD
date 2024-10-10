@@ -70,28 +70,28 @@ def run_main(variable, method, cachedir, stationnames,
         ypred_1979to2012_anomalies = SO.predict(variable, from1979to2012, ERA5Data,
                                       fit_predictand=True)
         
-        ypred_2013to2018_anomalies = SO.predict(variable, from2013to2018, ERA5Data,
+        ypred_2013to2018_anomalies = SO.predict(variable, from2013to2020, ERA5Data,
                                                 fit_predictand=True)
         
         ypred_1979to2012 = SO.predict(variable, from1979to2012, ERA5Data,
                                       fit_predictand=False)
         
-        ypred_2013to2018 = SO.predict(variable, from2013to2018, ERA5Data,
+        ypred_2013to2018 = SO.predict(variable, from2013to2020, ERA5Data,
                                                 fit_predictand=False)
         
         
         y_ano_1979to2012 = SO.get_var(variable, from1979to2012, anomalies=True)
         
-        y_ano_2013to2018 = SO.get_var(variable, from2013to2018, anomalies=True)
+        y_ano_2013to2018 = SO.get_var(variable, from2013to2020, anomalies=True)
        
-        y_ano_full = SO.get_var(variable, from1979to2018, anomalies=True)
+        y_ano_full = SO.get_var(variable, from1979to2020, anomalies=True)
         
         
-        y_obs_full = SO.get_var(variable, from1979to2018, anomalies=False)
+        y_obs_full = SO.get_var(variable, from1979to2020, anomalies=False)
         
         y_obs_1979to2012 = SO.get_var(variable, from1979to2012, anomalies=False)
         
-        y_obs_2013to2018 = SO.get_var(variable, from2013to2018, anomalies=False)
+        y_obs_2013to2018 = SO.get_var(variable, from2013to2020, anomalies=False)
         
         
         if len(y_ano_2013to2018.dropna()) > 24:
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     
     ensemble_method = "Stacking"
  
-    base_estimators = ["ARD", "RidgeCV", "LassoLarsCV"]
+    base_estimators = ["RidgeCV", "LassoLarsCV"]
 
     final_estimator = "RandomForest"
     

@@ -25,5 +25,9 @@ from1979to2012 = pd.date_range(start="1979-01-01", end="2012-12-31", freq="MS")
 
 from2013to2018 = pd.date_range(start="2013-01-01", end="2018-12-31", freq="MS")
 
+from2013to2020 = pd.date_range(start="2013-01-01", end="2020-12-31", freq="MS")
+
 
 from1979to2018 = pd.date_range(start="1979-01-01", end="2018-12-31", freq="MS")
+
+from1979to2020 = pd.date_range(start="1979-01-01", end="2020-12-31", freq="MS")
