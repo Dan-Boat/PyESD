@@ -35,7 +35,7 @@ from predictor_setting import *
 from pyESD.ESD_utils import load_csv, haversine, extract_indices_around
 
 
-from Fig_utils import calculate_regional_means
+from Fig_utils import calculate_regional_means, get_metrics
 
 # Define paths 
 path_to_save = "C:/Users/dboateng/Desktop/Python_scripts/ESD_Package/examples/isoPP/plots"
@@ -136,16 +136,7 @@ def plot_echam_gnip_spatial():
     
     plt.savefig(os.path.join(path_to_save, "GNIP_stations_fig1.pdf"), bbox_inches="tight", format = "pdf", dpi=300)
 
-def get_metrics(y_true, y_pred):
-    
-    mae = mean_absolute_error(y_true=y_true.loc[y_pred.index], y_pred=y_pred)
-    #rmse = mean_squared_error(y_true=y_true.loc[y_pred.index], y_pred=y_pred)
-    
-    regression_stats  = stats.linregress(y_true.loc[y_pred.index], y_pred["echam"])
-    
-    r2 = regression_stats.rvalue
-    
-    return mae, r2
+
 
 
 def plot_time_series(station_number):
@@ -231,6 +222,6 @@ def plot_time_series(station_number):
 
 
 
-plot_echam_gnip_spatial()
+# plot_echam_gnip_spatial()
 
 plot_time_series(station_number=8)

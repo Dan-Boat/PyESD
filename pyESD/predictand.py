@@ -306,10 +306,16 @@ class PredictandTimeseries():
             
             
             
-    def predict(self, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True,
+    def predict(self, daterange, predictor_dataset, fit_predictors=True, fit_predictand=True, transfer=False,
                 **predictor_kwargs):
         
-        X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors, **predictor_kwargs)
+        
+        if transfer:
+            X = predictor_kwargs["X_data"]
+            
+        else:
+        
+            X = self._get_predictor_data(daterange, predictor_dataset, fit_predictors, **predictor_kwargs)
         
         if not hasattr(self, "selector"):
             

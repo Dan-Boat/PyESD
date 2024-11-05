@@ -137,10 +137,11 @@ class StationOperator():
                 **predictor_kwargs)
     
     
-    def predict(self, variable, daterange , predictor_dataset, fit_predictand=True, fit_predictors=True, **predictor_kwargs):
+    def predict(self, variable, daterange , predictor_dataset, fit_predictand=True, fit_predictors=True, 
+                transfer=False, **predictor_kwargs):
         
         return self.variables[variable].predict(daterange , predictor_dataset, fit_predictand=fit_predictand,
-                                                fit_predictors=fit_predictors,
+                                                fit_predictors=fit_predictors, transfer=transfer,
                                                 **predictor_kwargs)
     
     

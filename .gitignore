@@ -29,6 +29,7 @@ private/
 /examples/isoPP/.predictors_200
 /examples/isoPP/final_cache_GNIP
 /examples/isoPP/final_exp
+/examples/isoPP/final_exp_transfer
 /examples/isoPP/model_selection
 /examples/isoPP/plots
 *.pickel
