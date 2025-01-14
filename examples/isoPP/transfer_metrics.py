@@ -97,7 +97,7 @@ def plot_line_example(num):
     #mae_echam5, r2_echam5 = get_metrics(y_true, y_pred)
     
     mae_echam6, r2_echam6 = get_metrics(y_true, y_pred_nudged["echam"])
-    mae_stack, r2_stack = get_metrics(y_true, y_pred_stacking)
+    #mae_stack, r2_stack = get_metrics(y_true, y_pred_stacking)
     mae_train_stack, r2_train_stack = get_metrics(y_true, y_pred_train_stacking)
     
     
@@ -117,16 +117,16 @@ def plot_line_example(num):
     plt.subplots_adjust(left=0.12, right=1-0.01, top=0.98, bottom=0.06, hspace=0.01)
     
     ax.plot(obs, linestyle="-", color=black, label=station.capitalize() + "," + str(num) + " (GNIP)")
-    ax.plot(model, linestyle="-", color=red, 
-            label="ECHAM5-wiso[MAE={:.2f} ‰, R²={:.2f}]".format(mae_echam5, r2_echam5))
+    # ax.plot(model, linestyle="-", color=red, 
+    #         label="ECHAM5-wiso[MAE={:.2f} ‰, R²={:.2f}]".format(mae_echam5, r2_echam5))
     
     ax.plot(model_nudged, color="blue", linestyle="-", 
-            label="ECHAM6-wiso(JRA55)[MAE={:.2f} ‰]".format(mae_echam6))
+            label="ECHAM6-wiso(JRA55)[MAE={:.2f} ‰, R²={:.2f}]".format(mae_echam6, r2_echam6))
     
     ax.plot(ypred_train, linestyle="--", color=grey, 
-            label="ERA5 1979-2012 (stacking-37*)[MAE={:.2f} ‰]".format(mae_train_stack))
-    ax.plot(ypred_test, linestyle="--", color="#06c4be", 
-            label="ERA5 2013-2018 (stacking-37*)[MAE={:.2f} ‰]".format(mae_stack))
+            label="ERA5 1979-2012 (stacking-37*)[MAE={:.2f} ‰, R²={:.2f}]".format(mae_train_stack, r2_train_stack))
+    # ax.plot(ypred_test, linestyle="--", color="#06c4be", 
+    #         label="ERA5 2013-2018 (stacking-37*)[MAE={:.2f} ‰], R²={:.2f}".format(mae_stack, r2_stack))
     
     ax.set_ylabel('$\delta^{18}$Op VSMOW [‰]', fontweight="bold", fontsize=20)
     ax.xaxis.set_major_locator(YearLocator(5))
@@ -140,7 +140,7 @@ def plot_line_example(num):
 
 transfer_stations = [36, 8, 21, 10, 12, 35]
 
-#transfer_stations = [27, 35] # comment out the predict for testing period
+transfer_stations = [27, 35] # comment out the predict for testing period
 
 for num in transfer_stations:
     
